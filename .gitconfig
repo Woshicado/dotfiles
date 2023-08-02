@@ -1,0 +1,9 @@
+[core]
+	autocrlf = input
+[user]
+	name = Joshua Meyer
+	email = s8jjmeye@stud.uni-saarland.de
+[init]
+	defaultBranch = main
+[alias]
+	pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
