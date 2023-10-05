@@ -3348,3 +3348,749 @@ m%init.vim.swp
 : 1692690188:0;mkdir .config/zsh
 : 1692690190:0;mkdir .config/conda
 : 1692690192:0;cp ~/.config/zsh/*  '/home/woshi/dotfiles/.config/zsh' -r
+: 1692690199:0;cp ~/.config/conda/*  '/home/woshi/dotfiles/.config/conda' -r
+: 1692690206:0;ls
+: 1692690228:0;cd .config/nvI
+: 1692690234:0;ls
+: 1692690241:0;cd ~
+: 1692690282:0;cp  '/home/woshi/.config/nvim/init.lua'  '/home/woshi/dotfiles/.config/nvim'
+: 1692690346:0;mkdir lua
+: 1692690350:0;cd lua
+: 1692690353:0;mkdir custom
+: 1692690367:0;cp -r  '/home/woshi/.config/nvim/lua/custom'   '/home/woshi/dotfiles/.config/nvim/lua/custom'
+: 1692690376:0;cd custom
+: 1692690380:0;cd custom/* .
+: 1692690386:0;mv custom/* .
+: 1692690389:0;rm custom
+: 1692690392:0;rmdir custom
+: 1692690399:0;nvim
+: 1692690422:0;~
+: 1692690426:0;cd dotfiles
+: 1692690439:0;git status
+: 1692690441:0;git add *
+: 1692690443:0;git add .
+: 1692690480:0;ls
+: 1692690482:0;ls -al
+: 1692690497:0;rm -r .config/tmux/plugins
+: 1692690508:0;rm -rf .config/tmux/plugins
+: 1692690510:0;ls
+: 1692690516:0;git add .
+: 1692690518:0;git status
+: 1692690549:0;git add .config/zsh/oh-my-zsh
+: 1692690551:0;git status
+: 1692690572:0;git restore .config/zsh/oh-my-zsh
+: 1692690584:0;git commit
+: 1692690611:0;git push
+: 1692725933:0;git pull
+: 1692725937:0;cd Documents/Uni/MSc/ears/
+: 1692725939:0;git pull
+: 1692725959:0;tmux
+: 1692725991:0;cd ~/Documents
+: 1692725991:0;ls
+: 1692726009:0;code .
+: 1692726095:0;cd ~/Documents/Personal/woshicado_web
+: 1692726098:0;hugo server
+: 1692726969:0;tldr hudo
+: 1692726976:0;tldr hugo
+: 1692727047:0;man hugo
+: 1692727073:0;dnfi most
+: 1692727087:0;export PAGER=â€ƒ¼mostâ€ƒ½
+: 1692727090:0;man hugo
+: 1692727106:0;most
+: 1692727116:0;man hugo
+: 1692727122:0;most
+: 1692727128:0;export PAGER=â€ƒ¼mostâ€ƒ½
+: 1692727129:0;most
+: 1692727132:0;man hugo
+: 1692727139:0;which most
+: 1692727147:0;export PAGER=â€ƒ¼/usr/bin/mostâ€ƒ½
+: 1692727149:0;man hugo
+: 1692727170:0;cd ~/Documents/Personal/woshicado_web
+: 1692727172:0;tmux
+: 1692727182:0;man hugo
+: 1692727185:0;export PAGER=â€ƒ¼/usr/bin/mostâ€ƒ½
+: 1692727188:0;man hugo
+: 1692727192:0;export PAGER="/usr/bin/most"
+: 1692727194:0;man hugo
+: 1692727203:0;man grep
+: 1692727221:0;export PAGER="/usr/bin/most"
+: 1692727224:0;man grep
+: 1692727257:0;tldr most
+: 1692727263:0;man most
+: 1692727288:0;export COLORTERM=truecolor
+: 1692727290:0;man most
+: 1692727369:0;echo $COLORTERM
+: 1692727381:0;man grep
+: 1692727389:0;export PAGER="/usr/bin/most"
+: 1692727391:0;man grep
+: 1692727396:0;echo $COLORTERM
+: 1692727469:0;man grep 2>/dev/null | \
+GREP_COLORS=$(man grep 2>/dev/null | \
+grep '^ *ms=01;31' -m1):ne \\
+grep '^ *GREP_COLORS *$\|^ *ne ' -A9 --color=always | \
+most
+: 1692727490:0;man grep 2>/dev/null
+: 1692727647:0;man grep
+: 1692727650:0;export PAGER="/usr/bin/most"
+: 1692727651:0;man grep
+: 1692727707:0;export PAGER="/usr/bin/most -s"
+: 1692727709:0;man grep
+: 1692727713:0;tldr most
+: 1692727715:0;man most
+: 1692727866:0;export PAGER="most"
+: 1692727868:0;man most
+: 1692728044:0;tmux
+: 1692728047:0;echo $COLORTERM
+: 1692728050:0;man most
+: 1692728075:0;man most -C
+: 1692728089:0;export PAGER="most -C"
+: 1692728090:0;man most -C
+: 1692728117:0;export PAGER="most"
+: 1692728118:0;man most -C
+: 1692728124:0;man most
+: 1692728221:0;export PAGER="most -s"
+: 1692728223:0;export PAGER="most -u"
+: 1692728225:0;man most
+: 1692728228:0;export PAGER="most +u"
+: 1692728229:0;man most
+: 1692728234:0;export PAGER="most -s"
+: 1692728235:0;man most
+: 1692728352:0;man -P /usr/bin/most
+: 1692728362:0;man -P /usr/bin/most most
+: 1692728399:0;nvim .mostrc
+: 1692728426:0;export PAGER="most -s"
+: 1692728429:0;man most
+: 1692728696:0;export LESS_TERMCAP_mb=$'\e[1;32m'
+: 1692728696:0;export LESS_TERMCAP_md=$'\e[1;32m'
+: 1692728696:0;export LESS_TERMCAP_me=$'\e[0m'
+: 1692728696:0;export LESS_TERMCAP_se=$'\e[0m'
+: 1692728696:0;export LESS_TERMCAP_so=$'\e[01;33m'
+: 1692728696:0;export LESS_TERMCAP_ue=$'\e[0m'
+: 1692728697:0;export LESS_TERMCAP_us=$'\e[1;4;31m'
+: 1692728710:0;man most
+: 1692728725:0;export PAGER="less"
+: 1692728727:0;man most
+: 1692728756:0;export LESS=-R
+: 1692728756:0;export LESS_TERMCAP_mb=$'\E[1;31m'     # begin blink
+: 1692728756:0;export LESS_TERMCAP_md=$'\E[1;36m'     # begin bold
+: 1692728756:0;export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
+: 1692728756:0;export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
+: 1692728756:0;export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
+: 1692728756:0;export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
+: 1692728757:0;export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
+: 1692728761:0;man grep
+: 1692728767:0;tmux
+: 1692728769:0;man grep
+: 1692728797:0;nvim .config/zsh/.zshrc
+: 1692728829:0;souce .config/zsh/.zshrc
+: 1692728834:0;source .config/zsh/.zshrc
+: 1692728836:0;man most
+: 1692728839:0;man
+: 1692728841:0;man most
+: 1692728855:0;man
+: 1692728858:0;which man
+: 1692728866:0;nvim .config/zsh/.zshrc
+: 1692728877:0;source .config/zsh/.zshrc
+: 1692728879:0;mant
+: 1692728881:0;mant man
+: 1692728949:0;nvim .config/zsh/.zshrc
+: 1692729012:0;source .config/zsh/.zshrc
+: 1692729020:0;man most
+: 1692729057:0;source .config/zsh/.zshrc
+: 1692729086:0;man most
+: 1692729089:0;nvim .config/zsh/.zshrc
+: 1692729098:0;man most
+: 1692729114:0;echo "PALETTE OF 8 COLORS (bold, high intensity, normal, faint)"
+: 1692729114:0;for i in {30..37}; do printf "\e[1;${i}m1;%-2s      \e[m" "$i"; done; echo
+: 1692729114:0;for i in {90..97}; do printf "\e[${i}m%+4s      \e[m" "$i"; done; echo
+: 1692729114:0;for i in {30..37}; do printf "\e[${i}m%+4s      \e[m" "$i"; done; echo
+: 1692729114:0;for i in {30..37}; do printf "\e[2;${i}m2;%-2s      \e[m" "$i"; done;
+: 1692729114:0;echo -e "\n\n\nPALETTE OF 256 COLORS (only normal)"
+: 1692729114:0;j=8
+: 1692729115:0;for i in {0..255}; do\
+    [[ $i = 16 ]] && j=6\
+    [[ $i = 232 ]] && j=8\
+    printf "\e[38;5;${i}m38;5;%-4s\e[m" "${i}"\
+    (( i>15 && i<232 )) && printf "\e[52C\e[1;38;5;${i}m1;38;5;%-4s\e[52C\e[m\e[2;38;5;${i}m2;38;5;%-4s\e[m\e[126D" "${i}" "${i}"\
+    [[ $(( $(( $i - 15 )) % $j )) = 0 ]] && echo\
+    [[ $(( $(( $i - 15 )) % $(( $j * 6 )) )) = 0 ]] && echo\
+done
+: 1692729144:0;tldr less
+: 1692729186:0;nvim .config/zsh/.zshrc
+: 1692729218:0;man most
+: 1692729312:0;nvim .config/zsh/.zshrc
+: 1692729364:0;man most
+: 1692729396:0;nvim .config/zsh/.zshrc
+: 1692729444:0;man most
+: 1692729453:0;nvim .config/zsh/.zshrc
+: 1692729461:0;man most
+: 1692729463:0;nvim .config/zsh/.zshrc
+: 1692729475:0;man most
+: 1692729477:0;nvim .config/zsh/.zshrc
+: 1692729654:0;man most
+: 1692729659:0;nvim .config/zsh/.zshrc
+: 1692729994:0;curl http://ipecho.net/plain\; echo
+: 1692730011:0;curl http://ipecho.net/plain\\
+
+: 1692730013:0;curl http://ipecho.net/plain\
+
+: 1692730154:0;clear\
+
+: 1692730155:0;nvim .config/zsh/.zshrc
+: 1692730174:0;z
+: 1692730179:0;z woshicado
+: 1692730191:0;cd ~/Documents/Personal/woshicado_web
+: 1692730197:0;z woshicado
+: 1692730328:0;nvim .config/zsh/.zshrc
+: 1692730333:0;nvim ~/.config/zsh/.zshrc
+: 1692730506:0;vscd .config/zsh/.zshrc dotfiles/.zshrc 
+: 1692730820:0;sudo dnf remove most
+: 1692730828:0;sudo dnf update
+: 1692730924:0;tldr dnf
+: 1692730931:0;dnf autoremove
+: 1692730934:0;sudo dnf autoremove
+: 1692731045:0;z woshicado
+: 1692731054:0;tmux
+: 1692731077:0;hugo server
+: 1692731159:0;man hugo
+: 1692731171:0;tldr hugo
+: 1692731192:0;man hugo new
+: 1692731883:0;hugo new content projects/MasterThesis.md
+: 1692731893:0;hugo new content projects/MasterThesis.md --kind blogposttemp.md
+: 1692731911:0;hugo new content --kind blogposttemp.md projects/MasterThesis.md
+: 1692731918:0;hugo new blogposttemp.md projects/MasterThesis.md
+: 1692731933:0;rm content/blogposttemp.md
+: 1692731947:0;hugo new projects/MasterThesis.md --kind blogposttemp.md
+: 1692732001:0;hugo new --kind blogposttemp.md projects/MasterThesis.md
+: 1692732016:0;rm content/projects/MasterThesis.md
+: 1692732017:0;hugo new --kind blogposttemp.md projects/MasterThesis.md
+: 1692732040:0;hugo new --kind="blogposttemp.md" projects/MasterThesis.md
+: 1692732042:0;rm content/projects/MasterThesis.md
+: 1692732042:0;hugo new --kind="blogposttemp.md" projects/MasterThesis.md
+: 1692732126:0;mv  '/home/woshi/Documents/Personal/woshicado_web/archetypes/blogposttemp.md'  '/home/woshi/Documents/Personal/woshicado_web/archetypes/projects.md'
+: 1692732130:0;rm content/projects/MasterThesis.md
+: 1692732136:0;hugo new projects/MasterThesis.md
+: 1692732448:0;hugo server --buildDrafts
+: 1692732965:0;man hugo server
+: 1692732971:0;tldr hugo server
+: 1692732973:0;man hugo server
+: 1692738991:0;sudo grub2-reboot 4; reboot
+: 1692774003:0;mux
+: 1692774007:0;tmux
+: 1693048107:0;sudo grub2-reboot 4; reboot
+: 1693431444:0;ssh creed
+: 1693432008:0;sudo grub2-reboot 4; reboot
+: 1693493943:0;ssh creed
+: 1693494132:0;ssh creed -X
+: 1693494237:0;tmux
+: 1693494255:0;cd Documents/Uni/MSc/ears/
+: 1693494262:0;cd mitsuba
+: 1693494267:0;source ~/Documents/Uni/MSc/ears/mitsuba/setpath.sh
+: 1693494336:0;cd Documents/Uni/MSc/ears/scenes/cbox
+: 1693494348:0;scons -j 12 && mitsuba ../scenes/cbox/cbox.xml -o ../scenes/cbox/out.exr -r 5
+: 1693494360:0;tev out.exr references/bears_lightImage_65536.exr
+: 1693494382:0;tev out.exr references/bears_lightImage_65536.exr references/path_classic_100000.exr
+: 1693494473:0;ssh creed -X
+: 1693497290:0;cd Documents/Uni/MSc/ears/scenes/cbox
+: 1693497712:0;scp creed:~/MSc/mitsuba/scenes/cbox/out_LIf.exr out_LIf.exr
+: 1693497730:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr out_LIf.exr
+: 1693497770:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693497798:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-0.exr out_LIf.exr
+: 1693497803:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693497826:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-2.exr out_LIf.exr
+: 1693497831:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693498421:0;r
+: 1693498421:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693498534:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-1.exr out_LIf.exr
+: 1693498538:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693498645:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-3.exr out_LIf.exr
+: 1693498650:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693498737:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-4.exr out_LIf.exr
+: 1693498741:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693498902:0;scp creed:~/MSc/mitsuba/scenes/cbox/noSF/out_LIf.exr__train-5.exr out_LIf.exr
+: 1693498907:0;tev out_LIf.exr references/bears_lightImage_65536.exr
+: 1693499250:0;scp -r creed:~/MSc/mitsuba/scenes/cbox/noSF/ noSF
+: 1693499281:0;tev noSF/*.exr
+: 1693499289:0;tev noSF/*.exr references/bears_lightImage_65536.exr
+: 1693499336:0;tev noSF/*.exr references/bears_lightImage_65536.exr references/path_classic_100000.exr
+: 1693499782:0;scp -r creed:~/MSc/mitsuba/scenes/cbox/SF/ SF
+: 1693499796:0;tev noSF/*.exr references/bears_lightImage_65536.exr references/path_classic_100000.exr SF/*
+: 1693502191:0;cd ..
+: 1693502192:0;ls
+: 1693502244:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/bdpt_8h.exr bdpt_8h.exr
+: 1693502272:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/references/bdpt_8h.exr bdpt_8h.exr
+: 1693502296:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/references/SFCheck.exr SFCheck.exr
+: 1693502305:0;tev *.exr
+: 1693502388:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck.exr SFCheck.exr
+: 1693502394:0;tev *.exr
+: 1693502719:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck.exr SFCheck.exr
+: 1693502722:0;tev *.exr
+: 1693504079:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck.exr SFCheck.exr
+: 1693504081:0;tev *.exr
+: 1693504094:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck.exr__train-0.exr SFCheck.exr
+: 1693504099:0;tev *.exr
+: 1693506473:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck..exr SFCheck.exr
+: 1693506475:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/SFCheck.exr SFCheck.exr
+: 1693506478:0;tev *.exr
+: 1694351269:0;tmux
+: 1694351278:0;dnfua
+: 1694352294:0;reboot
+: 1694352296:0;sudo reboot
+: 1694352564:0;dnfua
+: 1694365745:0;ssh creed
+: 1694367150:0;ls
+: 1694367178:0;cd Documents/Uni/MSc/ears/scenes/cbox
+: 1694367198:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694367209:0;tev test.exr references/bears_lightImage_65536.exr
+: 1694367257:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694367263:0;tev test.exr references/bears_lightImage_65536.exr
+: 1694367442:0;cd Documents/Uni/MSc/ears/scenes/cbox
+: 1694367444:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694367449:0;tev test.exr references/bears_lightImage_65536.exr
+: 1694367514:0;cd Documents/Uni/MSc/ears/scenes/cbox
+: 1694367569:0;tev test.exr references/bears_lightImage_65536.exr
+: 1694367584:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694371013:0;tev test.exr references/bears_lightImage_65536.exr
+: 1694373206:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694374648:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694374868:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694375241:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694375266:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694375289:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694375486:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr && tev test.exr references/bears_lightImage_65536.exr
+: 1694376052:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694376068:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-o0.exr test.exr
+: 1694376078:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694376433:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694377130:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694377283:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694377300:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694377514:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr
+: 1694377534:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr
+: 1694377671:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694377718:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr
+: 1694377764:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr
+: 1694377838:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-3.exr test.exr
+: 1694377925:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-4.exr test.exr
+: 1694378026:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-5.exr test.exr
+: 1694378151:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694378204:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694378221:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694378283:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr
+: 1694378357:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-3.exr test.exr
+: 1694378472:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694378597:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr test.exr
+: 1694380021:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694380459:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-3.exr test.exr
+: 1694380487:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-4.exr test.exr
+: 1694380549:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694380563:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr
+: 1694380574:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr
+: 1694380611:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694380706:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr
+: 1694380717:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-2.exr test.exr
+: 1694380764:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-3.exr test.exr
+: 1694380823:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-0.exr test.exr
+: 1694380860:0;scp creed:~/MSc/mitsuba/scenes/cbox/test.exr__train-1.exr test.exr
+: 1694381047:0;cd ..
+: 1694381050:0;ls
+: 1694381069:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-1.exr test.exr
+: 1694381075:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr test.exr
+: 1694381085:0;tev bdpt_8h.exr
+: 1694381105:0;tev test.exr
+: 1694454332:0;dnfu
+: 1694457207:0;clear
+: 1694457210:0;ssh creed
+: 1694457277:0;ls
+: 1694457288:0;cd Documents/Uni/MSc/ears/scenes/
+: 1694457289:0;ls
+: 1694457295:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr test.exr
+: 1694457309:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-*.exr .
+: 1694457312:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-0.exr .
+: 1694457318:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-1.exr .
+: 1694457327:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-2.exr .
+: 1694457332:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-3.exr .
+: 1694457340:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-4.exr .
+: 1694457345:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-5.exr .
+: 1694457349:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-6.exr .
+: 1694457354:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-7.exr .
+: 1694457360:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-8.exr .
+: 1694457365:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-9.exr .
+: 1694457371:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-10.exr .
+: 1694457376:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/test.exr__train-11.exr .
+: 1694457381:0;tev *.exr
+: 1694537194:0;ssh creed
+: 1694550204:0;sudo grub2-reboot 4; reboot
+: 1694813698:0;ssh creed
+: 1694814998:0;sudo grub2-reboot 4; reboot
+: 1694859030:0;ssh creed
+: 1694859084:0;scp creed:~/MSc/mitsuba/scenes/veach-bidir/lisf .
+: 1694859089:0;scp -r creed:~/MSc/mitsuba/scenes/veach-bidir/lisf .
+: 1694859192:0;tev lisf
+: 1694859214:0;tev lisf/out.exr__train-0.exr lisf/out.exr__train-1.exr lisf/out.exr__train-2.exr lisf/out.exr__train-3.exr lisf/out.exr__train-4.exr lisf/out.exr__train-5.exr lisf/out.exr__train-6.exr lisf/out.exr__train-7.exr lisf/out.exr__train-8.exr lisf/out.exr__train-9.exr lisf/out.exr__train-10.exr lisf/out.exr__train-11.exr lisf/out.exr__train-12.exr lisf/out.exr__train-13.exr lisf/out.exr__train-14.exr lisf/out.exr__train-15.exr lisf/out.exr__train-16.exr lisf/out.exr__train-17.exr lisf/out.exr__train-18.exr lisf/out.exr__train-19.exr lisf/out.exr__train-20.exr lisf/out.exr__train-21.exr lisf/out.exr
+: 1694859287:0;nvim lisf/cfg
+: 1694862971:0;cd /media/woshi/HDD
+: 1694862971:0;ls
+: 1694883045:0;ssh creed
+: 1695411239:0;dnfu
+: 1695417730:0;ssh creed
+: 1695466332:0;nvim
+: 1695466349:0;cd Documents/Uni/MSc/ears/scenes/
+: 1695466355:0;nvim cbox/cbox.xml
+: 1695466366:0;nvim
+: 1695466393:0;ssh creed
+: 1695466412:0;ls
+: 1695466414:0;cd Downloads
+: 1695466415:0;ls
+: 1695466422:0;mkdir creedRuns
+: 1695466425:0;cd creedRuns
+: 1695466442:0;scp -r creed:~/MSc/mitsuba/scenes/*/cfg .
+: 1695466446:0;scp -r "creed:~/MSc/mitsuba/scenes/*/cfg" .
+: 1695466450:0;scp -r "creed:~/MSc/mitsuba/scenes/**/cfg" .
+: 1695466453:0;scp -r "creed:~/MSc/mitsuba/scenes/*/*/cfg" .
+: 1695466466:0;ls
+: 1695466497:0;scp -r creed:~/MSc/mitsuba/scenes/bathroom2/test/cfg test/cfg
+: 1695466511:0;scp -r creed:~/MSc/mitsuba/scenes .
+: 1695466540:0;cd Downloads/creedRuns
+: 1695466541:0;ls
+: 1695466545:0;rm cfg
+: 1695473000:0;cd scenes
+: 1695473042:0;./plot_sF.py -d bathroom2 kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473052:0;python3 plot_sF.py -d bathroom2 kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473066:0;python3 -m pip install matplotlib
+: 1695473075:0;./plot_sF.py -d bathroom2 kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473093:0;nvim plot_sF.py
+: 1695473190:0;./plot_sF.py -d bathroom2 kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473199:0;cd bathroom2
+: 1695473199:0;ls
+: 1695473208:0;ls ears-cfg
+: 1695473307:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473310:0;cd ..
+: 1695473311:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473382:0;xprop WM_CLASS
+: 1695473393:0;sudo xprop WM_CLASS
+: 1695473398:0;xprop WM_CLASS
+: 1695473414:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695473477:0;nvim plot_sF.py
+: 1695473495:0;fg
+: 1695473499:0;nvim plot_sF.py
+: 1695476874:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695476884:0;tmux
+: 1695476890:0;nvim plot_sF.py
+: 1695476893:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695478276:0;cd ..
+: 1695478278:0;cd scenes
+: 1695478327:0;./opentev_ordered.sh kitchen/test/ kitchen/ears-cfg
+: 1695478348:0;./opentev_ordered.sh kitchen/test/ kitchen/ears-cfg kitchen/references/bdpt_51200.exr
+: 1695478533:0;nvim kitchen/test/cfg
+: 1695478541:0;nvim kitchen/ears-cfg/cfg
+: 1695479372:0;./opentev_ordered.sh cbox/test cbox/ears-cfg
+: 1695479748:0;./opentev_ordered.sh spaceship/test spaceship/ears-cfg
+: 1695480116:0;./opentev_ordered.sh spaceship/test spaceship/ears-cfg spaceship/li/out.exr
+: 1695480611:0;./opentev_ordered.sh veach-bidir/test veach-bidir/ears-cfg veach-bidir/references/bdpt_9h_lI.exr 
+: 1695483907:0;~
+: 1695483911:0;cd .config/nvI
+: 1695483915:0;cd .config/nvim/lua/custom/
+: 1695483917:0;nvim
+: 1695484501:0;cd ..
+: 1695484518:0;cd scenes
+: 1695484523:0;mkdir kitchen/testruns
+: 1695484537:0;scp creed:~/MSc/mitsuba/scenes/kitchen/testruns kitchen/testruns
+: 1695484541:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns kitchen/testruns
+: 1695484588:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr
+: 1695484608:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695484663:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr
+: 1695484784:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695485523:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns kitchen/testruns
+: 1695485551:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695485649:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns kitchen/testruns
+: 1695485653:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695485725:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns kitchen/testruns
+: 1695485741:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695485859:0;nvim kitchen/testruns/testruns/cfg
+: 1695485993:0;ssh creed
+: 1695486027:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695486031:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695486251:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695486253:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695486532:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695486537:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695486896:0;~
+: 1695486899:0;nvim .config/zsh/.zshrc
+: 1695486965:0;nvim .config/tmux/tmux.conf
+: 1695487038:0;nvim .config/zsh/.zshrc
+: 1695487057:0;zsh
+: 1695487080:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695487089:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695488293:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/testruns/out.exr-dbg-BEARS.exr
+: 1695488299:0;./opentev_ordered.sh kitchen/testruns/testruns/out.exr-dbg-BEARS.exr kitchen/ears-cfg/out.exr-dbg-EARS-779spp.exr kitchen/test/out.exr-dbg-BEARS.exr
+: 1695488503:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg testruns
+: 1695488533:0;mv kitchen/testruns/testruns/* kitchen/testruns
+: 1695488542:0;rm kitchen/testruns/testruns
+: 1695488545:0;rm -r kitchen/testruns/testruns
+: 1695488555:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/out.exr-dbg-BEARS.exr
+: 1695488567:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/cffg
+: 1695488569:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/cfg
+: 1695488588:0;./plot_sF.py -d kitchen -s test ears-cfg testruns
+: 1695488606:0;nvim kitchen/testruns/cfg
+: 1695488634:0;rm kitchen/testruns/testruns
+: 1695488642:0;rm kitchen/testruns/cfg
+: 1695488647:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/out.exr-dbg-BEARS.exr kitchen/testruns/cfg
+: 1695488657:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/cfg kitchen/testruns/cfg
+: 1695488664:0;nvim kitchen/testruns/cfg
+: 1695488671:0;./plot_sF.py -d kitchen -s test ears-cfg testruns
+: 1695488680:0;./plot_sF.py -d kitchen -s test ears-cfg testruns -c 1
+: 1695488902:0;nvim kitchen/test/cfg
+: 1695490291:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/cfg kitchen/testruns/cfg
+: 1695490295:0;./plot_sF.py -d kitchen -s test ears-cfg testruns -c 1
+: 1695490357:0;nvim kitchen/testruns/cfg
+: 1695490366:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/testruns/cfg kitchen/testruns/cfg
+: 1695490367:0;nvim kitchen/testruns/cfg
+: 1695490384:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/test/cfg kitchen/testruns/cfg
+: 1695490388:0;./plot_sF.py -d kitchen -s test ears-cfg testruns -c 1
+: 1695491065:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/test/* kitchen/testruns/
+: 1695491072:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/test kitchen/testruns/
+: 1695491394:0;ls kitchen/testruns
+: 1695491398:0;ls kitchen/testruns/test
+: 1695491441:0;tev kitchen/testruns/test/*.exr
+: 1695493600:0;tev kitchen/testruns/test/*.exr kitchen/ears-cfg kitchen/references/bdpt_51200.exr
+: 1695494155:0;./plot_sF.py -d kitchen -s test ears-cfg testruns
+: 1695494163:0;./plot_sF.py -d kitchen -s test ears-cfg testruns -c 1
+: 1695494355:0;tev kitchen/testruns/test/*.exr kitchen/ears-cfg kitchen/references/bdpt_51200.exr
+: 1695497878:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg testrun
+: 1695497881:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695497943:0;./opentev_ordered.sh veach-bidir/test veach-bidir/ears-cfg veach-bidir/references/bdpt_9h_lI.exr 
+: 1695498183:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/test/cfg kitchen/testruns/cfg
+: 1695498191:0;./plot_sF.py -d kitchen -s test ears-cfg testruns -c 1
+: 1695498755:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s test ears-cfg
+: 1695498831:0;sudo grub2-reboot 4; reboot
+: 1695663615:0;dnfu
+: 1695663665:0;btop
+: 1695663744:0;lsdf
+: 1695663747:0;lsfd
+: 1695664070:0;dnfua
+: 1695664106:0;dnfua --allowerasubg --best
+: 1695664111:0;dnfua --allowerasing --best
+: 1695664301:0;tldr mount
+: 1695664315:0;nvim /etc/fstab
+: 1695664321:0;mount -a
+: 1695664324:0;sudo mount -a
+: 1695664378:0;sudo grub2-reboot 4; reboot
+: 1696066541:0;ssh creed
+: 1696075715:0;sudo grub2-reboot 4; reboot
+: 1696329695:0;ssh creed
+: 1696329719:0;ls
+: 1696329724:0;rm lisf
+: 1696329727:0;rmdir lisf
+: 1696329732:0;rm -r lisf
+: 1696329732:0;ls
+: 1696329759:0;cd Documents/Uni/MSc/
+: 1696329760:0;ls
+: 1696329766:0;cd B_old
+: 1696329766:0;ld
+: 1696329767:0;ls
+: 1696329776:0;cd ..
+: 1696329800:0;scp -r creed:~/MSc/mitsuba/scenes .
+: 1696335959:0;cd scenes
+: 1696335978:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s bears-as-ears bears
+: 1696335984:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s bears-as-ears ears
+: 1696336397:0;ssh creed
+: 1696337224:0;cd sd
+: 1696337226:0;cd ..
+: 1696337235:0;cd Uni/MSc/ears/mitsuba
+: 1696337245:0;cd Documents/Uni/MSc/ears/mitsuba
+: 1696337248:0;cd ..
+: 1696337251:0;cd scenes/
+: 1696337255:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s bears-as-ears ears
+: 1696340752:0;ssh creed
+: 1696341036:0;scp -r creed:~/MSc/mitsuba/scenes/kitchen/ears/cfg ./kitchen/ears/cfg
+: 1696341040:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s bears-as-ears ears
+: 1696343841:0;ssh creed
+: 1696351836:0;sudo grub2-reboot 4; reboot
+: 1696423625:0;memtest
+: 1696431024:0;ssh creed
+: 1696431033:0;cd Uni
+: 1696431041:0;cd Documents/Uni
+: 1696431043:0;ls
+: 1696431051:0;cd MSc
+: 1696431052:0;ls
+: 1696431059:0;scp -r creed:~/MSc/mitsuba/scenes .
+: 1696432198:0;cd scenes/
+: 1696432200:0;./plot_sF.py -d kitchen veach-bidir cbox spaceship -s bears-as-ears ears
+: 1696499725:0;dnfi delta gping
+: 1696499736:0;dnfi gping
+: 1696499750:0;gping google.com euw.leagueoflegends.com
+: 1696499782:0;tldr gping
+: 1696499786:0;man gping
+: 1696499793:0;gping --help | less
+: 1696499848:0;dnfi ioping
+: 1696499862:0;ioping -RL /dev/sda
+: 1696499865:0;sudo ioping -RL /dev/sda
+: 1696499887:0;sudo ioping -RL /dev/sdb
+: 1696499895:0;sudo ioping -RL /dev/sdc
+: 1696499909:0;tldr ioping
+: 1696499919:0;ioping .
+: 1696499928:0;ioping -RL .
+: 1696500007:0;dnfi dust
+: 1696500014:0;dnfi duf
+: 1696500020:0;dnfi dutree
+: 1696500041:0;dnfi lsd
+: 1696500046:0;ls
+: 1696500048:0;lsdf
+: 1696500049:0;lsd
+: 1696500060:0;cd Documents
+: 1696500061:0;lsd
+: 1696500064:0;cd Uni
+: 1696500065:0;lsd
+: 1696500067:0;cd MSc
+: 1696500067:0;lsd
+: 1696500072:0;cd scenes
+: 1696500073:0;lsd
+: 1696500076:0;lsd -al
+: 1696500085:0;ls -al
+: 1696500092:0;lsd -al
+: 1696500107:0;cd ~
+: 1696500109:0;h
+: 1696500112:0;h 10
+: 1696500115:0;h -10
+: 1696500120:0;h -20
+: 1696500144:0;dutree
+: 1696500178:0;dnf history list
+: 1696500180:0;q
+: 1696500181:0;clear
+: 1696500197:0;tldr dutree
+: 1696500208:0;man dutree --help | less
+: 1696500222:0;man dutree
+: 1696500225:0;dutree -h
+: 1696500256:0;dutree -d 1 -u .
+: 1696500267:0;dutree -d 1 -u /
+: 1696500273:0;sudo dutree -d 1 -u /
+: 1696500288:0;hsi less
+: 1696500297:0;hsi more
+: 1696500307:0;hsi most
+: 1696500400:0;sudo dutree -d 100 -u / | less
+: 1696500413:0;sudo dutree -d 100 -u /
+: 1696500420:0;dnf history list | less
+: 1696500444:0;dnfu
+: 1696500585:0;dutree -h
+: 1696500600:0;dutree -d1
+: 1696500616:0;dutree -d1 /
+: 1696500645:0;sudo dutree -d1 /
+: 1696500658:0;dnfu
+: 1696500691:0;sudo dutree -d1 -u /
+: 1696500738:0;cd home
+: 1696500742:0;cd /home
+: 1696500746:0;sudo dutree -d1 -u .
+: 1696500765:0;sudo dutree -d2 -u .
+: 1696500819:0;cd woshi
+: 1696500839:0;nvim useful_cmds
+: 1696500849:0;nvim useful_cmds.md
+: 1696500907:0;delta
+: 1696500981:0;ps
+: 1696501004:0;ps -a
+: 1696501024:0;btop++
+: 1696501045:0;dnf history list | less
+: 1696501770:0;dnfi jx
+: 1696501908:0;dnfu
+: 1696501918:0;dnfi fx
+: 1696501926:0;nvim useful_cmds.md
+: 1696501970:0;brew
+: 1696502041:0;cd .local/bin
+: 1696502041:0;ls
+: 1696502050:0;curl https://fx.wtf/install.sh | sh
+: 1696502058:0;sudo curl https://fx.wtf/install.sh | sh
+: 1696502078:0;curl https://fx.wtf/install.sh | sudo sh
+: 1696502082:0;fx
+: 1696502088:0;~
+: 1696502089:0;ls
+: 1696502454:0;dig
+: 1696502458:0;nslookup
+: 1696503326:0;nvim useful_cmds.md
+: 1696503704:0;z scenes
+: 1696503764:0;dnfi fzf
+: 1696503853:0;find * -type f | fzf > selected
+: 1696503866:0;find * -type f . | fzf > selected
+: 1696503887:0;find Documents/Uni/MSc -type f | fzf > selected
+: 1696503927:0;find Documents/Uni/MSc -type f | 
+: 1696503930:0;find Documents/Uni/MSc -type f | fzf
+: 1696504030:0;find Documents/Uni/MSc -type f | fzf > selected
+: 1696504646:0;n .config/zsh/.zshrc
+: 1696504768:0;echo ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+: 1696504789:0;echo $ZSH_CUSTOM
+: 1696504796:0;git clone --depth 1 https://github.com/unixorn/fzf-zsh-plugin.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
+: 1696504833:0;clear
+: 1696504929:0;find Documents/Uni/MSc -type f | fzf > selected
+: 1696504944:0;clear
+: 1696504949:0;tmux
+: 1696505028:0;which fzf-file-widget
+: 1696505033:0;which fzf-cd-widget
+: 1696505076:0;cd /home/woshi/.config/zsh/oh-my-zsh/custom/plugins/fzf-zsh-plugin/
+: 1696505077:0;ls
+: 1696505079:0;cd bin
+: 1696505080:0;ls
+: 1696505131:0;printenv | grep FZF_ALT_C
+: 1696505140:0;find . -type d ( -path .git -o -path node_modules ) -prune
+: 1696505305:0;echo $FZF_CTRL_T_COMMAND
+: 1696505331:0;~
+: 1696505332:0;n .config/zsh/.zshrc
+: 1696505372:0;which fzf
+: 1696505383:0;n .config/zsh/.zshrc
+: 1696505399:0;which fzf
+: 1696505452:0;zsh
+: 1696505463:0;tmux
+: 1696505504:0;cd Documents/Uni/Documents/Uni/MSc/scenes/veach-bidir/scene.xml 
+: 1696505505:0;cd Documents/Uni/Documents/Uni/MSc/scenes/veach-bidir/
+: 1696505520:0;Documents/Uni/MSc/scenes/kitchen 
+: 1696505524:0;tmux
+: 1696505536:0;builtin cd -- Desktop
+: 1696505544:0;..
+: 1696505551:0;builtin cd -- Documents/Uni/MSc/scenes/kitchen
+: 1696505558:0;cleaer
+: 1696505559:0;clear
+: 1696505561:0;~
+: 1696505565:0;clear
+: 1696505572:0;ls
+: 1696505576:0;dotfiles
+: 1696505576:0;ls
+: 1696505600:0;lsd -al
+: 1696505635:0;delta .zshrc ../.config/zsh/.zshrc
+: 1696505674:0;git pull
+: 1696505701:0;rm .zshrc
+: 1696505707:0;rm .tmux.conf
+: 1696505715:0;lsd .. -al
+: 1696505731:0;n ../selected
+: 1696505841:0;cp -r ../.config/zsh .
+: 1696505849:0;git status
+: 1696505856:0;ls
+: 1696505872:0;lsd
+: 1696505880:0;lsd -al
+: 1696505884:0;.config
+: 1696505885:0;ls
+: 1696505890:0;ldf -al -d1
+: 1696505894:0;lsd -al -d1
+: 1696505896:0;lsd -al -d3
+: 1696505899:0;lsd -al -d 3
+: 1696505900:0;lsd -al -d 2
+: 1696505904:0;lsd -al
+: 1696505908:0;lsd -al zsh
+: 1696505927:0;delta zsh/.zshrc .config/zsh/.zshrc
+: 1696505929:0;cd ..
+: 1696505932:0;cd dotfiles
+: 1696505933:0;delta zsh/.zshrc .config/zsh/.zshrc
+: 1696505944:0;lsd .config/zsh -al
+: 1696505958:0;git status
+: 1696505972:0;lsd .config/tmux -al
+: 1696505980:0;mv zsh .config
+: 1696505983:0;mv -r zsh .config
+: 1696505990:0;mv zsh .config/zsh
+: 1696506003:0;git diff
+: 1696506042:0;cd .config/zsh/oh-my-zsh
+: 1696506044:0;git diff
+: 1696506120:0;git status
+: 1696506127:0;cd ..
+: 1696506134:0;git status
+: 1696506151:0;lsd -al
+: 1696506163:0;git add .config/zsh/.zshrc
+: 1696506181:0;cp ../.config/zsh .
+: 1696506197:0;hsi cp
+: 1696506205:0;cp -r ../.config/zsh .
