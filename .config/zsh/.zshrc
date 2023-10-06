@@ -40,7 +40,6 @@ HIST_STAMPS="yyyy-mm-dd"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 export FZF_BASE=/usr/bin/fzf
-
 DISABLE_FZF_KEY_BINDINGS="false"
 
 # Which plugins would you like to load?
@@ -114,6 +113,9 @@ man() {
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
+### PAGER (LESS) MOUSE WHEEL SUPPORT
+export LESS='--mouse --wheel-lines 4'
+
 ### LOCAL BINARY DIR
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -123,6 +125,11 @@ alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
 alias n='nvim'
+alias ls='lsd'
+alias l='lsd -l'
+alias ll='lsd -la'
+alias la='lsd -lA'
+alias lt='lsd --tree'
 
 ### ANYDSL: The paths for this are kinda random... change to own need
 export PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/bin:$HOME/Documents/Uni/CG/anydsl/artic/build/bin:$HOME/Documents/Uni/CG/anydsl/impala/build/bin:${PATH:-}"

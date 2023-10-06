@@ -1,9 +1,29 @@
 [core]
-	autocrlf = input
+  autocrlf = input
+  pager = delta --hyperlinks
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
+  light = false
+  side-by-side = true
+  line-numbers = true
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
+
 [user]
-	name = Joshua Meyer
-	email = s8jjmeye@stud.uni-saarland.de
+  name = Joshua Meyer
+  email = s8jjmeye@stud.uni-saarland.de
+
 [init]
-	defaultBranch = main
+  defaultBranch = main
+
 [alias]
-	pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+  pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+

@@ -17,3 +17,9 @@ autocmd("VimEnter", {
   pattern = "*",
   command = "if argc() == 0 && !exists('s:std_in') | NvimTreeOpen | endif"
 })
+
+autocmd("ExitPre", {
+	group = vim.api.nvim_create_augroup("Exit", { clear = true }),
+	command = "set guicursor=a:hor50",
+	desc = "Set cursor back to underline when leaving Neovim."
+})
