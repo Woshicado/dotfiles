@@ -1,18 +1,14 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
+export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+### Sort "*2.smth" before "*10.smth"
+setopt numericglobsort
+
 ZSH_THEME="bira"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-HYPHEN_INSENSITIVE="true"
+# CASE_SENSITIVE="true"    # a == A ?
+HYPHEN_INSENSITIVE="true"  # - == _ ?
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -28,25 +24,14 @@ HYPHEN_INSENSITIVE="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
+### HISTORY FILE
+export HISTFILE=$XDG_CONFIG_HOME/zsh/zsh_history
 HIST_STAMPS="yyyy-mm-dd"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
 
 export FZF_BASE=/usr/bin/fzf
 DISABLE_FZF_KEY_BINDINGS="false"
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+### PLUGINS
 plugins=(
   # git # With tmux, we do not really need this
   z       # Easy fuzzy navigation
@@ -63,14 +48,8 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 ### User configuration
-#
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-#
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
-# >>> conda initialize >>>
+### >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 export CONDARC=$XDG_CONFIG_HOME/conda/condarc
 
@@ -86,10 +65,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
-# Put history in $XDG_CONFIG_HOME
-export HISTFILE=$XDG_CONFIG_HOME/zsh/zsh_history
-export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 
 ### MACROS
 # mkdir and cd into it
@@ -109,15 +84,24 @@ man() {
   command man "$@"
 }
 
+# Source .source_me when entering a directory
+autoload -U add-zsh-hook
+load-local-conf() {
+     # check file exists, is regular file and is readable:
+     if [[ -f .source_me && -r .source_me ]]; then
+       source .source_me
+     fi
+}
+add-zsh-hook chpwd load-local-conf
+
+
 ### DEFAULT EDITOR
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
-### PAGER (LESS) MOUSE WHEEL SUPPORT
+### PAGER (LESS) CONFIG
 export LESS='--mouse --wheel-lines 4'
-
-### LOCAL BINARY DIR
-export PATH="$HOME/.local/bin:$PATH"
+export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 
 ### HELPFUL ALIASES
 alias cwd=pwd
@@ -125,26 +109,36 @@ alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
 alias n='nvim'
+alias c='xclip -sel c -r'
+# Directory aliases
 alias ls='lsd'
 alias l='lsd -l'
 alias ll='lsd -la'
 alias la='lsd -lA'
 alias lt='lsd --tree'
 
-### ANYDSL: The paths for this are kinda random... change to own need
-export PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/bin:$HOME/Documents/Uni/CG/anydsl/artic/build/bin:$HOME/Documents/Uni/CG/anydsl/impala/build/bin:${PATH:-}"
-export LD_LIBRARY_PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/lib:${LD_LIBRARY_PATH:-}"
-
-### CUDA
-export CUDA_HOME="/usr/local/cuda"
-export PATH="${CUDA_HOME}/bin:${PATH}"
-export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:$LD_LIBRARY_PATH"
-
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
 bindkey "^[^?" backward-kill-line
 bindkey "^W" backward-kill-word
 
-### Sort "*2.smth" before "*10.smth"
-setopt numericglobsort
+### ANYDSL: The paths for this are kinda random... change to own need
+#export PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/bin:$HOME/Documents/Uni/CG/anydsl/artic/build/bin:$HOME/Documents/Uni/CG/anydsl/impala/build/bin:${PATH:-}"
+#export LD_LIBRARY_PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/lib:${LD_LIBRARY_PATH:-}"
+
+### LOCAL BINARY DIR
+export PATH="$HOME/.local/bin:$PATH"
+
+### Add homebrew to path, but APPEND
+export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
+export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
+export PATH="${PATH}:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin";
+export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
+
+### CUDA
+export CUDA_HOME="/usr/local/cuda"
+export PATH="${PATH}:${CUDA_HOME}/bin"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:{CUDA_HOME}/lib64"
 
