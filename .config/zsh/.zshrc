@@ -5,7 +5,7 @@ export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 ### Sort "*2.smth" before "*10.smth"
 setopt numericglobsort
 
-ZSH_THEME="bira"
+ZSH_THEME="customized-bira"
 
 # CASE_SENSITIVE="true"    # a == A ?
 HYPHEN_INSENSITIVE="true"  # - == _ ?
@@ -142,4 +142,44 @@ export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 export CUDA_HOME="/usr/local/cuda"
 export PATH="${PATH}:${CUDA_HOME}/bin"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:{CUDA_HOME}/lib64"
+
+
+### CUSTOM ZSH PROMPT
+
+precmd_prompt () {
+  # Regex to find visible character length of prompt string
+  local zero='%([BSUbfksu]|([FK]|){*})'
+
+  # split left part of first line
+  local left_pref='─%B%(!.%{%}.%{%})%n@%m%{%} %B%{%}%4~ %{%}'
+  left_eval=$(ruby_prompt_info)$(conda_info)$(venv_info) # $(git_prompt_info)$(hg_prompt_info)
+
+  # Define what should be shown on the right
+  PS1_1_right=${(%):-'[%D{%H:%M:%S}] '}
+
+  # Git Prompt. Currently placed on the right. Could also be placed in the middle maybe? Will see
+  local git_prompt_info=$(git_prompt_info)$(hg_prompt_info)
+
+  # Compute length of the left prompt
+  local left_pref_length=${#${(S%%)left_pref//$~zero/}} 
+  local left_length=${#${(S%%)left_eval//$~zero/}}
+  left_length=$(($left_length+$left_pref_length+2))
+
+  # Compute length of the git prompt
+  local git_length=${#${(S%%)git_prompt_info//$~zero/}}
+
+  # Compute the necessary width for the middle prompt.
+  local middle_width=$((COLUMNS-left_length-${#PS1_1_right}-git_length))
+  
+  # Fill middle up to necessary length with spaces
+  PS1_1_middle=${(r:$middle_width:: :)}
+
+  # Finally build the prompt. First line right prompt color hard coded because of length calculation.
+  ### GIT ON RIGHT
+  PROMPT="${PROMPT_FL}${PS1_1_middle}${git_prompt_info}%{$fg[green]%}${PS1_1_right}%{$reset_color%}"$'\n'"${PROMPT_SL}"
+  ### GIT ON LEFT
+  #PROMPT="${PROMPT_FL}${git_prompt_info}${PS1_1_middle}%{$fg[green]%}${PS1_1_right}%{$reset_color%}"$'\n'"${PROMPT_SL}"
+  ### GIT IN MIDDLE? Should be possible, but idk if better
+}
+precmd_functions+=(precmd_prompt)
 

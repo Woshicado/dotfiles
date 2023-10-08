@@ -9,6 +9,7 @@ NC='\033[0m' # No color
 
 # Initialize the swap flag
 swap=false
+whole_path=false
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
@@ -16,6 +17,10 @@ while [[ $# -gt 0 ]]; do
     case $key in
         -o|--out)
             swap=true
+            shift
+            ;;
+        -p|--whole-path)
+            whole_path=true
             shift
             ;;
         *)
@@ -38,6 +43,7 @@ path_pairs=(
   "/etc/zshenv:./etc/zshenv"
   "$HOME/.gitconfig:./.gitconfig"                                           # git
   "$HOME/.config/glow/glow.yml:./.config/glow/glow.yml"                     # glow
+  "$HOME/.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme:./.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme"
 )
 
 ask_yes_no() {
@@ -93,9 +99,13 @@ for pair in "${path_pairs[@]}"; do
 
     # Check if the source path exists
     if [ -e "$source_path" ]; then
-        echo -ne "[${YELLOW}Copying${NC}] ${GREEN}$source_path${NC} to ${RED}$dest_path${NC}..."
+        filename=$source_path
+        if [ "$whole_path" = false ]; then
+          filename="${filename##*/}"
+        fi
+        echo -ne "[${YELLOW}Copying${NC}] ${NC}$filename${NC}..."
         cp -r "$source_path" "$dest_path"
-        echo -e "\r[${BGREEN}Copied${NC}] ${GREEN}$source_path${NC} to ${RED}$dest_path${NC}$(tput el)"
+        echo -e "\r[${BGREEN}Copied${NC}] ${NC}$filename${NC}$(tput el)"
     else
         echo -e "[${RED}ERROR${NC}] Source path ${YELLOW}$source_path${NC} does not exist."
     fi
