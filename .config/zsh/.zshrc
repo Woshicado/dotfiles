@@ -100,6 +100,7 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 ### PAGER (LESS) CONFIG
+export PAGER='less -r'
 export LESS='--mouse --wheel-lines 4'
 export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 
