@@ -4,6 +4,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BGREEN='\033[0;92m'
+BRED='\033[0;33m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No color
 
@@ -44,6 +45,7 @@ path_pairs=(
   "$HOME/.gitconfig:./.gitconfig"                                           # git
   "$HOME/.config/glow/glow.yml:./.config/glow/glow.yml"                     # glow
   "$HOME/.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme:./.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme"
+  "$HOME/.local/bin/ansi_colors:./ansi_colors"
 )
 
 ask_yes_no() {
@@ -104,8 +106,12 @@ for pair in "${path_pairs[@]}"; do
           filename="${filename##*/}"
         fi
         echo -ne "[${YELLOW}Copying${NC}] ${NC}$filename${NC}..."
-        cp -r --no-target-directory "$source_path" "$dest_path"
-        echo -e "\r[${BGREEN}Copied${NC}] ${NC}$filename${NC}$(tput el)"
+        errormsg=$(cp -r --no-target-directory "$source_path" "$dest_path" 2>&1) # 2> /dev/null
+        if [ $? == 0 ]; then
+          echo -e "\r[${BGREEN}Copied${NC}] ${NC}$filename${NC}$(tput el)"
+        else
+          echo -e "\r[${RED}FAILED${NC}] ${NC}$filename${NC}$(tput el): ${BRED}${errormsg}${NC}"
+        fi
     else
         echo -e "[${RED}ERROR${NC}] Source path ${YELLOW}$source_path${NC} does not exist."
     fi
