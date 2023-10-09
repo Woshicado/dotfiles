@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Define color codes
 RED='\033[0;31m'
@@ -104,7 +104,7 @@ for pair in "${path_pairs[@]}"; do
           filename="${filename##*/}"
         fi
         echo -ne "[${YELLOW}Copying${NC}] ${NC}$filename${NC}..."
-        cp -r "$source_path" "$dest_path"
+        cp -r --no-target-directory "$source_path" "$dest_path"
         echo -e "\r[${BGREEN}Copied${NC}] ${NC}$filename${NC}$(tput el)"
     else
         echo -e "[${RED}ERROR${NC}] Source path ${YELLOW}$source_path${NC} does not exist."
