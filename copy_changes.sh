@@ -46,6 +46,7 @@ path_pairs=(
   "$HOME/.config/glow/glow.yml:./.config/glow/glow.yml"                     # glow
   "$HOME/.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme:./.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme"
   "$HOME/.local/bin/ansi_colors:./ansi_colors"
+  "$HOME/.config/Code/User/hsnips:./.config/Code/User/hsnips"
 )
 
 ask_yes_no() {
