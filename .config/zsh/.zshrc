@@ -117,6 +117,8 @@ alias l='lsd -l'
 alias ll='lsd -la'
 alias la='lsd -lA'
 alias lt='lsd --tree'
+# Copy directory over ssh (from remote to local)
+alias rcp='rsync -saLPz --port 22 -e ssh '
 
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
