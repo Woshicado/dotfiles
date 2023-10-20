@@ -119,8 +119,9 @@ alias la='lsd -lA'
 alias lt='lsd --tree'
 # Copy directory over ssh (from remote to local)
 alias rcp='rsync -saLPz --port 22 -e ssh '
-#
+# Custom git aliases for submodules
 alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
+alias gsp='git push --recurse-submodules=on-demand'
 
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
