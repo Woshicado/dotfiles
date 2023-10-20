@@ -33,7 +33,7 @@ DISABLE_FZF_KEY_BINDINGS="false"
 
 ### PLUGINS
 plugins=(
-  # git # With tmux, we do not really need this
+  git # With tmux, we do not really need this
   z       # Easy fuzzy navigation
   vscode  # cmd shortcuts. E.g.: `vscd f1 f2` opens diff in code
   sudo    # Double escape sudo's last command
@@ -119,6 +119,8 @@ alias la='lsd -lA'
 alias lt='lsd --tree'
 # Copy directory over ssh (from remote to local)
 alias rcp='rsync -saLPz --port 22 -e ssh '
+#
+alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
 
 ### HANDY KEYBINDS
 bindkey "^K" kill-line

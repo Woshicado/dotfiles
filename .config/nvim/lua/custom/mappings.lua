@@ -17,6 +17,7 @@ M.nvimtree = {
     ["<F5>"] = {"<cmd> NvimTreeToggle <CR>", "Toggle nvimtree"},
     ["<F4>"] = {"<cmd> :bd <CR>", "Close current file"},
     ["<C-q>"] = {"<cmd> :q! <CR>", "Close session without saving"},
+    ["<A-q>"] = {"<cmd> :cq <CR>", "Close session with error code"}, -- Useful to abort commit
     ["<leader><C-w>"] = {"<cmd> :set wrap!<CR>", "Toggle word wrap"},
     ["<leader><Left>"] = { "<cmd> :bp!<CR>", "Switch to previous buffer"},
     ["<leader><Right>"] = { "<cmd> :bn!<CR>", "Switch to previous buffer"},
