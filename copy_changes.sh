@@ -33,7 +33,7 @@ done
 
 # Define a list of path pairs in the format "source:destination"; Files and directories allowed
 path_pairs=(
-  "$HOME/.config/alacritty/alacritty.yml:./.config/alacritty/alacritty.yml" # Alacritty
+  "$HOME/.config/alacritty/alacritty.toml:./.config/alacritty/alacritty.toml" # Alacritty
   "$HOME/.config/conda/condarc:./.config/conda/condarc"                     # Conda
   "$HOME/.config/nvim/init.lua:./.config/nvim/init.lua"                     # Nvim
   "$HOME/.config/nvim/lua/custom:./.config/nvim/lua/custom"

@@ -99,6 +99,9 @@ add-zsh-hook chpwd load-local-conf
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
+### CUSTOM COMPOSE FILE
+export XCOMPOSEFILE='/home/woshi/.config/XCompose'
+
 ### PAGER (LESS) CONFIG
 export PAGER='less -r'
 export LESS='--mouse --wheel-lines 4'
@@ -131,6 +134,59 @@ bindkey "^W" backward-kill-word
 ### ANYDSL: The paths for this are kinda random... change to own need
 #export PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/bin:$HOME/Documents/Uni/CG/anydsl/artic/build/bin:$HOME/Documents/Uni/CG/anydsl/impala/build/bin:${PATH:-}"
 #export LD_LIBRARY_PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/lib:${LD_LIBRARY_PATH:-}"
+
+### DEEPL
+export DEEPL_AUTH_KEY="9ab11644-e033-4b12-6aee-67649d6fabe6:fx"
+
+# Detect source and translate to
+ts() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=ES --show-detected-source "$*"
+  else
+    deepl text --to=ES "$*"
+  fi
+}
+
+te() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=EN-US --show-detected-source "$*"
+  else
+    deepl text --to=EN-US "$*"
+  fi
+}
+
+tg() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=DE --show-detected-source "$*"
+  else
+    deepl text --to=DE "$*"
+  fi
+}
+
+td() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=DE --show-detected-source "$*"
+  else
+    deepl text --to=DE "$*"
+  fi
+}
+tj() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=JA --show-detected-source "$*"
+  else
+    deepl text --to=JA "$*"
+  fi
+}
+
+# Explicitly translate from...
+dts() { deepl text --to=ES --from=DE "$*" }
+std() { deepl text --to=DE --from=ES "$*" }
+dtj() { deepl text --to=JA --from=DE "$*" }
 
 ### LOCAL BINARY DIR
 export PATH="$HOME/.local/bin:$PATH"
@@ -166,7 +222,7 @@ precmd_prompt () {
   local git_prompt_info=$(git_prompt_info)$(hg_prompt_info)
 
   # Compute length of the left prompt
-  local left_pref_length=${#${(S%%)left_pref//$~zero/}} 
+  local left_pref_length=${#${(S%%)left_pref//$~zero/}}
   local left_length=${#${(S%%)left_eval//$~zero/}}
   left_length=$(($left_length+$left_pref_length+2))
 
@@ -175,7 +231,7 @@ precmd_prompt () {
 
   # Compute the necessary width for the middle prompt.
   local middle_width=$((COLUMNS-left_length-${#PS1_1_right}-git_length))
-  
+
   # Fill middle up to necessary length with spaces
   PS1_1_middle=${(r:$middle_width:: :)}
 
@@ -187,4 +243,3 @@ precmd_prompt () {
   ### GIT IN MIDDLE? Should be possible, but idk if better
 }
 precmd_functions+=(precmd_prompt)
-
