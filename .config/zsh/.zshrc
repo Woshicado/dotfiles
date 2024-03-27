@@ -97,7 +97,8 @@ add-zsh-hook chpwd load-local-conf
 # Ranger: cd to current if exiting via Q
 function ranger {
   local IFS=$'\t\n'
-  local tempfile="$(mktemp -t tmp.XXXXXX)"
+  local tempfile="$(mktemp $HOME/.rangerdir.XXXXXXXXX)"
+#  chmod a+rw $tempfile
   local ranger_cmd=(
     command
     ranger
@@ -105,11 +106,11 @@ function ranger {
   )
 
   ${ranger_cmd[@]} "$@"
-  if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$PWD" ]]; then
+  if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "" ]]; then
     cd -- "$(cat -- "$tempfile")" || return
+    clear
   fi
   command rm -f -- "$tempfile" 2>/dev/null
-  clear
 }
 
 
