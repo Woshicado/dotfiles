@@ -47,6 +47,8 @@ path_pairs=(
   "$HOME/.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme:./.config/zsh/oh-my-zsh/custom/themes/customized-bira.zsh-theme"
   "$HOME/.local/bin/ansi_colors:./ansi_colors"
   "$HOME/.config/Code/User/hsnips:./.config/Code/User/hsnips"
+  "$HOME/.config/ranger:./.config/ranger"
+  "$HOME/.config/zathura:./.config/zathura"
 )
 
 ask_yes_no() {

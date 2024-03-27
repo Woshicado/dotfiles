@@ -1,0 +1,8 @@
+ map <C-i> zoom in
+ map <C-o> zoom out
+ map <C-+> zoom in
+ map <C--> zoom out
+ map <C-w> quit
+
+ set scroll-step 120
+ set scroll-wrap false
