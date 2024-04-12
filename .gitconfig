@@ -1,3 +1,4 @@
+# ~/.gitconfig
 [core]
   autocrlf = input
   pager = delta --hyperlinks
@@ -17,11 +18,6 @@
 [diff]
   colorMoved = default
 
-[user]
-  name = Joshua Meyer
-  email = s8jjmeye@stud.uni-saarland.de
-	signingkey = 67CD220428F9F1A6
-
 [init]
   defaultBranch = main
 
@@ -29,4 +25,10 @@
   pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
 
 [commit]
-	gpgsign = true
+  gpgsign = true
+
+[include]
+  path = .gitconfig-personal
+
+[includeIf "gitdir:~/Documents/Uni/"]
+  path = .gitconfig-uni
