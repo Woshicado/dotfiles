@@ -31,8 +31,8 @@ ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
 export PROMPT_FL="╭─${user_host} ${current_dir}${rvm_ruby}${conda}${venv} " # ${vcs_branch}"
 export PROMPT_SL="╰─%B${user_symbol}%b "
 
-#PROMPT="╭─${user_host} ${current_dir}${rvm_ruby}${conda}${venv} ${vcs_branch}
-#╰─%B${user_symbol}%b "
+PROMPT="╭─${user_host} ${current_dir}${rvm_ruby}${conda}${venv} ${vcs_branch}
+╰─%B${user_symbol}%b "
 RPROMPT="%B${return_code}%b"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}‹"
