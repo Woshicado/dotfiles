@@ -136,6 +136,7 @@ alias dnfua='sudo dnf update --refresh'
 alias n='nvim'
 alias c='xclip -sel c -r'
 alias pdf='zathura'
+
 # Directory aliases
 alias ls='lsd'
 alias l='lsd -l'
@@ -145,11 +146,16 @@ alias lt='lsd --tree'
 alias llt='lsd -a --tree'
 alias lat='lsd -la --tree'
 alias llat='lsd -la --tree'
+
 # Copy directory over ssh (from remote to local)
 alias rcp='rsync -saLPz --port 22 -e ssh '
+
 # Custom git aliases for submodules
 alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
 alias gsp='git push --recurse-submodules=on-demand'
+
+# Always start ipython with current venv
+alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
