@@ -119,6 +119,7 @@ function ranger {
 ### DEFAULT EDITOR
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+export VIMTEX_OUTPUT_DIRECTORY='out'
 
 ### CUSTOM COMPOSE FILE
 export XCOMPOSEFILE='/home/woshi/.config/XCompose'

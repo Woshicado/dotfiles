@@ -12,6 +12,10 @@ vim.opt.expandtab = true
 vim.opt.scrolloff = 8
 vim.opt.cc = {80,100}
 vim.opt.smarttab = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.showbreak = "=>"
+vim.opt.conceallevel = 2
 
 autocmd("VimEnter", {
   pattern = "*",

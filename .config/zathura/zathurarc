@@ -6,3 +6,4 @@
 
  set scroll-step 120
  set scroll-wrap false
+ set selection-notification false
