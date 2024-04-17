@@ -146,6 +146,7 @@ alias lt='lsd --tree'
 alias llt='lsd -a --tree'
 alias lat='lsd -la --tree'
 alias llat='lsd -la --tree'
+alias cd='z'
 
 # Copy directory over ssh (from remote to local)
 alias rcp='rsync -saLPz --port 22 -e ssh '
