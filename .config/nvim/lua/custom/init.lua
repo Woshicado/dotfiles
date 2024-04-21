@@ -1,5 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 
+
 -- Auto resize panes when resizing nvim window
 -- autocmd("VimResized", {
 --   pattern = "*",
@@ -16,6 +17,7 @@ vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.showbreak = "=>"
 vim.opt.conceallevel = 2
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
 autocmd("VimEnter", {
   pattern = "*",
