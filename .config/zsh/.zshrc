@@ -159,6 +159,9 @@ alias gsp='git push --recurse-submodules=on-demand'
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
+# Start obsidian (flatpak installation) manually to allow for gpg-signing
+alias obsidian="/var/lib/flatpak/app/md.obsidian.Obsidian/current/active/files/obsidian"
+
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
 bindkey "^[^?" backward-kill-line
