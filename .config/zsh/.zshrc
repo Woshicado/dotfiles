@@ -7,7 +7,24 @@ setopt numericglobsort
 
 # Because ZSH did not take into account custom prompt functions we need to disable async loading
 zstyle ':omz:alpha:lib:git' async-prompt no
+zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 ZSH_THEME="customized-bira"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
 
 # CASE_SENSITIVE="true"    # a == A ?
 HYPHEN_INSENSITIVE="true"  # - == _ ?
@@ -147,7 +164,7 @@ alias lt='lsd --tree'
 alias llt='lsd -a --tree'
 alias lat='lsd -la --tree'
 alias llat='lsd -la --tree'
-alias cd='z'
+#alias cd='z'
 
 # Copy directory over ssh (from remote to local)
 alias rcp='rsync -saLPz --port 22 -e ssh '
