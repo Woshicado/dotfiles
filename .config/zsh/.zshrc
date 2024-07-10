@@ -258,7 +258,11 @@ export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 ### CUDA
 export CUDA_HOME="/usr/local/cuda"
 export PATH="${PATH}:${CUDA_HOME}/bin"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${CUDA_HOME}/lib64"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${CUDA_HOME}/lib64:/usr/lib64"
+export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${LD_LIBRARY_PATH}"
+
+
+eval "$(oh-my-posh init zsh --config "${HOME}/.config/oh-my-posh/.mytheme.omp.yaml")"
 
 ### CUSTOM ZSH PROMPT
 
@@ -297,4 +301,4 @@ precmd_prompt () {
   # PROMPT="${PROMPT_FL}${vcs_branch}${PS1_1_middle}%{$fg[green]%}${PS1_1_right}%{$reset_color%}"$'\n'"${PROMPT_SL}"
   ### GIT IN MIDDLE? Should be possible, but idk if better
 }
-precmd_functions+=(precmd_prompt)
+#precmd_functions+=(precmd_prompt)
