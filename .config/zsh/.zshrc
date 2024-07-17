@@ -1,6 +1,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
+export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
 
 ### Sort "*2.smth" before "*10.smth"
 setopt numericglobsort

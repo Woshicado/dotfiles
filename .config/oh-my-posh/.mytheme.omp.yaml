@@ -93,12 +93,22 @@ blocks:
       always_enabled: false
       threshold: 3000
       style: round
+  - type: owm
+    style: plain
+    template: "| {{.Weather}} ({{.Temperature}}{{.UnitIcon}}) "
+    foreground: cyan
+    background: ""
+    properties:
+      api_key: ""
+      location: "Saarbrücken,66111,DE"
+      http_timeout: 200
+      cache_timeout: 10
+      units: metric
   - type: time
     style: plain
     template: "| {{ .CurrentDate | date .Format }}"
     background: ""
     foreground: lightGreen
-
     min_width: 80
 
 - type: prompt
