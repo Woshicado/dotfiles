@@ -2,6 +2,7 @@
 [core]
   autocrlf = input
   pager = delta --hyperlinks
+  excludesfile = /home/woshi/.gitignore-global
 
 [interactive]
   diffFilter = delta --color-only
