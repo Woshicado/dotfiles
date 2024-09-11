@@ -49,6 +49,7 @@ export HISTFILE=$XDG_CONFIG_HOME/zsh/zsh_history
 HIST_STAMPS="yyyy-mm-dd"
 
 export FZF_BASE=/usr/bin/fzf
+export FZF_DEFAULT_OPTS='--height 40% --tmux center,60%'
 DISABLE_FZF_KEY_BINDINGS="false"
 
 ### PLUGINS
