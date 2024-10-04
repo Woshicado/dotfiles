@@ -78,7 +78,7 @@ blocks:
     - "{{if eq \"Charging\" .State.String}}#4caf50{{end}}"
     - "{{if eq \"Discharging\" .State.String}}#40c4ff{{end}}"
     - "{{if eq \"Full\" .State.String}}#ff0000{{end}}"
-    template: "| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }} \uf295 "
+    template: "| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }} \U000f03f0 "
     properties:
       charged_icon: "\uf00d "
       charging_icon: "\ue234 "
@@ -132,8 +132,6 @@ blocks:
       foreground: red
       template: "{{if gt .Code 0 }}\uea87 {{ .Code }}{{end}}"
 
-
-
 secondary_prompt:
   background: "transparent"
   foreground: "#555555"
@@ -146,3 +144,4 @@ transient_prompt:
   - "{{if gt .Code 0}}red{{end}}"
   - "{{if eq .Code 0}}blue{{end}}"
   template: "\uf104{{ now | date \"15:04\" }}{{ if .Segments.Executiontime.FormattedMs }} | <yellow>\U000f0dbc{{ .Segments.Executiontime.FormattedMs }}</>{{ end }}{{if gt .Code 0}} | \uea87 {{ .Code }}{{end}}\uf105 "
+

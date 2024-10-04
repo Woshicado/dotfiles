@@ -1,7 +1,11 @@
 # Path to your oh-my-zsh installation.
+export XDG_CONFIG_HOME="$HOME/.config"
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
+
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 ### Sort "*2.smth" before "*10.smth"
 setopt numericglobsort
@@ -65,6 +69,8 @@ plugins=(
   virtualenv
   fzf
 )
+
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -148,11 +154,16 @@ export PAGER='less -r'
 export LESS='--mouse --wheel-lines 4'
 export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 
+### DOCKER
+#export DOCKER_DEFAULT_PLATFORM='linux/amd64'
+alias ssh_tb='ssh -L 16006:127.0.0.1:6006'
+
 ### HELPFUL ALIASES
 alias cwd=pwd
 alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
+alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
 alias n='nvim'
 alias c='xclip -sel c -r'
 alias pdf='zathura'
@@ -186,9 +197,28 @@ bindkey "^K" kill-line
 bindkey "^[^?" backward-kill-line
 bindkey "^W" backward-kill-word
 
-### ANYDSL: The paths for this are kinda random... change to own need
-#export PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/bin:$HOME/Documents/Uni/CG/anydsl/artic/build/bin:$HOME/Documents/Uni/CG/anydsl/impala/build/bin:${PATH:-}"
-#export LD_LIBRARY_PATH="$HOME/Documents/Uni/CG/anydsl/llvm_install/lib:${LD_LIBRARY_PATH:-}"
+### TMUX custom function
+function tmuxsc() {
+    local session_name="$1"
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        # If the session exists, switch to it
+    else
+        # If the session doesn't exist, create it in detached mode and switch to it
+        tmux new-session -d -s "$session_name"
+    fi
+    tmux switch-client -t "$session_name"
+}
+
+### yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 
 ### DEEPL
 export DEEPL_AUTH_KEY="9ab11644-e033-4b12-6aee-67649d6fabe6:fx"
@@ -263,8 +293,17 @@ export PATH="${PATH}:${CUDA_HOME}/bin"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${CUDA_HOME}/lib64:/usr/lib64"
 export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${LD_LIBRARY_PATH}"
 
-
 eval "$(oh-my-posh init zsh --config "${HOME}/.config/oh-my-posh/.mytheme.omp.yaml")"
+
+### Load venvwrapper
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  source "$HOME/Library/Python/3.9/bin/virtualenvwrapper.sh"
+
+  ### Tev wrapper for macos... Seems to try and execute x86 instead of arm64 otherwise...
+  alias tev="arch -arm64 /Applications/tev.app/Contents/MacOS/tev"
+fi
+# Load base env (macOS does not seem to do that by default)
+workon base
 
 ### CUSTOM ZSH PROMPT
 
@@ -304,3 +343,11 @@ precmd_prompt () {
   ### GIT IN MIDDLE? Should be possible, but idk if better
 }
 #precmd_functions+=(precmd_prompt)
+
+
+###### THE FOLLOWING SHOULD BE AT THE END.
+### Make sure homebrew is the first to be looked up
+export PATH="/opt/homebrew/bin:$PATH"
+### Apply all defined hooks, e.g., sourcing .source_me files.
+load-local-conf
+

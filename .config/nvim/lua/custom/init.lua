@@ -21,7 +21,7 @@ vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
 autocmd("VimEnter", {
   pattern = "*",
-  command = "if argc() == 0 && !exists('s:std_in') | NvimTreeOpen | endif"
+  command = "if argc() == 0 && !exists('s:std_in') | NvimTreeToggle | endif"
 })
 
 autocmd("ExitPre", {

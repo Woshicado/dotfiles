@@ -33,6 +33,8 @@ shape = "Underline"
 
 [env]
 TERM = "xterm-256color"
+PATH = "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# XDG_CONFIG_HOME = "/Users/joshua/.config"
 
 [font]
 builtin_box_drawing = false
@@ -59,11 +61,46 @@ history = 10000
 multiplier = 4
 
 [window]
-decorations = "none"
+# decorations = "transparent"
 dynamic_title = true
 opacity = 1.0
 resize_increments = false
 
+[window.padding]
+x = 4
+y = 8
+
 [window.class]
 general = "Alacritty"
 instance = "Alacritty"
+
+[keyboard]
+bindings = [
+  { key = "Right", mods = "Alt", chars = "\u001BF" },
+  { key = "Left",  mods = "Alt", chars = "\u001BB" },
+  # { key = "Right", mods = "Command", chars = "\u001b[F" },- 
+  { key = "A", mods = "Command", chars = "\u0001" },
+  { key = "K", mods = "Alt", chars = "\u001bk" },
+  { key = "J", mods = "Alt", chars = "\u001bj" },
+  { key = "H", mods = "Alt", chars = "\u001bh" },
+  { key = "L", mods = "Alt", chars = "\u001bl" },
+  #{ key = "Left", mods = "Alt", chars = "\u001bh" },
+  #{ key = "Right", mods = "Alt", chars = "\u001bl" }
+  # { key = "Left", mods = "Command", action = "Move", chars = "BeginningOfLines" },
+]
+
+[shell]
+program = "/opt/homebrew/bin/tmux"
+args = ["new-session", "-A", "-D", "-s", "main", "-f", "/Users/joshua/.config/tmux/tmux.conf"]
+
+#[shell]
+#program = "/bin/zsh"
+#args = ["-c", "/opt/homebrew/bin/tmux"]
+
+#[shell]
+#program = "/bin/zsh"
+#args = ["-c", "env > ~/alacritty_env.txt && /opt/homebrew/bin/tmux"]
+#[shell]
+#program = "/bin/zsh"
+#args = ["-c", "source ~/.zshrc && tmux"]
+

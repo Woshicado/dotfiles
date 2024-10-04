@@ -1,1 +1,6 @@
-.vscode/settings.json
+.vscode
+.source_me
+out
+__pycache__
+.DS_Store
+
