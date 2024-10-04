@@ -1,0 +1,39 @@
+[manager]
+show_hidden = false
+sort_dir_first = true
+sort_sensitive = false
+sort_by = "natural"
+sort_translit = true
+scrolloff = 3
+ratio = [1, 4, 4]
+
+[preview]
+tab_size = 2
+max_width = 2048
+max_height = 2048
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*"
+run  = "git"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*/"
+run  = "git"
+
+[plugin]
+prepend_previewers = [
+  # { name = "*.md", run = "glow" },
+  # { mime = "text/csv", run = "miller"},
+  # { name = "*.ipynb", run = "nbpreview" },
+  # { name = "*", run = "hexyl" },
+
+  { name = "*.csv", run = "rich-preview"}, # for csv files
+  { name = "*.md", run = "rich-preview" }, # for markdown (.md) files
+  { name = "*.ipynb", run = "rich-preview"}, # for jupyter notebooks (.ipynb)
+  { name = "*.json", run = "rich-preview"}, # for json (.json) files
+  { name = "*.py", run = "rich-preview"}, # for json (.json) files
+# { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
+]
+
