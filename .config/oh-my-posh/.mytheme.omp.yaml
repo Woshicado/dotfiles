@@ -80,7 +80,7 @@ blocks:
     - "{{if eq \"Full\" .State.String}}#ff0000{{end}}"
     template: "| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }} \U000f03f0 "
     properties:
-      charged_icon: "\uf00d "
+      charged_icon: "\U000f17e8 "
       charging_icon: "\ue234 "
     background: ""
     foreground: ""
