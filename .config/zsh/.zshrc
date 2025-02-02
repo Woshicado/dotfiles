@@ -62,8 +62,8 @@ plugins=(
   z       # Easy fuzzy navigation
   vscode  # cmd shortcuts. E.g.: `vscd f1 f2` opens diff in code
   sudo    # Double escape sudo's last command
-  dirhistory
-  history
+  #dirhistory
+  #history
   copybuffer
   zsh-autosuggestions
   virtualenv
@@ -114,10 +114,22 @@ man() {
 # Source .source_me when entering a directory
 autoload -U add-zsh-hook
 load-local-conf() {
-     # check file exists, is regular file and is readable:
-     if [[ -f .source_me && -r .source_me ]]; then
-       source .source_me
-     fi
+  local dir=$PWD
+
+  while [[ $dir != "/" ]]; do
+    if [[ -f "$dir/.source_me" && -r "$dir/.source_me" ]]; then
+      source "$dir/.source_me"
+      return
+    fi
+
+    # Stop if the directory is a Git repository root
+    if [[ -d "$dir/.git" ]]; then
+      return
+    fi
+
+    # Move to the parent directory
+    dir=$(dirname "$dir")
+  done
 }
 add-zsh-hook chpwd load-local-conf
 
@@ -190,7 +202,9 @@ alias gsp='git push --recurse-submodules=on-demand'
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
 # Start obsidian (flatpak installation) manually to allow for gpg-signing
-alias obsidian="/var/lib/flatpak/app/md.obsidian.Obsidian/current/active/files/obsidian"
+if [[ ! "$OSTYPE" == "darwin"* ]]; then
+  alias obsidian="/var/lib/flatpak/app/md.obsidian.Obsidian/current/active/files/obsidian"
+fi
 
 ### HANDY KEYBINDS
 bindkey "^K" kill-line
@@ -288,10 +302,10 @@ export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
 export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 
 ### CUDA
-export CUDA_HOME="/usr/local/cuda"
-export PATH="${PATH}:${CUDA_HOME}/bin"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${CUDA_HOME}/lib64:/usr/lib64"
-export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${LD_LIBRARY_PATH}"
+#export CUDA_HOME="/usr/local/cuda"
+#export PATH="${PATH}:${CUDA_HOME}/bin"
+#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${CUDA_HOME}/lib64:/usr/lib64"
+#export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${LD_LIBRARY_PATH}"
 
 eval "$(oh-my-posh init zsh --config "${HOME}/.config/oh-my-posh/.mytheme.omp.yaml")"
 
@@ -345,9 +359,40 @@ precmd_prompt () {
 #precmd_functions+=(precmd_prompt)
 
 
+
+### FOR JEKYLL/RUBY
+# chruby for ruby env
+source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
+source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
+
+# Change away from system ruby
+chruby ruby-3.3.5
+
+
+
+
+
+
+### FOR MUJOCO_PY
+#export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+#export CC="/opt/homebrew/opt/llvm/bin/clang"
+#export CXX="/opt/homebrew/opt/llvm/bin/clang++"
+#export CXX11="/opt/homebrew/opt/llvm/bin/clang++"
+#export CXX14="/opt/homebrew/opt/llvm/bin/clang++"
+#export CXX17="/opt/homebrew/opt/llvm/bin/clang++"
+#export CXX1X="/opt/homebrew/opt/llvm/bin/clang++"
+
+#export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+#export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+
+
 ###### THE FOLLOWING SHOULD BE AT THE END.
 ### Make sure homebrew is the first to be looked up
-export PATH="/opt/homebrew/bin:$PATH"
+#export PATH="/opt/homebrew/bin:$PATH"
 ### Apply all defined hooks, e.g., sourcing .source_me files.
 load-local-conf
+
+
 

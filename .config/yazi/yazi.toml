@@ -29,11 +29,16 @@ prepend_previewers = [
   # { name = "*.ipynb", run = "nbpreview" },
   # { name = "*", run = "hexyl" },
 
-  { name = "*.csv", run = "rich-preview"}, # for csv files
+  { mime = "text/csv", run = "miller"},
+  # { name = "*.json", run = "miller_json"},
+  { name = "*.jsonl", run = "miller_jsonl"},
+  # { name = "*.csv", run = "rich-preview"}, # for csv files
   { name = "*.md", run = "rich-preview" }, # for markdown (.md) files
   { name = "*.ipynb", run = "rich-preview"}, # for jupyter notebooks (.ipynb)
-  { name = "*.json", run = "rich-preview"}, # for json (.json) files
-  { name = "*.py", run = "rich-preview"}, # for json (.json) files
+  # { name = "*.json", run = "rich-preview"},
+  { name = "*.py", run = "rich-preview"},
+  { name = "*.sh", run = "rich-preview"},
+  # { name = "*.json", run = "rich-preview"},
+  { name = "*.tex", run = "rich-preview"},
 # { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
 ]
-

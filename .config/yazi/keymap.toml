@@ -1,6 +1,6 @@
 [[manager.prepend_keymap]]
 on   = "T"
-run  = "plugin --sync max-preview"
+run  = "plugin max-preview"
 desc = "Maximize or restore preview"
 
 [[manager.prepend_keymap]]
@@ -10,12 +10,12 @@ desc = "Open shell here"
 
 [[manager.prepend_keymap]]
 on   = "l"
-run  = "plugin --sync smart-enter"
+run  = "plugin smart-enter"
 desc = "Enter the child directory, or open the file"
 
 [[manager.prepend_keymap]]
 on   = "<Right>"
-run  = "plugin --sync smart-enter"
+run  = "plugin smart-enter"
 desc = "Enter the child directory, or open the file"
 
 [[manager.prepend_keymap]]
@@ -28,3 +28,74 @@ on   = "<A-Up>"
 run  = "seek -1"
 desc = "Scroll preview up"
 
+# [[manager.prepend_keymap]]
+# on   = [ "g", "f" ]
+# run  = 'search_do --via=fd --args="-d 3"'
+# desc = "Switch to the flat view with a max depth of 3"
+
+[[manager.prepend_keymap]]
+on   = [ "g", "f" ]
+run  = 'search fd --args="-H"'
+desc = "Search via fd"
+
+[[manager.prepend_keymap]]
+on   = [ "g", "u" ]
+run  = 'cd $HOME/Documents/Uni'
+desc = "go to Uni directory"
+
+[[manager.prepend_keymap]]
+on   = [ "g", "v" ]
+run  = 'cd $VIRTUAL_ENV'
+desc = "go to py venv"
+
+[[manager.prepend_keymap]]
+on   = [ "f","f" ]
+run  = "filter --smart"
+desc = "find file by filename"
+
+[[manager.prepend_keymap]]
+on   = [ "f","g" ]
+run  = "plugin fg"
+desc = "find file by content (fuzzy match)"
+
+[[manager.prepend_keymap]]
+on   = [ "f","z" ]
+run  = "plugin fg --args='fzf'"
+desc = "find file by filename"
+
+[[manager.prepend_keymap]]
+on   = [ "f","g" ]
+run  = "plugin fg"
+desc = "find file by content (fuzzy match)"
+
+# Bookmarks
+
+[[manager.prepend_keymap]]
+on = [ "b", "a" ]
+run = "plugin yamb --args=save"
+desc = "Add bookmark"
+
+[[manager.prepend_keymap]]
+on = [ "b", "d" ]
+run = "plugin yamb --args=delete_by_fzf"
+desc = "Delete bookmark by fzf"
+
+[[manager.prepend_keymap]]
+on = [ "b", "r" ]
+run = "plugin yamb --args=rename_by_fzf"
+desc = "Rename bookmark by key"
+
+[[manager.prepend_keymap]]
+on = [ "b", "g" ]
+run = "plugin yamb --args=jump_by_fzf"
+desc = "Jump bookmark by fzf"
+
+[[manager.prepend_keymap]]
+on = [ "g", "b" ]
+run = "plugin yamb --args=jump_by_fzf"
+desc = "Jump bookmark by fzf"
+
+[[manager.prepend_keymap]]
+on   = "<C-d>"
+run  = "plugin diff"
+desc = "Diff the selected with the hovered file"
