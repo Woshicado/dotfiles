@@ -20,6 +20,33 @@ return {
   },
 
   {
+    "nvim-tree/nvim-tree.lua",
+    config = function()
+      require("nvim-tree").setup {
+        on_attach = function(bufnr)
+          local api = require "nvim-tree.api"
+
+          local function opts(desc)
+            return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+          end
+
+          -- default mappings
+          api.config.mappings.default_on_attach(bufnr)
+
+          -- custom mappings
+          local options = vim.bo[bufnr].ft == "NvimTree" and "nvimtree" or "default"
+          vim.keymap.set("n", "<C-t>", function() require("menu").open(options) end, opts "Context Menu")
+        end
+      }
+    end,
+  },
+
+  {
+    "nvzone/menu",
+    lazy = true,
+  },
+
+  {
     "hrsh7th/nvim-cmp",
     opts = function()
       return require "configs.cmp"
@@ -29,8 +56,7 @@ return {
   -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-    },
+    dependencies = {},
     config = function()
       require "configs.lspconfig"
     end, -- Override to setup mason-lspconfig
