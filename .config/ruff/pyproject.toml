@@ -1,0 +1,9 @@
+[tool.ruff]
+respect-gitignore = true
+
+line-length = 100
+#indent-width = 2
+
+[tool.ruff.format]
+#indent-style="tab"
+quote-style = "double"
