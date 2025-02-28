@@ -342,7 +342,7 @@ precmd_prompt () {
 
   # Compute length of the git prompt
   local git_length=${#${(S%%)vcs_branch//$~zero/}}
- 
+
   # Compute the necessary width for the middle prompt.
   local middle_width=$((COLUMNS-left_length-${#PS1_1_right}-git_length))
 
@@ -364,13 +364,8 @@ precmd_prompt () {
 # chruby for ruby env
 source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
 source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-
 # Change away from system ruby
 chruby ruby-3.3.5
-
-
-
-
 
 
 ### FOR MUJOCO_PY
@@ -395,4 +390,10 @@ chruby ruby-3.3.5
 load-local-conf
 
 
+
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/joshua/.cache/lm-studio/bin"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
