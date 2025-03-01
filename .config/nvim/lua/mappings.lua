@@ -84,7 +84,7 @@ map("n", "<leader>ws", "<cmd>SessionSave<CR>", { noremap = true, desc = "Save se
 
 
 -- Terminal mappings
-map('t'  ,  '<c-\\><ESC>'  ,  '<C-\\><C-n>'  ,  { noremap = true, desc = "Defocus terminal" })
+map('t', '<c-\\><ESC>', '<C-\\><C-n>', { noremap = true, desc = "Defocus terminal" })
 
 
 ---- Text manipulation
@@ -137,3 +137,54 @@ map("v", "<End>",  [[col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_']], { 
 map("i", "<Home>", "<C-o><Home>", { noremap = true, desc = "Home key in insert mode" })
 map("i", "<End>",  "<C-o><End>", { noremap = true, desc = "End key in insert mode" })
 
+
+-- Debugging keybinds with dap and `<leader>d.`
+map("n", "<leader>db", function() require('dap').toggle_breakpoint() end, { desc = "Toggle breakpoint" })
+map("n", "<leader>dc", function() require('dap').continue() end, { desc = "Continue" })
+map("n", "<leader>dl", function() require('dap').run_last() end, { desc = "Run last" })
+
+
+map({ "n", "v" }, "<leader>de", function() require('dapui').eval() end, { desc = "Eval expression" })
+map("n", "<leader>dt", function() require("dapui").toggle() end, { desc = "DapUI close" })
+map("n", "<leader>dp", function() require('dap').toggle_breakpoint(vim.fn.input('Condition: '), nil, nil ) end, { desc = "Toggle _conditional_ breakpoint" })
+
+
+-- VSCode mappings
+map('n', '<F5>', function() require('dap').continue() end)
+map('n', '<F10>', function() require('dap').step_over() end)
+map('n', '<F11>', function() require('dap').step_into() end)
+map('n', '<F12>', function() require('dap').step_out() end)
+
+
+map({'n', 'v'}, '<Leader>dh', function() require('dap.ui.widgets').hover() end)
+map('n', '<Leader>ds', function()
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.scopes)
+end)
+
+
+-- Send selection to repl
+map("n", "<leader>dr", function() require('dap').repl.toggle() end, { desc = "Toggle repl" })
+map("v", "<leader>ds", function() require('dap').repl.run() end, { desc = "Send selection to repl" })
+
+-- Step commands; To be able to repeat them with a simple <M-r> click we need a helper function and variable.
+local last_dap_step = nil
+local function repeat_last_step()
+  if last_dap_step then
+    last_dap_step()
+  else
+    print "No previous step action"
+  end
+end
+
+local function set_last_step(fn)
+  last_dap_step = fn
+  fn()
+end
+
+map("n", "<leader>dn", function() set_last_step(require('dap').step_over) end, { desc = "Step Over", noremap = true, silent = true })
+map("n", "<leader>di", function() set_last_step(require('dap').step_into) end, { desc = "Step Into", noremap = true, silent = true })
+map("n", "<leader>do", function() set_last_step(require('dap').step_out) end, { desc = "Step Out", noremap = true, silent = true })
+map("n", '<leader>du', function() set_last_step(require("dap").up) end, { desc = "Step Out", noremap = true, silent = true })
+map("n", '<leader>dd', function() set_last_step(require("dap").down) end, { desc = "Step Out", noremap = true, silent = true })
+map("n", "<M-r>",      function() repeat_last_step() end, { desc = "Repeat Last Step", noremap = true, silent = true })

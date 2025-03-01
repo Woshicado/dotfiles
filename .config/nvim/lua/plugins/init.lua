@@ -20,6 +20,56 @@ return {
   },
 
   {
+    "mfussenegger/nvim-dap",
+    config = function()
+      local dap, dapui = require "dap", require "dapui"
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      -- dap.listeners.before.event_terminated.dapui_config = function()
+      --   dapui.close()
+      -- end
+      -- dap.listeners.before.event_exited.dapui_config = function()
+      --   dapui.close()
+      -- end
+    end,
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    lazy = false,
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    config = function()
+      require("dapui").setup()
+    end,
+  },
+
+  {
+    "mfussenegger/nvim-dap-python",
+    lazy = false,
+    config = function()
+      require("dap-python").setup("/Users/joshua/.virtualenvs/base/bin/python", { console = "externalTerminal" })
+      table.insert(require("dap").configurations.python, {
+        type = "debugpy",
+        request = "launch",
+        name = "Debug file",
+        program = "${file}",
+        -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+        console = "integratedTerminal",
+        justMyCode = false,
+      })
+      local dap = require "dap"
+      dap.defaults.fallback.external_terminal = {
+        command = "/opt/homebrew/bin/kitty",
+        args = { "--hold" },
+      }
+    end,
+  },
+
+  {
     "nvim-tree/nvim-tree.lua",
     config = function()
       require("nvim-tree").setup {
@@ -35,8 +85,10 @@ return {
 
           -- custom mappings
           local options = vim.bo[bufnr].ft == "NvimTree" and "nvimtree" or "default"
-          vim.keymap.set("n", "<C-t>", function() require("menu").open(options) end, opts "Context Menu")
-        end
+          vim.keymap.set("n", "<C-t>", function()
+            require("menu").open(options)
+          end, opts "Context Menu")
+        end,
       }
     end,
   },
