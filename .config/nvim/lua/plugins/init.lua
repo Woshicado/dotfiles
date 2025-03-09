@@ -300,12 +300,15 @@ return {
           return vim.fn.system(cmd) == "true\n"
         end,
         session_lens = {
-          previewer = true,
+          previewer = false,
           mappings = {
             -- Mode can be a string or a table, e.g. {"i", "n"} for both insert and normal mode
             delete_session = { "i", "<C-D>" },
             alternate_session = { "i", "<C-S>" },
             copy_session = { "i", "<C-Y>" },
+          },
+          theme_conf = {
+            border = true,
           },
         },
       }
@@ -375,7 +378,7 @@ return {
             {
               desc = " Neovim",
               group = "@string",
-              action = "SessionRestore " .. os.getenv("XDG_CONFIG_HOME") .. "/nvim",
+              action = "SessionRestore " .. os.getenv "XDG_CONFIG_HOME" .. "/nvim",
               key = "n",
             },
             {
@@ -383,7 +386,7 @@ return {
               group = "@string",
               action = "SessionSearch",
               key = "s",
-            }
+            },
           },
           project = {
             enable = true,
@@ -638,6 +641,33 @@ return {
   {
     "github/copilot.vim",
     lazy = false,
+  },
+
+  -- noice (pretty cmdline and messages)
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+  },
+
+  {
+    "rcarriga/nvim-notify",
+    config = function()
+      local notify = require "notify"
+      notify.setup {
+        background_colour = "#181825",
+      }
+    end,
   },
 
   -- vim-tmux-navigator (Navigate between vim and tmux panes)
