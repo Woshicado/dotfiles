@@ -6,13 +6,21 @@
 local M = {}
 
 M.base46 = {
-  theme = "onedark",
+  theme = "penumbra_light",
 
-  -- hl_override = {
-  --   Comment = { italic = true },
-  --   ["@comment"] = { italic = true },
-  -- },
+  hl_override = {
+    Comment = { italic = true, bold = true },
+    ["@comment"] = { italic = true, bold = true },
+    String = { italic = true },
+    ["@string"] = { italic = true },
+  },
+  theme_toggle = {
+    "onedark",
+    "penumbra_light",
+  },
 }
+
+require "configs.neogithl"
 
 local autocmd = vim.api.nvim_create_autocmd
 local usercmd = vim.api.nvim_create_user_command

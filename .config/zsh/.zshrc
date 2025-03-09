@@ -4,6 +4,8 @@ export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
 
+DISABLE_LS_COLORS="true"
+
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
@@ -159,7 +161,7 @@ export EDITOR="$VISUAL"
 export VIMTEX_OUTPUT_DIRECTORY='out'
 
 ### CUSTOM COMPOSE FILE
-export XCOMPOSEFILE='/home/woshi/.config/XCompose'
+export XCOMPOSEFILE='$XDG_CONFIG_HOME/XCompose'
 
 ### PAGER (LESS) CONFIG
 export PAGER='less -r'
@@ -181,6 +183,7 @@ alias c='xclip -sel c -r'
 alias pdf='zathura'
 
 # Directory aliases
+alias ols='/bin/ls -l'
 alias ls='lsd'
 alias l='lsd -l'
 alias ll='lsd -la'
@@ -189,9 +192,15 @@ alias lt='lsd --tree'
 alias llt='lsd -a --tree'
 alias lat='lsd -la --tree'
 alias llat='lsd -la --tree'
+alias pwdy="echo $(pwd) | pbcopy" # Copy current directory to clipboard
 #alias cd='z'
 
-# Copy directory over ssh (from remote to local)
+# Obsidian
+export O_VAULT_DIR="$HOME/vaults/obsidian-notes"
+alias oo='cd $O_VAULT_DIR'
+alias or='nvim $O_VAULT_DIR/inbox/*.md'
+
+# Copy directory over ssh
 alias rcp='rsync -saLPz --port 22 -e ssh '
 
 # Custom git aliases for submodules
@@ -315,7 +324,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   ### Tev wrapper for macos... Seems to try and execute x86 instead of arm64 otherwise...
   alias tev="arch -arm64 /Applications/tev.app/Contents/MacOS/tev"
+  export PATH="${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
 fi
+
+# Load custom LS colors
+source $XDG_CONFIG_HOME/zsh/lscolors.sh
+
 # Load base env (macOS does not seem to do that by default)
 workon base
 
@@ -390,10 +404,8 @@ chruby ruby-3.3.5
 load-local-conf
 
 
-
-
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/joshua/.cache/lm-studio/bin"
+export PATH="$PATH:$HOME/.cache/lm-studio/bin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

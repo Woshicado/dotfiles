@@ -10,19 +10,15 @@ classic: false
 # layout.
 # Possible values: permission, user, group, context, size, date, name, inode, links, git
 blocks:
+  - git
   - permission
-  # - name
-  # - user
-  # - group
   - size
-  # - date
   - name
-  # - size
   - date
   - user
   - group
 
-# == Color ==
+  # == Color ==
 # This has various color options. (Will be expanded in the future.)
 color:
   # When to colorize the output.
@@ -48,6 +44,12 @@ date: '+%d %b %y %H:%M:%S' # %X is broken on my home pc, don't ask me why... Oth
 # Possible values: false, true
 dereference: false
 
+# == Ignore Globs ==
+# A list of globs to ignore when listing.
+ignore-globs:
+  - .git
+#   - .vscode
+
 # == Display ==
 # What items to display. Do not specify this for the default behavior.
 # Possible values: all, almost-all, directory-only
@@ -65,12 +67,6 @@ icons:
   # Separator between icon and the name
   # Default to 1 space
   separator: " "
-
-# == Ignore Globs ==
-# A list of globs to ignore when listing.
-ignore-globs:
-  - .git
-  - .vscode
 
 # == Indicators ==
 # Whether to add indicator characters to certain listed files.
@@ -132,7 +128,7 @@ hyperlink: auto
 
 # == Symlink arrow ==
 # Specifies how the symlink arrow display, chars in both ascii and utf8
-symlink-arrow: ⇒
+symlink-arrow: 
 
 # == Header ==
 # Whether to display block headers.
@@ -142,7 +138,7 @@ header: false
 # == Literal ==
 # Whether to show quotes on filenames.
 # Possible values: false, true
-# literal: false
+literal: false
 
 # == Truncate owner ==
 # How to truncate the username and group names for a file if they exceed a certain

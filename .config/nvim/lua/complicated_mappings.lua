@@ -24,23 +24,23 @@ end, {})
 
 
 -- Toggle checkbox in markdown [ ] <--> [x]
-map(
-  {'n' },
-  '<leader>tt',
-  function()
-    local line = vim.api.nvim_get_current_line()
-    local modified_line = line:gsub("(- %[)(.)(%])",
-      function(prefix, checkbox, postfix)
-        checkbox = (checkbox == " ") and "x" or " "
-        return prefix .. checkbox .. postfix
-    end)
-    vim.api.nvim_set_current_line(modified_line)
-  end,
-  {
-    desc = 'ftplugin - toggle checkboxes',
-    buffer = true,
-  }
-)
+-- map(
+--   {'n' },
+--   '<leader>tt',
+--   function()
+--     local line = vim.api.nvim_get_current_line()
+--     local modified_line = line:gsub("(- %[)(.)(%])",
+--       function(prefix, checkbox, postfix)
+--         checkbox = (checkbox == " ") and "x" or " "
+--         return prefix .. checkbox .. postfix
+--     end)
+--     vim.api.nvim_set_current_line(modified_line)
+--   end,
+--   {
+--     desc = 'ftplugin - toggle checkboxes',
+--     buffer = true,
+--   }
+-- )
 
 -- don't copy empty lines on deletion
 map(

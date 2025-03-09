@@ -1,3 +1,6 @@
 [pycodestyle]
 ignore = E111,E501,E114,E266,W503,W191
 
+[tool.flake8]
+ignore = F541
+

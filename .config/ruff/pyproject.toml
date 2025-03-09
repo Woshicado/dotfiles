@@ -1,9 +1,51 @@
 [tool.ruff]
 respect-gitignore = true
-
 line-length = 100
 #indent-width = 2
+select = [
+  "ALL",
+]
+fixable = [
+  "ALL",
+]
 
 [tool.ruff.format]
 #indent-style="tab"
 quote-style = "double"
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/rules/#pandas-vet-pd
+ignore = [
+  "D", # Docstring rules
+  "ANN",  # Missing type annotation
+  "F541", # f-string is missing placeholders
+  "E501", # Line too long
+  "E114", # Indentation is not a multiple of four
+  "E111", # Indentation is not a multiple of four
+  "E266", # Too many leading '#' for block comment
+# "W503",
+  "W191", # Indentation contains tabs
+  "T201", "T203", # Print and pprint warnings
+  "C901", # Function is too complex
+  "ERA001", # Commented out code
+  "N812", # Constant imported as non constant
+  "N813", # Camel case
+  "N814", # Camel case
+  "PLR2004", # Magic number in comparison
+  "FBT003", # Boolean positional value in function call (th.where... is explicit enough)
+  "PLR0915", # Too many statements in function
+  "PLR0912", # Too many branches
+  "PLR0904", # Too many public methods
+  "PLR0911", # Too many return statements
+  "PLR0913", # Too many arguments
+  "PLR0914", # Too many local variables
+  "PLR0916", # Too many boolean expressions
+  "PLR0917", # Too many positional arguments
+  "PLR1702", # Too many nested blocks
+  "EM", # Error message ...
+  "PT018", # Assertion should be broken down
+# "SIM115", # Use a context manager for opening files
+  "TRY003", # Avoid specifying long messages outside the exception class
+  "S101", # Avoid using assert; I think asserts are useful for optimization with '-O' flag in critical code
+]
+

@@ -1,4 +1,5 @@
 return {
+  -- conform.nvim (formatter)
   {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre', -- uncomment for format on save
@@ -7,7 +8,7 @@ return {
       require("conform").setup {
         formatters_by_ft = {
           lua = { "stylua" },
-          python = { "isort", "ruff_format" },
+          python = { "ruff_fix", "ruff_format" },
           rust = { "rustfmt", lsp_format = "fallback" },
           javascript = { "prettierd", "prettier", stop_after_first = true },
           yaml = { "yamlfix" },
@@ -19,6 +20,47 @@ return {
     end,
   },
 
+  -- obsidian.nvim (Edit, search, ... obsidian notes in Neovim)
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*",
+    lazy = true,
+    ft = "markdown",
+    dependencies = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {
+      workspaces = {
+        {
+          name = "personal",
+          path = "~/vaults/obsidian-notes/",
+        },
+      },
+      notes_subdir = "inbox",
+      new_notes_location = "notes_subdir",
+      templates = {
+        subdir = "Extras/Templates",
+        date_format = "%Y-%m-%d",
+        time_format = "%H:%M",
+      },
+    },
+    config = function(_, opts)
+      require("obsidian").setup(opts)
+
+      -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
+      -- see also: 'follow_url_func' config option above.
+      vim.keymap.set("n", "gd", function()
+        if require("obsidian").util.cursor_on_markdown_link() then
+          return "<cmd>ObsidianFollowLink<CR>"
+        else
+          return "gd"
+        end
+      end, { noremap = false, expr = true })
+    end,
+  },
+
+  -- nvim-dap (Debugging Adapter Protocol; debugging common)
   {
     "mfussenegger/nvim-dap",
     config = function()
@@ -38,6 +80,14 @@ return {
     end,
   },
 
+  -- fzf (Needed as dependency for neogit; otherwise I am using fzf-lua)
+  {
+    "junegunn/fzf",
+    build = "./install --bin",
+    lazy = false,
+  },
+
+  -- nvim-dap-ui (debugging UI)
   {
     "rcarriga/nvim-dap-ui",
     lazy = false,
@@ -47,28 +97,107 @@ return {
     end,
   },
 
+  -- nvim-dap-python (python debugger server)
   {
     "mfussenegger/nvim-dap-python",
     lazy = false,
     config = function()
-      require("dap-python").setup("/Users/joshua/.virtualenvs/base/bin/python", { console = "externalTerminal" })
-      table.insert(require("dap").configurations.python, {
+      require("dap-python").setup(
+        "/Users/joshua/.virtualenvs/base/bin/python",
+        { console = "integratedTerminal", include_configs = false }
+      )
+      local dap = require "dap"
+      local configs = dap.configurations.python or {}
+      dap.configurations.python = configs
+      table.insert(configs, {
         type = "debugpy",
         request = "launch",
         name = "Debug file",
         program = "${file}",
         -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+        -- env = { DEBUGPY_LOG_DIR= "${workspaceFolder}/.daplogs" }, -- enables debuglogs in local dir
         console = "integratedTerminal",
         justMyCode = false,
+        logToFile = true,
+        showReturnValue = true,
+        stopOnEntry = true,
       })
-      local dap = require "dap"
-      dap.defaults.fallback.external_terminal = {
+
+      -- TODO: I guess use argparse at some point to make this more robust
+      vim.g.last_debugpy_command = vim.g.last_debugpy_command or ""
+
+      table.insert(dap.configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Debug custom",
+        program = function()
+          local parts = vim.split(vim.g.last_debugpy_command, " ")
+          return parts[1] -- First part is the script
+        end,
+        args = function()
+          vim.g.last_debugpy_command = vim.fn.input("Command: ", vim.g.last_debugpy_command or "")
+          local parts = vim.split(vim.g.last_debugpy_command, " ")
+          return vim.list_slice(parts, 2)
+        end,
+        console = "integratedTerminal",
+        justMyCode = false,
+        logToFile = true,
+        showReturnValue = true,
+        stopOnEntry = false,
+      })
+
+      require("dap").defaults.fallback.external_terminal = {
         command = "/opt/homebrew/bin/kitty",
         args = { "--hold" },
       }
     end,
   },
 
+  -- timber (Better logs)
+  {
+    "Goose97/timber.nvim",
+    version = "*",
+    opts = {},
+    event = "VeryLazy",
+    config = function()
+      require("timber").setup {
+        log_marker = "🪵",
+        log_templates = {
+          default = {
+            lua = [[print("%watcher_marker_start" .. %log_target .. "%watcher_marker_end")]],
+            python = [[print(f"%watcher_marker_start|\033[0;32m{%log_target=}\033[0m|%watcher_marker_end")]],
+          },
+          file = {
+            python = [[print(f"%watcher_marker_start|LOG \033[0;32m{%log_target=}\033[0m ON LINE \033[0;33m%filename:%line_number\033[0m|%watcher_marker_end")]],
+          },
+          time_start = {
+            lua = [[local _start = os.time()]],
+            python = [[import time; _start = time.perf_counter()]],
+          },
+          time_end = {
+            lua = [[print("Elapsed time: " .. tostring(os.time() - _start) .. " seconds")]],
+            python = [[print(f"%watcher_marker_start|Elapsed time: \033[0;34m{time.perf_counter() - _start}\033[0m seconds|%watcher_marker_end")]],
+          },
+          pretty = {
+            python = [[from pprint import pformat; print(f"%watcher_marker_start|\033[0;32m%log_target = {pformat(%log_target)}\033[0m|%watcher_marker_end")]],
+          },
+        },
+        log_watcher = {
+          enabled = true,
+          -- A table of source id and source configuration
+          sources = {
+            log_file = {
+              type = "filesystem",
+              name = "Log file",
+              path = "/tmp/debug.log",
+            },
+          },
+        },
+      }
+    end,
+  },
+
+  -- nvim-tree (Tree file explorer)
   {
     "nvim-tree/nvim-tree.lua",
     config = function()
@@ -93,11 +222,13 @@ return {
     end,
   },
 
+  -- menu (Context menu)
   {
     "nvzone/menu",
     lazy = true,
   },
 
+  -- nvim-cmp (Autocompletion)
   {
     "hrsh7th/nvim-cmp",
     opts = function()
@@ -105,7 +236,7 @@ return {
     end,
   },
 
-  -- These are some examples, uncomment them if you want to see them work!
+  -- nvim-lspconfig (Language Server Protocol)
   {
     "neovim/nvim-lspconfig",
     dependencies = {},
@@ -114,25 +245,37 @@ return {
     end, -- Override to setup mason-lspconfig
   },
 
+  -- oil.nvim (Nvim Filesystem Explorer and Editor)
   {
-    {
-      "stevearc/oil.nvim",
-      ---@module 'oil'
-      ---@type oil.SetupOpts
-      opts = {},
-      -- Optional dependencies
-      -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
-      dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-      -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
-      lazy = false,
-      config = function()
-        require("oil").setup {
-          -- Your configuration comes here
-        }
-      end,
-    },
+    "stevearc/oil.nvim",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+    config = function()
+      require("oil").setup {
+        -- Your configuration comes here
+      }
+    end,
   },
 
+  -- nvim-repeat
+  {
+    "tpope/vim-repeat",
+    lazy = false,
+  },
+
+  -- speeddating (Increment dates)
+  {
+    "tpope/vim-speeddating",
+    lazy = false,
+  },
+
+  -- auto-session (Automatically save and restore sessions)
   {
     "rmagatti/auto-session",
     lazy = false,
@@ -169,12 +312,14 @@ return {
     end,
   },
 
+  -- glow (prettier markdown preview; actually not really convincing)
   {
     "ellisonleao/glow.nvim",
     config = true,
     cmd = "Glow",
   },
 
+  -- neogit (Git integration)
   {
     "NeogitOrg/neogit",
     dependencies = {
@@ -196,71 +341,49 @@ return {
     end,
   },
 
+  -- dashboard (Start screen when starting nvim without arguments)
   {
     "nvimdev/dashboard-nvim",
     lazy = false,
     event = "VimEnter",
     config = function()
       require("dashboard").setup {
-        -- config
         config = {
-          -- header = {
-          -- },
           week_header = {
             enable = true,
-            --   append = {
-            --     '',
-            --     '                    █▓                             ',
-            --     '                  ██▓█                             ',
-            --     '                 ▓░░░░░▒                           ',
-            --     '                ▓▒░░░░░░▓                          ',
-            --     '               ██░░░░░░░░                          ',
-            --     '              █▓▒░░░░░░░░▓                         ',
-            --     '              ██░░░░░░░░░░                         ',
-            --     '             █▓▒░░░░░░░░░░█                        ',
-            --     '             ▓█░░░░░░░░░░░▒                        ',
-            --     '            █▓▒░░░░░░░░░░░░█                       ',
-            --     '           █▓█░░░░░░░░░░░░░░█                      ',
-            --     '          █▓█░░░░░░░░░██░░░░░█                     ',
-            --     '        █▓▓█░░░░░░░░░░░█░░░▓░░█                    ',
-            --     '       █▓▓█░░░░░░░░░░░░█░░░░░░▒█                   ',
-            --     '      █▓▓█░░░░░░░░░░░░░▓█░░░░░░░▒                  ',
-            --     '     █▓▓▓░░░░░░░░░░▓█▒░░▓█░░░░░░░░░░▒█             ',
-            --     '    █▓▓█░░░░░░░█▒▓▓▓▓▓▒▓▓▓█░░░░░░░░░░░░░▒█         ',
-            --     '    █▓▓░░░░░░░▒█▓▓▓▓▓▓▓▓▓▓██░░░░░░░░░░░░░░░▒       ',
-            --     '    ▓▓█░░░░░░▒▓▓▓▓▒▒▒▒▒▓▓▓▓█▓░░░░░░░░░░░░░░░░▓     ',
-            --     '   █▓▓█░░░░░░░▓▓▓▓▒▒▒▒▒▓▓▓▓█▓░░░░░░█▓▓▓▓▓▓░░░░▒    ',
-            --     '    ▓▓█░░░░░░░▒█▓▓▓▓▓▓▓▓▓▓█░▓█░░░░▒▓▓▓▓▒▒▓▓░░░░█   ',
-            --     '    █▓▓█░░░░░░░░█▓▓▓▓▓▓▓▓▒░░█▓░░░░█▓▓▓▒▒▒▓█░░░░    ',
-            --     '     █▓▓▓░░░░░░░░░░░▒▒░░░░░░░▓█░░░░▒█▓▓▓▓█░░░░█    ',
-            --     '       █▓█░░░░░░░░░░░░░░░░░░░░▓█░░░░░░░░░░░░░█     ',
-            --     '         ███▒░░░░░░░░░░░░░░░░▓ █▓█▒░░░░░░░░█       ',
-            --     '              ███▓▒░░░▒▒██       ██▓█████          ',
-            --     '                                                   ',
-            --   }
           },
           shortcut = {
             { desc = "󰊳 Update", group = "@property", action = "Lazy update", key = "u" },
             {
-              icon = " ",
-              icon_hl = "@variable",
-              desc = "Files",
+              desc = " Files",
               group = "Label",
               action = 'require("fzf-lua").files()',
               key = "f",
             },
             {
-              desc = " Apps",
+              desc = " Obsidian",
               group = "DiagnosticHint",
-              action = "Telescope app",
-              key = "a",
+              action = "require('fzf-lua').files { cwd = '$O_VAULT_DIR' }",
+              key = "o",
             },
             {
-              desc = " dotfiles",
+              desc = " Dotfiles",
               group = "Number",
-              action = "Telescope dotfiles",
+              action = "require('fzf-lua').files { cwd = '~/dotfiles' }",
               key = "d",
             },
+            {
+              desc = " Neovim",
+              group = "@string",
+              action = "SessionRestore " .. os.getenv("XDG_CONFIG_HOME") .. "/nvim",
+              key = "n",
+            },
+            {
+              desc = " Sessions",
+              group = "@string",
+              action = "SessionSearch",
+              key = "s",
+            }
           },
           project = {
             enable = true,
@@ -294,6 +417,7 @@ return {
     dependencies = { { "nvim-tree/nvim-web-devicons" } },
   },
 
+  -- nvim-surround (change surrounds of text)
   {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -320,6 +444,7 @@ return {
     end,
   },
 
+  -- nvim-treesitter (Syntax highlighting)
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -353,6 +478,7 @@ return {
     },
   },
 
+  -- telescope (Fuzzy finder for basically everything. Configured to use fzf)
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -376,11 +502,13 @@ return {
     end,
   },
 
+  -- telescope-fzf-native (Faster fzf for telescope)
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
   },
 
+  -- actions-preview (code actions and autofixes)
   {
     "aznhe21/actions-preview.nvim",
     config = function()
@@ -418,6 +546,18 @@ return {
     end,
   },
 
+  -- nvim-bqf (Better quickfix)
+  {
+    "kevinhwang91/nvim-bqf",
+    lazy = false,
+    config = function()
+      require("bqf").setup {
+        auto_enable = true,
+      }
+    end,
+  },
+
+  -- better-escape
   {
     "max397574/better-escape.nvim",
     event = "InsertEnter",
@@ -426,11 +566,16 @@ return {
     end,
   },
 
+  -- vimtex (LaTeX support)
   {
     "lervag/vimtex",
-    -- lazy = false,
+    lazy = false, -- we don't want to lazy load VimTeX
     init = function()
+      vim.g.vimtex_view_method = "skim"
+      vim.g.vimtex_view_skim_sync = 1
+      vim.g.vimtex_view_skim_activate = 1
       vim.g.vimtex_syntax_enabled = 1
+      -- vim.g.vimtex_view_general_options = "--synctex-forward=@line:@col:@pdf"
       vim.g.vimtex_syntax_conceal = {
         acents = 1,
         ligatures = 1,
@@ -446,11 +591,21 @@ return {
         sections = 0,
         styles = 1,
       }
+      vim.g.vimtex_compiler_latexmk = {
+        options = {
+          "-verbose",
+          "-file-line-error",
+          "-synctex=1",
+          "-interaction=nonstopmode",
+          "-shell-escape",
+        },
+      }
 
       -- Use init for configuration, don't use the more common "config".
     end,
   },
 
+  -- fzf-lua (Fuzzy finder; I like fzf syntax)
   {
     "ibhagwan/fzf-lua",
     lazy = false,
@@ -467,21 +622,25 @@ return {
     end,
   },
 
+  -- volt (nvchad pretty interactive UIs; used in minty, menu, ...)
   {
     "nvzone/volt",
     lazy = true,
   },
 
+  -- minty (nvchad pretty colorpicker)
   {
     "nvzone/minty",
     cmd = { "Shades", "Huefy" },
   },
 
+  -- github copilot (AI code completion)
   {
     "github/copilot.vim",
     lazy = false,
   },
 
+  -- vim-tmux-navigator (Navigate between vim and tmux panes)
   {
     "christoomey/vim-tmux-navigator",
     lazy = false,
