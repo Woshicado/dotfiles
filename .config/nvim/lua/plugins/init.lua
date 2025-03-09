@@ -366,13 +366,17 @@ return {
             {
               desc = " Obsidian",
               group = "DiagnosticHint",
-              action = "require('fzf-lua').files { cwd = '$O_VAULT_DIR' }",
+              action = function()
+                require("utils").open_or_create_session(os.getenv "O_VAULT_DIR")
+              end,
               key = "o",
             },
             {
               desc = " Dotfiles",
               group = "Number",
-              action = "require('fzf-lua').files { cwd = '~/dotfiles' }",
+              action = function()
+                require("utils").open_or_create_session(os.getenv "HOME" .. "/dotfiles")
+              end,
               key = "d",
             },
             {
@@ -391,21 +395,7 @@ return {
           project = {
             enable = true,
             limit = 8,
-            action = function(path)
-              -- Construct the session file path (depends on how sessions are stored)
-              local absolute_path = vim.fn.fnamemodify(path, ":p")
-              absolute_path = absolute_path:sub(1, -2)
-              local encoded_path = absolute_path:gsub("/", "%%2F"):gsub("%.", "%%2E")
-              local session_file = vim.fn.stdpath "data" .. "/sessions/" .. encoded_path .. ".vim"
-
-              if vim.fn.filereadable(session_file) == 1 then
-                -- If the session file exists, restore the session
-                vim.cmd("SessionRestore " .. vim.fn.fnameescape(path))
-              else
-                -- If the session file does not exist, open fzf-lua
-                require("fzf-lua").files { cwd = path }
-              end
-            end,
+            action = require("utils").open_or_create_session,
           },
           mru = { enable = true, limit = 10, cwd_only = false },
         },
@@ -648,7 +638,19 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
-      -- add any options here
+      lsp = {
+        signature = {
+          enabled = true,
+        },
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+        },
+      },
+      presets = {
+        lsp_doc_border = true,
+      },
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries

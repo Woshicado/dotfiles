@@ -12,4 +12,9 @@ config.completion = {
 
 config.preselect = cmp.PreselectMode.None
 
+-- config.window = {
+--   completion = cmp.config.window.bordered(),
+--   documentation = cmp.config.window.bordered(),
+-- }
+
 return config

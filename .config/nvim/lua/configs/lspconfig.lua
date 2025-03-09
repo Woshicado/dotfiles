@@ -77,6 +77,7 @@ end
 lspconfig.pylsp.setup({
 	on_attach = function(client, bufnr)
 		client.capabilities.diagnosticProvider = false -- Disable diagnostics from pylsp
+		-- client.server_capabilities.signatureHelpProvider = false -- disable signature help, use noice lsp instead
 		nvlsp.on_attach(client, bufnr)
 	end,
 	on_init = nvlsp.on_init,

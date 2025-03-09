@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "penumbra_light",
+  theme = "onedark",
 
   hl_override = {
     Comment = { italic = true, bold = true },
@@ -18,6 +18,10 @@ M.base46 = {
     "onedark",
     "penumbra_light",
   },
+}
+
+M.lsp = {
+  signature = false,
 }
 
 require "configs.neogithl"
