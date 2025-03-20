@@ -373,6 +373,12 @@ precmd_prompt () {
 #precmd_functions+=(precmd_prompt)
 
 
+# On ubuntu, need to source virtualenvwrapper
+LSB_RELEASE=$(lsb_release -d)
+if [[ $LSB_RELEASE =~ "Ubuntu" ]]; then
+  source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+fi
+
 
 ### FOR JEKYLL/RUBY
 # chruby for ruby env
