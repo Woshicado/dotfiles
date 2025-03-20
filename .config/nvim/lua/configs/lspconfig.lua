@@ -4,7 +4,7 @@ require("nvchad.configs.lspconfig").defaults()
 local lspconfig = require("lspconfig")
 
 -- EXAMPLE
-local servers = { "html", "cssls", "ts_ls", "clangd", "ltex", "ruff", "marksman" }
+local servers = { "html", "cssls", "ts_ls", "clangd", "ltex", "marksman" }
 local nvlsp = require("nvchad.configs.lspconfig")
 
 -- Local dictionary
@@ -56,6 +56,7 @@ local server_settings = {
 				pydocstyle = { enabled = false },
 				pylint = { enabled = false },
 			},
+      filetypes = { "python" },
 		},
 	},
 	ruff = {
@@ -76,11 +77,23 @@ end
 
 lspconfig.pylsp.setup({
 	on_attach = function(client, bufnr)
-		client.capabilities.diagnosticProvider = false -- Disable diagnostics from pylsp
+    client.capabilities.diagnosticProvider = false -- Disable diagnostics from pylsp
 		-- client.server_capabilities.signatureHelpProvider = false -- disable signature help, use noice lsp instead
 		nvlsp.on_attach(client, bufnr)
 	end,
 	on_init = nvlsp.on_init,
 	capabilities = nvlsp.capabilities,
 	settings = server_settings.pylsp,
+})
+
+lspconfig.ruff.setup({
+  on_attach = function(client, bufnr)
+    -- Disable Ruff's references and definitions if it's interfering
+    client.server_capabilities.referencesProvider = false
+    client.server_capabilities.definitionProvider = false
+    nvlsp.on_attach(client, bufnr)
+  end,
+	on_init = nvlsp.on_init,
+	capabilities = nvlsp.capabilities,
+	settings = server_settings.ruff,
 })

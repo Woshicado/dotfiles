@@ -387,7 +387,7 @@ return {
             },
             {
               desc = " Sessions",
-              group = "@string",
+              group = "Define",
               action = "SessionSearch",
               key = "s",
             },
@@ -634,43 +634,43 @@ return {
   },
 
   -- noice (pretty cmdline and messages)
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      lsp = {
-        signature = {
-          enabled = true,
-        },
-        override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
-        },
-      },
-      presets = {
-        lsp_doc_border = true,
-      },
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    },
-  },
+  -- {
+  --   "folke/noice.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     lsp = {
+  --       signature = {
+  --         enabled = true,
+  --       },
+  --       override = {
+  --         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+  --         ["vim.lsp.util.stylize_markdown"] = true,
+  --         ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+  --       },
+  --     },
+  --     presets = {
+  --       lsp_doc_border = true,
+  --     },
+  --   },
+  --   dependencies = {
+  --     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --     "MunifTanjim/nui.nvim",
+  --     -- OPTIONAL:
+  --     --   `nvim-notify` is only needed, if you want to use the notification view.
+  --     --   If not available, we use `mini` as the fallback
+  --     -- "rcarriga/nvim-notify",
+  --   },
+  -- },
 
-  {
-    "rcarriga/nvim-notify",
-    config = function()
-      local notify = require "notify"
-      notify.setup {
-        background_colour = "#181825",
-      }
-    end,
-  },
+  -- {
+  --   "rcarriga/nvim-notify",
+  --   config = function()
+  --     local notify = require "notify"
+  --     notify.setup {
+  --       background_colour = "#181825",
+  --     }
+  --   end,
+  -- },
 
   -- vim-tmux-navigator (Navigate between vim and tmux panes)
   {

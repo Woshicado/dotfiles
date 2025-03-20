@@ -4,6 +4,8 @@ export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
 
+export WANDB_MODE="offline"
+
 DISABLE_LS_COLORS="true"
 
 export LC_CTYPE=en_US.UTF-8
