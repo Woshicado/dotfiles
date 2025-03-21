@@ -5,18 +5,9 @@ return {
     -- event = 'BufWritePre', -- uncomment for format on save
     -- opts = require "configs.conform",
     config = function()
-      require("conform").setup {
-        formatters_by_ft = {
-          lua = { "stylua" },
-          python = { "ruff_fix", "ruff_format" },
-          rust = { "rustfmt", lsp_format = "fallback" },
-          javascript = { "prettierd", "prettier", stop_after_first = true },
-          yaml = { "yamlfix" },
-          css = { "prettier" },
-          html = { "prettier" },
-          json = { "jq" },
-        },
-      }
+      require("conform").setup(
+        require "configs.conform"
+      )
     end,
   },
 

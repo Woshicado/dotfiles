@@ -202,6 +202,21 @@ export O_VAULT_DIR="$HOME/vaults/obsidian-notes"
 alias oo='cd $O_VAULT_DIR'
 alias or='nvim $O_VAULT_DIR/inbox/*.md'
 
+# Time tracking via toggl track python cli (https://github.com/AuHau/toggl-cli)
+alias tt='toggl'
+alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
+alias ttws='toggl start -a Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
+alias tts='toggl start -a Service'
+alias ttm='toggl start -a Main'
+alias ttd='toggl start -a Side'
+alias ttt='toggl stop'
+
+# Current projects
+alias ttrtg='toggl start -a Side -o RTG'
+alias ttr='toggl start -a Side -o RARE'
+alias ttc='toggl start -a Side -o Safety'
+alias tte='toggl start -a Main -o Exploration'
+
 # Copy directory over ssh
 alias rcp='rsync -saLPz --port 22 -e ssh '
 
@@ -376,8 +391,7 @@ precmd_prompt () {
 
 
 # On ubuntu, need to source virtualenvwrapper
-LSB_RELEASE=$(lsb_release -d)
-if [[ $LSB_RELEASE =~ "Ubuntu" ]]; then
+if [[ ! "$OSTYPE" == "darwin"* ]] && [[ $(lsb_release -d) =~ "Ubuntu" ]]; then
   source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 fi
 
@@ -417,3 +431,10 @@ export PATH="$PATH:$HOME/.cache/lm-studio/bin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+#compdef toggl
+_toggl() {
+  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _TOGGL_COMPLETE=complete-zsh  toggl)
+}
+if [[ "$(basename -- ${(%):-%x})" != "_toggl" ]]; then
+  compdef _toggl toggl
+fi

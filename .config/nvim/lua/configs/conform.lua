@@ -1,11 +1,12 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    css = { "prettier" },
-    html = { "prettier" },
+    css = { "prettierd" },
+    html = { "prettierd" },
     python = { "ruff_organize_imports", "ruff_format" },
     yaml = { "yamlfix" },
     json = { "jq" },
+    markdown = { "prettierd" },
   },
   formatters = {
     ruff_organize_imports = {
