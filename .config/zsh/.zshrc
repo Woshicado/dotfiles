@@ -180,7 +180,7 @@ alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
 alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
-alias n='nvim'
+alias n='$HOME/.local/bin/nvim/bin/nvim' # nevoim 0.10.4, 0.11 with current config broken
 alias c='xclip -sel c -r'
 alias pdf='zathura'
 

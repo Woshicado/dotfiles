@@ -5,11 +5,33 @@ return {
     -- event = 'BufWritePre', -- uncomment for format on save
     -- opts = require "configs.conform",
     config = function()
-      require("conform").setup(
-        require "configs.conform"
-      )
+      require("conform").setup(require "configs.conform")
     end,
   },
+
+  -- Render markdowns in normal mode
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    -- dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+    lazy = false,
+    config = function()
+      require("render-markdown").setup {
+        completions = { lsp = { enabled = true } },
+      }
+    end,
+  },
+
+  -- Markdown tables
+  -- {
+  --   -- I feel like this table plugin does not really work well with rendered tables? Or whatever, some issues
+  --   "dhruvasagar/vim-table-mode",
+  --   lazy = false,
+  -- },
 
   -- obsidian.nvim (Edit, search, ... obsidian notes in Neovim)
   {
@@ -313,6 +335,36 @@ return {
     cmd = "Glow",
   },
 
+  -- diffview
+  {
+    "sindrets/diffview.nvim",
+    command = "DiffviewOpen",
+    cond = is_git_root,
+    keys = {
+      {
+        "<leader>gd",
+        function()
+          require("utils").toggle_diffview "DiffviewOpen"
+        end,
+        desc = "Diff Index",
+      },
+      {
+        "<leader>gD",
+        function()
+          require("utils").toggle_diffview "DiffviewOpen master..HEAD"
+        end,
+        desc = "Diff master",
+      },
+      {
+        "<leader>gf",
+        function()
+          require("utils").toggle_diffview "DiffviewFileHistory %"
+        end,
+        desc = "Open diffs for current File",
+      },
+    },
+  },
+
   -- neogit (Git integration)
   {
     "NeogitOrg/neogit",
@@ -462,27 +514,84 @@ return {
     },
   },
 
+  {
+    "debugloop/telescope-undo.nvim",
+  },
+
+  {
+    "nvim-lua/plenary.nvim",
+  },
+
+  -- {
+  --   "nvim-telescope/telescope-ui-select.nvim",
+  -- },
+
   -- telescope (Fuzzy finder for basically everything. Configured to use fzf)
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "andrew-george/telescope-themes",
+      "nvim-lua/plenary.nvim",
+      "debugloop/telescope-undo.nvim",
+    },
+    keys = {
+      { -- lazy style key map
+        "<leader>u",
+        "<cmd>Telescope undo<cr>",
+        desc = "undo history",
+      },
     },
     opts = {
       extensions_list = { "themes", "fzf" },
       extensions = {
+        undo = {
+          use_delta = true,
+          side_by_side = true,
+          layout_strategy = "vertical",
+          layout_config = {
+            preview_height = 0.8,
+            prompt_position = "top",
+          },
+          vim_diff_opts = {
+            ctxlen = 16,
+          },
+          -- mappings = {
+          --   i = {
+          --     ["<cr>"] = require("telescope-undo.actions").yank_additions,
+          --     ["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+          --     ["<C-cr>"] = require("telescope-undo.actions").restore,
+          --     -- alternative defaults, for users whose terminals do questionable things with modified <cr>
+          --     ["<C-y>"] = require("telescope-undo.actions").yank_deletions,
+          --     ["<C-r>"] = require("telescope-undo.actions").restore,
+          --   },
+          --   n = {
+          --     ["y"] = require("telescope-undo.actions").yank_additions,
+          --     ["Y"] = require("telescope-undo.actions").yank_deletions,
+          --     ["u"] = require("telescope-undo.actions").restore,
+          --   },
+          -- },
+          -- telescope-undo.nvim config, see below
+        },
         fzf = {
           fuzzy = true, -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true, -- override the file sorter
           case_mode = "smart_case", -- or "ignore_case" or "respect_case"
         },
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown {
+            -- even more opts
+          },
+        },
       },
     },
-    config = function()
+    config = function(_, opts)
       -- load extension
       local telescope = require "telescope"
       telescope.load_extension "themes"
+      -- telescope.load_extension "ui-select"
+      telescope.setup(opts)
+      telescope.load_extension "undo"
     end,
   },
 
@@ -667,5 +776,11 @@ return {
   {
     "christoomey/vim-tmux-navigator",
     lazy = false,
+  },
+
+  -- puppeteer (Convert to f-string and back)
+  {
+    "chrisgrieser/nvim-puppeteer",
+    lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
   },
 }

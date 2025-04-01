@@ -22,13 +22,20 @@ M.open_or_create_session = function(path)
 
 	if vim.fn.filereadable(session_file) == 1 then
 		-- If the session file exists, restore the session
-      print("🪵0TJ" .. path .. "0TJ")
-		  require("auto-session").RestoreSession(vim.fn.fnameescape(path))
+		require("auto-session").RestoreSession(vim.fn.fnameescape(path))
 	else
 		-- If the session file does not exist, open fzf-lua
-    -- require("fzf-lua").files({ cwd = path })
-    vim.cmd("cd " .. path)
-    require("oil").open(path)
+		-- require("fzf-lua").files({ cwd = path })
+		vim.cmd("cd " .. path)
+		require("oil").open(path)
+	end
+end
+
+M.toggle_diffview =  function(cmd)
+	if next(require("diffview.lib").views) == nil then
+		vim.cmd(cmd)
+	else
+		vim.cmd("DiffviewClose")
 	end
 end
 

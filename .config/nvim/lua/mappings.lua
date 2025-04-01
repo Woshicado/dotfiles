@@ -28,7 +28,7 @@ map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>", {desc = "Tog
 map({ "n", "v"}, "<leader><Left>",  "<cmd> :bp!<CR>", { desc = "Switch to previous buffer", noremap=true })
 map({ "n", "v"}, "<leader><Right>", "<cmd> :bn!<CR>", { desc = "Switch to next buffer", noremap=true })
 map({ "n", "v"}, "<M-x>",           "<cmd> :bd <CR>", { desc = "Close current file", noremap=true })
-
+map({ "n", "v"}, "<C-S-o>",         "<C-i>",          { desc = "Forward", noremap=true })
 
 -- Tmux integration
 map("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>", { desc = "window left", noremap=true })
@@ -91,6 +91,15 @@ map("n", "<C-d>", "<C-d>zz", { desc = "Center screen on navigation" })
 -- Center screen on navigation with n/N
 map("n", "n", "nzzzv", { desc = "Center screen on navigation with n"})
 map("n", "N", "Nzzzv", { desc = "Center screen on navigation with N"})
+-- Top screen on [[ and ]] and [m and ]m
+map("n", "[[", "[[zt", { noremap = true,  desc = "Top screen on [["})
+map("n", "]]", "]]zt", { noremap = true,  desc = "Top screen on ]]"})
+map("n", "[m", "[mzt", { noremap = true,  desc = "Top screen [m"})
+map("n", "]m", "]mzt", { noremap = true,  desc = "Top screen ]m"})
+-- Cetner screen on navigation with { and }
+map("n", "{", "{zz", { desc = "Center screen on {"})
+map("n", "}", "}zz", { desc = "Center screen on }"})
+
 
 ---- Text manipulation
 

@@ -21,7 +21,13 @@ M.base46 = {
 }
 
 M.lsp = {
-  signature = false,
+  signature = true,
+}
+
+M.ui = {
+  telescope = {
+    style = "bordered",
+  },
 }
 
 require "configs.neogithl"
