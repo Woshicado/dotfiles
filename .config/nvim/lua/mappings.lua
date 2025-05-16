@@ -30,6 +30,10 @@ map({ "n", "v"}, "<leader><Right>", "<cmd> :bn!<CR>", { desc = "Switch to next b
 map({ "n", "v"}, "<M-x>",           "<cmd> :bd <CR>", { desc = "Close current file", noremap=true })
 map({ "n", "v"}, "<C-S-o>",         "<C-i>",          { desc = "Forward", noremap=true })
 
+-- Overwrite pasting since it breaks with newlines and ext_keys in kitty with tmux
+map("i", "<M-v>", "<C-o>p", { desc = "Paste in insert mode" })
+map("n", "<M-v>", "p", { desc = "Paste in normal mode" })
+
 -- Tmux integration
 map("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>", { desc = "window left", noremap=true })
 map("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>", { desc = "window right", noremap=true })
