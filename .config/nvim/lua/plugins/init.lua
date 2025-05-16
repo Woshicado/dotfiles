@@ -9,6 +9,28 @@ return {
     end,
   },
 
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    lazy = false,
+    config = function()
+      require("treesitter-context").setup {
+        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+        multiwindow = false, -- Enable multiwindow support.
+        max_lines = 10, -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        line_numbers = true,
+        multiline_threshold = 1, -- Maximum number of lines to show for a single context
+        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+        -- Separator between context and content. Should be a single character string, like '-'.
+        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+        separator = "󰜥",
+        zindex = 20, -- The Z-index of the context window
+        on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+      }
+    end,
+  },
+
   -- Render markdowns in normal mode
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -335,11 +357,30 @@ return {
     cmd = "Glow",
   },
 
+  -- grug-far (search and replace)
+  {
+    "MagicDuck/grug-far.nvim",
+    tag = "1.6.3",
+    lazy = false,
+    -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
+    -- additional lazy config to defer loading is not really needed...
+    config = function()
+      -- optional setup call to override plugin options
+      -- alternatively you can set options with vim.g.grug_far = { ... }
+      require("grug-far").setup {
+        -- options, see Configuration section below
+        -- there are no required options atm
+        -- engine = 'ripgrep' is default, but 'astgrep' or 'astgrep-rules' can
+        -- be specified
+      }
+    end,
+  },
+
   -- diffview
   {
     "sindrets/diffview.nvim",
     command = "DiffviewOpen",
-    cond = is_git_root,
+    cond = "is_git_root",
     keys = {
       {
         "<leader>gd",
@@ -396,7 +437,7 @@ return {
       require("dashboard").setup {
         config = {
           week_header = {
-            enable = true,
+            enable = false,
           },
           shortcut = {
             { desc = "󰊳 Update", group = "@property", action = "Lazy update", key = "u" },
@@ -601,44 +642,6 @@ return {
     build = "make",
   },
 
-  -- actions-preview (code actions and autofixes)
-  {
-    "aznhe21/actions-preview.nvim",
-    config = function()
-      require("actions-preview").setup {
-        diff = {
-          algorithm = "patience",
-          ignore_whitespace = true,
-          ctxlen = 3,
-        },
-
-        telescope = {
-          sorting_strategy = "ascending",
-          layout_strategy = "vertical",
-          layout_config = {
-            width = 0.8,
-            height = 0.9,
-            prompt_position = "top",
-            preview_cutoff = 20,
-            preview_height = function(_, _, max_lines)
-              return max_lines - 15
-            end,
-          },
-        },
-
-        -- priority list of external command to highlight diff
-        -- disabled by default, must be set by yourself
-        highlight_command = {
-          require("actions-preview.highlight").delta(),
-          -- require("actions-preview.highlight").diff_so_fancy(),
-          -- require("actions-preview.highlight").diff_highlight(),
-        },
-
-        backend = { "telescope", "minipick", "snacks", "nui" },
-      }
-    end,
-  },
-
   -- nvim-bqf (Better quickfix)
   {
     "kevinhwang91/nvim-bqf",
@@ -668,6 +671,9 @@ return {
       vim.g.vimtex_view_skim_sync = 1
       vim.g.vimtex_view_skim_activate = 1
       vim.g.vimtex_syntax_enabled = 1
+      vim.g.vimtex_compiler_latexmk = {
+        out_dir = "./out",
+      }
       -- vim.g.vimtex_view_general_options = "--synctex-forward=@line:@col:@pdf"
       vim.g.vimtex_syntax_conceal = {
         acents = 1,

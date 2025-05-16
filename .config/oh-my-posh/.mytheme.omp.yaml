@@ -83,7 +83,7 @@ blocks:
           display_mode: context
           fetch_virtual_env: true
           home_enabled: true
-        template: '{{if .Venv }}|  {{ .Venv }} {{ end }}'
+        template: '{{if .Venv }}|  {{ .Venv }} 󰁥 {{ .Major }}.{{ .Minor }} {{ end }}'
         foreground: magenta
         type: python
         style: plain
@@ -118,7 +118,7 @@ blocks:
         cache:
           duration: 10m0s
           strategy: session
-        template: '| {{.Weather}} ({{.Temperature}}{{.UnitIcon}}) '
+        template: '| {{.Weather}} {{.Temperature}}{{.UnitIcon}} '
         foreground: cyan
         type: owm
         style: plain

@@ -4,7 +4,7 @@ export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
 
-export WANDB_MODE="offline"
+export WANDB_MODE="online"
 
 DISABLE_LS_COLORS="true"
 
@@ -55,6 +55,9 @@ HYPHEN_INSENSITIVE="true"  # - == _ ?
 ### HISTORY FILE
 export HISTFILE=$XDG_CONFIG_HOME/zsh/zsh_history
 HIST_STAMPS="yyyy-mm-dd"
+export HISTSIZE=10000000
+export SAVEHIST=$HISTSIZE
+setopt extendedhistory
 
 export FZF_BASE=/usr/bin/fzf
 export FZF_DEFAULT_OPTS='--height 40% --tmux center,60%'
@@ -180,7 +183,8 @@ alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
 alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
-alias n='$HOME/.local/bin/nvim/bin/nvim' # nevoim 0.10.4, 0.11 with current config broken
+alias n='nvim' # nevoim 0.10.4, 0.11 with current config broken
+alias v='n'
 alias c='xclip -sel c -r'
 alias pdf='zathura'
 
@@ -226,6 +230,7 @@ alias gsp='git push --recurse-submodules=on-demand'
 
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+alias univpn="sudo openconnect vpn.hiz-saarland.de --authgroup UdS -u s8jjmeye "
 
 # Start obsidian (flatpak installation) manually to allow for gpg-signing
 if [[ ! "$OSTYPE" == "darwin"* ]]; then
@@ -438,3 +443,8 @@ _toggl() {
 if [[ "$(basename -- ${(%):-%x})" != "_toggl" ]]; then
   compdef _toggl toggl
 fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/joshua/.cache/lm-studio/bin"
+# End of LM Studio CLI section
+

@@ -1,6 +1,6 @@
 [[manager.prepend_keymap]]
 on   = "T"
-run  = "plugin max-preview"
+run  = "plugin toggle-pane max-preview"
 desc = "Maximize or restore preview"
 
 [[manager.prepend_keymap]]
@@ -28,10 +28,10 @@ on   = "<A-Up>"
 run  = "seek -1"
 desc = "Scroll preview up"
 
-# [[manager.prepend_keymap]]
-# on   = [ "g", "f" ]
-# run  = 'search_do --via=fd --args="-d 3"'
-# desc = "Switch to the flat view with a max depth of 3"
+[[manager.prepend_keymap]]
+on = "<C-p>"
+run = 'shell -- qlmanage -p "$@"'
+desc = "Quicklook file"
 
 [[manager.prepend_keymap]]
 on   = [ "g", "f" ]
@@ -49,6 +49,11 @@ run  = 'cd $VIRTUAL_ENV'
 desc = "go to py venv"
 
 [[manager.prepend_keymap]]
+on = [ "g", "r" ]
+run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
+desc = "go to git root"
+
+[[manager.prepend_keymap]]
 on   = [ "f","f" ]
 run  = "filter --smart"
 desc = "find file by filename"
@@ -64,9 +69,11 @@ run  = "plugin fg --args='fzf'"
 desc = "find file by filename"
 
 [[manager.prepend_keymap]]
-on   = [ "f","g" ]
-run  = "plugin fg"
-desc = "find file by content (fuzzy match)"
+on  = "<A-m>"
+run = '''shell --
+	paths=$(for p in "$@"; do echo "$p"; done | paste -s -d,)
+	thunderbird -compose "attachment='$paths'"
+'''
 
 # Bookmarks
 
@@ -99,3 +106,8 @@ desc = "Jump bookmark by fzf"
 on   = "<C-d>"
 run  = "plugin diff"
 desc = "Diff the selected with the hovered file"
+
+[[manager.prepend_keymap]]
+on = [ "g", "l" ]
+run = "follow"
+desc = "Follow hovered symlink"

@@ -7,6 +7,14 @@ local options = {
     yaml = { "yamlfix" },
     json = { "jq" },
     markdown = { "prettierd" },
+    tex = { "latexindent" },
+  },
+  opts = {
+    format = {
+      timeout_ms = 3000,
+      async = false, -- not recommended to change
+      quiet = false, -- not recommended to change
+    },
   },
   formatters = {
     ruff_organize_imports = {

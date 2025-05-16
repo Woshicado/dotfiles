@@ -88,6 +88,8 @@ map('t', '<c-\\><ESC>', '<C-\\><C-n>', { noremap = true, desc = "Defocus termina
 -- Center screen on navigation with ctrl-u/d
 map("n", "<C-u>", "<C-u>zz", { desc = "Center screen on navigation" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Center screen on navigation" })
+map("n", "<C-f>", "<C-f>zz", { desc = "Center screen on navigation" })
+map("n", "<C-b>", "<C-b>zz", { desc = "Center screen on navigation" })
 -- Center screen on navigation with n/N
 map("n", "n", "nzzzv", { desc = "Center screen on navigation with n"})
 map("n", "N", "Nzzzv", { desc = "Center screen on navigation with N"})
@@ -99,6 +101,8 @@ map("n", "]m", "]mzt", { noremap = true,  desc = "Top screen ]m"})
 -- Cetner screen on navigation with { and }
 map("n", "{", "{zz", { desc = "Center screen on {"})
 map("n", "}", "}zz", { desc = "Center screen on }"})
+-- Go to current context
+map("n", "[c", function() require("treesitter-context").go_to_context(vim.v.count1) end, { silent = true })
 
 
 ---- Text manipulation
@@ -164,6 +168,9 @@ map({ "n", "v" }, "<leader>de", function() require('dapui').eval() end, { desc =
 map("n", "<leader>dt", function() require("dapui").toggle() end, { desc = "DapUI close" })
 map("n", "<leader>dp", function() require('dap').toggle_breakpoint(vim.fn.input('Condition: '), nil, nil ) end, { desc = "Toggle _conditional_ breakpoint" })
 
+
+map({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions", noremap = true })
+map({"n", "v"}, "<leader>fs", function() require("grug-far").open() end, { desc = "Grug far", noremap = true })
 
 -- VSCode mappings
 map('n', '<F5>', function() require('dap').continue() end)

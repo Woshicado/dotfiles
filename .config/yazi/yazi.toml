@@ -1,16 +1,30 @@
 [manager]
-show_hidden = false
 sort_dir_first = true
 sort_sensitive = false
 sort_by = "natural"
 sort_translit = true
-scrolloff = 3
+scrolloff = 5
 ratio = [1, 4, 4]
+mouse_events   = [ "click", "scroll" ]
+sort_reverse 	 = false
+linemode       = "none"
+show_hidden    = false
+show_symlink   = true
+title_format   = "Yazi: {cwd}"
 
 [preview]
 tab_size = 2
 max_width = 2048
 max_height = 2048
+wrap            = "no"
+cache_dir       = ""
+image_delay     = 30
+image_filter    = "triangle"
+image_quality   = 75
+sixel_fraction  = 15
+ueberzug_scale  = 1
+ueberzug_offset = [ 0, 0, 0, 0 ]
+
 
 [[plugin.prepend_fetchers]]
 id   = "git"
@@ -27,7 +41,6 @@ prepend_previewers = [
   # { name = "*.md", run = "glow" },
   # { mime = "text/csv", run = "miller"},
   # { name = "*.ipynb", run = "nbpreview" },
-  # { name = "*", run = "hexyl" },
 
   { mime = "text/csv", run = "miller"},
   # { name = "*.json", run = "miller_json"},
@@ -41,4 +54,7 @@ prepend_previewers = [
   # { name = "*.json", run = "rich-preview"},
   { name = "*.tex", run = "rich-preview"},
 # { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
+]
+append_previewers = [
+  { name = "*", run = "hexyl" },
 ]
