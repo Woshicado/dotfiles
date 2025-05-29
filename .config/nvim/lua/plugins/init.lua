@@ -10,6 +10,85 @@ return {
   },
 
   {
+    "echasnovski/mini.ai",
+    lazy = false,
+    config = function()
+      local spec_pair = require("mini.ai").gen_spec.pair
+      require("mini.ai").setup {
+        -- Table with textobject id as fields, textobject specification as values.
+        -- Also use this to disable builtin textobjects. See |MiniAi.config|.
+        custom_textobjects = {
+          ["*"] = spec_pair("*", "*", { type = "greedy" }),
+          ["_"] = spec_pair("_", "_", { type = "greedy" }),
+        },
+
+        -- Module mappings. Use `''` (empty string) to disable one.
+        mappings = {
+          -- Main textobject prefixes
+          around = "a",
+          inside = "i",
+
+          -- Next/last variants
+          around_next = "an",
+          inside_next = "in",
+          around_last = "al",
+          inside_last = "il",
+
+          -- Move cursor to corresponding edge of `a` textobject
+          goto_left = "g[",
+          goto_right = "g]",
+        },
+
+        -- Number of lines within which textobject is searched
+        n_lines = 50,
+
+        -- How to search for object (first inside current line, then inside
+        -- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
+        -- 'cover_or_nearest', 'next', 'previous', 'nearest'.
+        search_method = "cover_or_next",
+
+        -- Whether to disable showing non-error feedback
+        -- This also affects (purely informational) helper messages shown after
+        -- idle time if user input is required.
+        silent = false,
+      }
+    end,
+  },
+
+  {
+    "echasnovski/mini.jump",
+    version = false,
+    lazy = false,
+    config = function()
+      require("mini.jump").setup {
+        -- Module mappings. Use `''` (empty string) to disable one.
+        mappings = {
+          forward = "f",
+          backward = "F",
+          forward_till = "t",
+          backward_till = "T",
+          repeat_jump = ";",
+        },
+
+        -- Delay values (in ms) for different functionalities. Set any of them to
+        -- a very big number (like 10^7) to virtually disable.
+        delay = {
+          -- Delay between jump and highlighting all possible jumps
+          highlight = 250,
+
+          -- Delay between jump and automatic stop if idle (no jump is done)
+          idle_stop = 10000000,
+        },
+
+        -- Whether to disable showing non-error feedback
+        -- This also affects (purely informational) helper messages shown after
+        -- idle time if user input is required.
+        silent = false,
+      }
+    end,
+  },
+
+  {
     "nvim-treesitter/nvim-treesitter-context",
     lazy = false,
     config = function()

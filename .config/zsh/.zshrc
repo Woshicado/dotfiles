@@ -227,6 +227,8 @@ alias rcp='rsync -saLPz --port 22 -e ssh '
 # Custom git aliases for submodules
 alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
 alias gsp='git push --recurse-submodules=on-demand'
+alias gs='git status'
+alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar%C(auto)  %D%n%s%n'"
 
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
