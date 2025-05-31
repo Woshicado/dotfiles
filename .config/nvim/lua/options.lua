@@ -34,6 +34,7 @@ o.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- or v:lua.vim.treesitter.foldex
 o.foldtext = ""
 o.foldcolumn = "0"
 o.fillchars:append { fold = " " }
+o.winborder = 'rounded'
 
 -- I don't know if these do anything, or what exactly they are supposed to do
 o.diffopt = {
@@ -46,3 +47,5 @@ o.diffopt = {
     "indent-heuristic",
     "iwhite" -- I toggle this one, it doesn't fit all cases.
 }
+
+vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "none" })

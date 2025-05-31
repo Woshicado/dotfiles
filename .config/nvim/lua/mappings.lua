@@ -15,7 +15,7 @@ map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>") -- Save on Cmd-S
 
 -- Exit keybinds
 map({ "n", "i", "v"}, "<C-q>", "<cmd> :q! <CR>", { desc = "Close session without saving", noremap=true })
-map({ "n", "i", "v"}, "<A-q>", "<cmd> :qa! <CR>", { desc = "Close session without saving", noremap=true })
+map({ "n", "i", "v"}, "<M-q>", "<cmd> :qa! <CR>", { desc = "Close session without saving", noremap=true })
 
 -- Misc Meta
 -- map({ "n", "i", "v"}, "<C-a>", "ggVG", { desc = "Select all", noremap=true }) -- Select all in current file
@@ -39,11 +39,38 @@ map("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>", { desc = "window left", noremap=
 map("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>", { desc = "window right", noremap=true })
 map("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>", { desc = "window down", noremap=true })
 map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up", noremap=true })
+map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap=true })
 
+
+-- German umlauts
+-- map({"i", "t"}, "<M-o>", "<C-S-k>o:", { desc = "ö" })
+-- map({"i", "t"}, "<M-u>", "<C-S-k>u:", { desc = "ü" })
+-- map({"i", "t"}, "<M-a>", "<C-S-k>a:", { desc = "ä" })
+-- map({"i", "t"}, "<M-S-o>", "<C-S-k>O:", { desc = "ö" })
+-- map({"i", "t"}, "<M-S-u>", "<C-S-k>U:", { desc = "ü" })
+-- map({"i", "t"}, "<M-S-a>", "<C-S-k>A:", { desc = "ä" })
+
+map({"i", "t"}, "<M-o>", "ö", { desc = "ö" })
+map({"i", "t"}, "<M-u>", "ü", { desc = "ü" })
+map({"i", "t"}, "<M-a>", "ä", { desc = "ä" })
+map({"i", "t"}, "<M-S-o>", "Ö", { desc = "Ö" })
+map({"i", "t"}, "<M-S-u>", "Ü", { desc = "Ü" })
+map({"i", "t"}, "<M-S-a>", "Ä", { desc = "Ä" })
 
 -- Oil go to parent directory
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+-- yanky.nvim
+map({"n","x"}, "p", "<Plug>(YankyPutAfter)")
+map({"n","x"}, "P", "<Plug>(YankyPutBefore)")
+map({"n","x"}, "gp", "<Plug>(YankyGPutAfter)")
+map({"n","x"}, "gP", "<Plug>(YankyGPutBefore)")
+map("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
+map("n", "<c-n>", "<Plug>(YankyNextEntry)")
+map("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
+map("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
+map("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
+map("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
 
 -- This seems useless since I get fuzzy suggestions anyway, but w/e
 vim.keymap.set({ "i" }, "<C-x><C-f>",
@@ -60,15 +87,18 @@ map("n", "<leader>ff", function() require("fzf-lua").files() end, { noremap = tr
 map("n", "<leader>fa", function() require("fzf-lua").git_files() end, { noremap = true, desc = "Fuzzy find git files" })
 map("n", "<leader>fb", function() require("fzf-lua").buffers() end, { noremap = true, desc = "Fuzzy find buffers" })
 map("n", "<leader>fo", function() require("fzf-lua").oldfiles() end, { noremap = true, desc = "Fuzzy find recent files" })
-map("n", "<leader>fr", function() require("fzf-lua").oldfiles() end, { noremap = true, desc = "Fuzzy find recent files" })
+map("n", "<leader>fr", function() require("fzf-lua").resume() end, { noremap = true, desc = "Fuzzy find recent files" })
 map("n", "<leader>fw", function() require("fzf-lua").grep_cword() end, { noremap = true, desc = "Fuzzy find word in project" })
 map("n", "<leader>fl", function() require("fzf-lua").live_grep() end, { noremap = true, desc = "Fuzzy live grep in project" })
-map("n", "<leader>fg", function() require("fzf-lua").live_grep() end, { noremap = true, desc = "Fuzzy live grep in project" })
+map("n", "<leader>fg", function() require("fzf-lua").live_grep_glob() end, { noremap = true, desc = "Fuzzy live grep in project" })
 map("n", "<leader>fz", function() require("fzf-lua").lgrep_curbuf() end, { noremap = true, desc = "Fuzzy live current buffer" })
+map("n", "<leader>fm", function() require("fzf-lua").marks() end, { noremap = true, desc = "Fuzzy marks" })
+map("n", "<leader>fp", function() require("fzf-lua").marks() end, { noremap = true, desc = "Fuzzy complete path" })
 
 
 -- Telescope git pickers
 map("n", "<leader>gs", function() require("fzf-lua").git_stash() end, { noremap = true, desc = "Telescope git stashes" })
+map("n", "<leader>gt", function() require("fzf-lua").git_status() end, { noremap = true, desc = "Telescope git status" })
 map("n", "<leader>gc", function() require("fzf-lua").git_commits() end, { noremap = true, desc = "Telescope git commits" })
 map("n", "<leader>gb", function() require("fzf-lua").git_branches() end, { noremap = true, desc = "Telescope git branches" })
 map("n", "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
