@@ -1,4 +1,4 @@
-[manager]
+[mgr]
 sort_dir_first = true
 sort_sensitive = false
 sort_by = "natural"

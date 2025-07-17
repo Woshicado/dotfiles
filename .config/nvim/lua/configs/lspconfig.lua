@@ -21,6 +21,7 @@ local server_settings = {
 			dictionary = {
 				["en-US"] = words,
 			},
+			enabled = { "bibtex", "gitcommit", "org", "tex", "restructuredtext", "rsweave", "latex", "quarto", "rmd", "context", "mail", "plaintext" },
 		},
 	},
 	html = {},
@@ -80,10 +81,10 @@ local python_path = venv and venv .. "/bin/python" or "python3"
 
 lspconfig.pylsp.setup({
 	on_attach = function(client, bufnr)
-    -- client.capabilities.diagnosticProvider = false -- Disable diagnostics from pylsp
-    -- client.server_capabilities.signatureHelpProvider = false
-    -- client.server_capabilities.hoverProvider = true
-    nvlsp.on_attach(client, bufnr)
+		-- client.capabilities.diagnosticProvider = false -- Disable diagnostics from pylsp
+		-- client.server_capabilities.signatureHelpProvider = false
+		-- client.server_capabilities.hoverProvider = true
+		nvlsp.on_attach(client, bufnr)
 	end,
 	on_init = nvlsp.on_init,
 	capabilities = nvlsp.capabilities,
@@ -93,14 +94,14 @@ lspconfig.pylsp.setup({
 				pycodestyle = { enabled = false },
 				jedi_completion = { fuzzy = true },
 				mccabe = { enabled = false },
-        pylsp_mypy = {
-          enabled = true,
-          -- dmypy = true,
-          live_mode = true, -- Enable live mode for Mypy
-          report_progress = true, -- Report progress for Mypy
-          overrides = { "--python-executable", python_path, "--ignore-missing-imports", true }, -- Use the virtual environment's Python executable
-          -- dmypy_command = { "~/.local/share/nvim/mason/packages/python-lsp-server/venv/bin/dmypy" }
-        },
+				pylsp_mypy = {
+					enabled = true,
+					-- dmypy = true,
+					live_mode = true, -- Enable live mode for Mypy
+					report_progress = true, -- Report progress for Mypy
+					overrides = { "--python-executable", python_path, "--ignore-missing-imports", true }, -- Use the virtual environment's Python executable
+					-- dmypy_command = { "~/.local/share/nvim/mason/packages/python-lsp-server/venv/bin/dmypy" }
+				},
 				isort = { enabled = false },
 				spyder = { enabled = false },
 				autopep8 = { enabled = false },
@@ -115,7 +116,7 @@ lspconfig.pylsp.setup({
 				ruff = {
 					enabled = true,
 					formatEnabled = true,
-					ignore = { "TD002", "TD003" }, -- Example ignores, adjust as needed
+					ignore = { "TD002", "TD003", "PD901" }, -- Example ignores, adjust as needed
 					format = { "I" },
 					extendSelect = { "I" },
 					severities = {
@@ -129,7 +130,7 @@ lspconfig.pylsp.setup({
 	},
 })
 
-vim.diagnostic.config({virtual_text = false, virtual_lines= {current_line=true}})
+vim.diagnostic.config({ virtual_text = false, virtual_lines = { current_line = true } })
 
 -- lspconfig.ruff.setup({
 -- 	on_attach = function(client, bufnr)

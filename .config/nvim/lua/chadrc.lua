@@ -113,6 +113,7 @@ function _G.qftf(info)
 end
 
 vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
+vim.g.abolish_save_file = vim.fn.expand("~/.config/nvim/after/plugin/abolish.vim")
 
 -- Adapt fzf's delimiter in nvim-bqf
 require('bqf').setup({

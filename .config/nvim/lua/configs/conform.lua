@@ -6,7 +6,7 @@ local options = {
     python = { "ruff_organize_imports", "ruff_fix", "ruff_format" },
     yaml = { "yamlfix" },
     json = { "jq" },
-    markdown = { "prettierd" },
+    markdown = { "yamlfix", "prettierd" },
     tex = { "latexindent" },
   },
   opts = {
@@ -17,6 +17,39 @@ local options = {
     },
   },
   formatters = {
+    yamlfix_frontmatter = {
+      command = "bash",
+      args = { "-c", [[
+        awk '
+          BEGIN { in_frontmatter=0 }
+          /^---$/ {
+            if (in_frontmatter == 0) {
+              in_frontmatter=1; print > "/tmp/frontmatter.yaml"; next
+            } else {
+              in_frontmatter=2; print "---"; next
+            }
+          }
+          {
+            if (in_frontmatter == 1) print > "/tmp/frontmatter.yaml";
+            else print
+          }
+        ' &&
+        yamlfix /tmp/frontmatter.yaml > /tmp/frontmatter_fixed.yaml &&
+        awk '
+          BEGIN { frontmatter = 1 }
+          {
+            if (frontmatter) {
+              if (NR == 1) print "---"
+              print
+              if ($0 == "---") frontmatter = 0
+            } else print
+          }
+        ' /tmp/frontmatter_fixed.yaml -
+      ]] },
+      stdin = true,
+      stdout = true,
+      fallback_formatter = nil,
+    },
     ruff_organize_imports = {
       command = "ruff",
       args = {

@@ -11,10 +11,13 @@ config.mapping["<CR>"] = cmp.mapping(function(fallback)
 	if cmp.visible() then
 		if luasnip.expandable() then
 			luasnip.expand()
-		else
+		elseif cmp.get_selected_entry() then
 			cmp.confirm({
-				select = true,
+				behavior = cmp.ConfirmBehavior.Insert,
+				select = false,
 			})
+		else
+			fallback()
 		end
 	else
 		fallback()

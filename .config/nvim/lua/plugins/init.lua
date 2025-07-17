@@ -110,6 +110,11 @@ return {
 		end,
 	},
 
+  {
+    "tpope/vim-abolish",
+    lazy = false,
+  },
+
 	-- Render markdowns in normal mode
 	{
 		"MeanderingProgrammer/render-markdown.nvim",

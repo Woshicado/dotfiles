@@ -49,3 +49,4 @@ o.diffopt = {
 }
 
 vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "none" })
+vim.api.nvim_set_hl(0, "LineNr", { fg = "#4e535d" })

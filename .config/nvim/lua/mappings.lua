@@ -61,10 +61,10 @@ map({"i", "t"}, "<M-S-a>", "Ä", { desc = "Ä" })
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- yanky.nvim
-map({"n","x"}, "p", "<Plug>(YankyPutAfter)")
-map({"n","x"}, "P", "<Plug>(YankyPutBefore)")
-map({"n","x"}, "gp", "<Plug>(YankyGPutAfter)")
-map({"n","x"}, "gP", "<Plug>(YankyGPutBefore)")
+map({"x"}, "p", "<Plug>(YankyPutAfter)")
+map({"x"}, "P", "<Plug>(YankyPutBefore)")
+map({"x"}, "gp", "<Plug>(YankyGPutAfter)")
+map({"x"}, "gP", "<Plug>(YankyGPutBefore)")
 map("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
 map("n", "<c-n>", "<Plug>(YankyNextEntry)")
 map("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
@@ -247,10 +247,20 @@ map("n", '<leader>dd', function() set_last_step(require("dap").down) end, { desc
 map("n", "<M-r>",      function() repeat_last_step() end, { desc = "Repeat Last Step", noremap = true, silent = true })
 
 -- quickfix keybinds
-map("n", "<leader>qc", ":copen<CR>", { noremap = true, silent = true }) -- Open Quickfix
-map("n", "<leader>ql", ":lopen<CR>", { noremap = true, silent = true }) -- Open Location List
-map("n", "<leader>qo", ":colder<CR>", { noremap = true, silent = true }) -- Older Quickfix List
-map("n", "<leader>qn", ":cnewer<CR>", { noremap = true, silent = true }) -- Newer Quickfix List
+-- Preferably use the default [q, ]q mappings etc.
+map("n", "<leader>qc", ":copen<CR>", { noremap = true, silent = true })
+map("n", "<leader>ql", ":lopen<CR>", { noremap = true, silent = true })
+map("n", "<leader>qp", ":colder<CR>", { noremap = true, silent = true })
+map("n", "<leader>qn", ":cnewer<CR>", { noremap = true, silent = true })
+map("n", "<leader>qq", ":cclose<CR>", { noremap = true, silent = true })
+map("n", "<leader>q[", ":cprev<CR>", { noremap = true, silent = true })
+map("n", "<leader>q]", ":cnext<CR>", { noremap = true, silent = true })
+map("n", "<leader>qP", ":cpf<CR>", { noremap = true, silent = true })
+map("n", "<leader>qN", ":cnf<CR>", { noremap = true, silent = true })
+map("n", "<leader>q{", ":colder<CR>", { noremap = true, silent = true })
+map("n", "<leader>q}", ":cnewer<CR>", { noremap = true, silent = true })
+map("n", "[<S-q>", ":colder<CR>", { noremap = true, silent = true })
+map("n", "]<S-q>", ":cnewer<CR>", { noremap = true, silent = true })
 
 
 -- timber logs

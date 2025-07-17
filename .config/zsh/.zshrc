@@ -176,6 +176,7 @@ export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 ### DOCKER
 #export DOCKER_DEFAULT_PLATFORM='linux/amd64'
 alias ssh_tb='ssh -L 16006:127.0.0.1:6006'
+alias rt='trash'
 
 ### HELPFUL ALIASES
 alias cwd=pwd
@@ -424,6 +425,11 @@ chruby ruby-3.3.5
 #export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 #export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
+
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
 
 ###### THE FOLLOWING SHOULD BE AT THE END.
