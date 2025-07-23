@@ -77,4 +77,13 @@ vim.list_extend(config.sources, {
 --   documentation = cmp.config.window.bordered(),
 -- }
 
-return config
+return {
+	"hrsh7th/nvim-cmp",
+	dependencies = {
+		"kdheepak/cmp-latex-symbols",
+		"hrsh7th/cmp-emoji",
+		"chrisgrieser/cmp_yanky",
+		"gbprod/yanky.nvim",
+	},
+	opts = config
+}

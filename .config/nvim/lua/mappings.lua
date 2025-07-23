@@ -75,32 +75,29 @@ map("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
 -- This seems useless since I get fuzzy suggestions anyway, but w/e
 vim.keymap.set({ "i" }, "<C-x><C-f>",
   function()
-    require("fzf-lua").complete_file({
-      cmd = "rg --files",
-      winopts = { preview = { hidden = true } }
-    })
+    vim.cmd("FzfLua complete_file cmd=\"rg --files\" winopts=\"{ preview = { hidden = true } }\"")
   end, { silent = true, desc = "Fuzzy complete file" })
 
 
 -- replace telescope with fzf
-map("n", "<leader>ff", function() require("fzf-lua").files() end, { noremap = true, desc = "Fuzzy find files" })-- stylua: ignore
-map("n", "<leader>fa", function() require("fzf-lua").git_files() end, { noremap = true, desc = "Fuzzy find git files" })
-map("n", "<leader>fb", function() require("fzf-lua").buffers() end, { noremap = true, desc = "Fuzzy find buffers" })
-map("n", "<leader>fo", function() require("fzf-lua").oldfiles() end, { noremap = true, desc = "Fuzzy find recent files" })
-map("n", "<leader>fr", function() require("fzf-lua").resume() end, { noremap = true, desc = "Fuzzy find recent files" })
-map("n", "<leader>fw", function() require("fzf-lua").grep_cword() end, { noremap = true, desc = "Fuzzy find word in project" })
-map("n", "<leader>fl", function() require("fzf-lua").live_grep() end, { noremap = true, desc = "Fuzzy live grep in project" })
-map("n", "<leader>fg", function() require("fzf-lua").live_grep_glob() end, { noremap = true, desc = "Fuzzy live grep in project" })
-map("n", "<leader>fz", function() require("fzf-lua").lgrep_curbuf() end, { noremap = true, desc = "Fuzzy live current buffer" })
-map("n", "<leader>fm", function() require("fzf-lua").marks() end, { noremap = true, desc = "Fuzzy marks" })
-map("n", "<leader>fp", function() require("fzf-lua").marks() end, { noremap = true, desc = "Fuzzy complete path" })
+map("n", "<leader>ff", "<cmd>FzfLua files<CR>", { noremap = true, desc = "Fuzzy find files" })
+map("n", "<leader>fa", "<cmd>FzfLua git_files<CR>", { noremap = true, desc = "Fuzzy find git files" })
+map("n", "<leader>fb", "<cmd>FzfLua buffers<CR>", { noremap = true, desc = "Fuzzy find buffers" })
+map("n", "<leader>fo", "<cmd>FzfLua oldfiles<CR>", { noremap = true, desc = "Fuzzy find recent files" })
+map("n", "<leader>fr", "<cmd>FzfLua resume<CR>", { noremap = true, desc = "Fuzzy find recent files" })
+map("n", "<leader>fw", "<cmd>FzfLua grep_cword<CR>", { noremap = true, desc = "Fuzzy find word in project" })
+map("n", "<leader>fl", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
+map("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
+map("n", "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", { noremap = true, desc = "Fuzzy live current buffer" })
+map("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { noremap = true, desc = "Fuzzy marks" })
+map("n", "<leader>fp", "<cmd>FzfLua paths<CR>", { noremap = true, desc = "Fuzzy complete path" })
 
 
 -- Telescope git pickers
-map("n", "<leader>gs", function() require("fzf-lua").git_stash() end, { noremap = true, desc = "Telescope git stashes" })
-map("n", "<leader>gt", function() require("fzf-lua").git_status() end, { noremap = true, desc = "Telescope git status" })
-map("n", "<leader>gc", function() require("fzf-lua").git_commits() end, { noremap = true, desc = "Telescope git commits" })
-map("n", "<leader>gb", function() require("fzf-lua").git_branches() end, { noremap = true, desc = "Telescope git branches" })
+map("n", "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
+map("n", "<leader>gt", "<cmd>FzfLua git_status<CR>", { noremap = true, desc = "Fuzzy git status" })
+map("n", "<leader>gc", "<cmd>FzfLua git_commits<CR>", { noremap = true, desc = "Fuzzy git commits" })
+map("n", "<leader>gb", "<cmd>FzfLua git_branches<CR>", { noremap = true, desc = "Fuzzy git branches" })
 map("n", "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
 
 
@@ -331,6 +328,6 @@ map("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n
 map("n", "<leader>od", ":ObsidianToday<cr>", { desc = "Open today's daily note" })
 map("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>", { desc = "Strip date from title" })
 map("n", "<leader>os", function () require("fzf-lua").files({ cwd = "$O_VAULT_DIR" }) end, { desc = "find file in obsidian notes"})
-map("n", "<leader>oz", function () require("fzf-lua").live_grep({ cwd = "$O_VAULT_DIR" }) end, { desc = "grep in obsidian notes"})
+map("n", "<leader>oz", function () vim.cmd("FzfLua live_grep cwd=\"$O_VAULT_DIR\"") end, { desc = "grep in obsidian notes"})
 map("n", "<leader>ok", ":!mv '%:p' $O_VAULT_DIR/zettelkasten<cr>:bd<cr>", { desc = "Move file to zettelkasten" })
 map("n", "<leader>or", ":!rm '%:p'<cr>:bd<cr>", { desc = "Remove file" })
