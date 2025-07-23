@@ -309,6 +309,22 @@ end, {
 })
 
 
+vim.keymap.set("n", "]t", function()
+  require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+vim.keymap.set("n", "[t", function()
+  require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
+
+vim.keymap.set("n", "]f", function()
+  require("todo-comments").jump_next({keywords = { "FIX", "HACK" }})
+end, { desc = "Next error/warning todo comment" })
+
+vim.keymap.set("n", "[f", function()
+  require("todo-comments").jump_prev({keywords = { "FIX", "HACK" }})
+end, { desc = "Next error/warning todo comment" })
+
 -- Obsidian keybinds
 map("n", "<leader>oo", ":cd $O_VAULT_DIR<CR>", { desc = "Open Obsidian notes" })
 map("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>", { desc = "Insert obsidian default note template" })

@@ -60,6 +60,7 @@
 
 [init]
   defaultBranch = main
+  templateDir = ~/.git-templates
 
 [alias]
   pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"

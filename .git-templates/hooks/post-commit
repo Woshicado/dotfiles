@@ -1,0 +1,2 @@
+#!/bin/sh
+git rev-parse HEAD > latest_commit.sha

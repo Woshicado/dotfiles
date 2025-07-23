@@ -9,6 +9,7 @@ return {
 		end,
 	},
 
+	-- Better text objects (q for quotes, b for general brackets/pars/..., p/n for prev/next, ...)
 	{
 		"echasnovski/mini.ai",
 		lazy = false,
@@ -55,6 +56,7 @@ return {
 		end,
 	},
 
+	-- Better jumps (repeats, whole buffer instead of line, ...)
 	{
 		"echasnovski/mini.jump",
 		version = false,
@@ -88,6 +90,7 @@ return {
 		end,
 	},
 
+	-- Show treesitter context at the top of the pane
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		lazy = false,
@@ -110,10 +113,158 @@ return {
 		end,
 	},
 
-  {
-    "tpope/vim-abolish",
-    lazy = false,
-  },
+	-- abolish (change and replace words)
+	{
+		"tpope/vim-abolish",
+		lazy = false,
+	},
+
+	-- todo-comments
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		lazy = false,
+		opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+		},
+	},
+
+	-- Task/ToDo list manager
+	{
+		"atiladefreitas/dooing",
+		lazy = false,
+		config = function()
+			require("dooing").setup({
+
+				-- Core settings
+				save_path = vim.fn.stdpath("data") .. "/dooing_todos.json",
+
+				-- Timestamp settings
+				timestamp = {
+					enabled = true, -- Show relative timestamps (e.g., @5m ago, @2h ago)
+				},
+
+				-- Window settings
+				window = {
+					width = 80, -- Width of the floating window
+					height = 40, -- Height of the floating window
+					border = "rounded", -- Border style
+					position = "center", -- Window position: 'right', 'left', 'top', 'bottom', 'center',
+					-- 'top-right', 'top-left', 'bottom-right', 'bottom-left'
+					padding = {
+						top = 1,
+						bottom = 1,
+						left = 2,
+						right = 2,
+					},
+				},
+
+				-- To-do formatting
+				formatting = {
+					pending = {
+						icon = "○",
+						format = { "icon", "notes_icon", "text", "due_date", "ect" },
+					},
+					in_progress = {
+						icon = "◐",
+						format = { "icon", "text", "due_date", "ect" },
+					},
+					done = {
+						icon = "✓",
+						format = { "icon", "notes_icon", "text", "due_date", "ect" },
+					},
+				},
+
+				quick_keys = true, -- Quick keys window
+
+				notes = {
+					icon = "📓",
+				},
+
+				scratchpad = {
+					syntax_highlight = "markdown",
+				},
+
+				-- Keymaps
+				keymaps = {
+					toggle_window = "<leader>td",
+					new_todo = "i",
+					toggle_todo = "x",
+					delete_todo = "d",
+					delete_completed = "D",
+					close_window = "q",
+					undo_delete = "u",
+					add_due_date = "H",
+					remove_due_date = "r",
+					toggle_help = "?",
+					toggle_tags = "t",
+					toggle_priority = "<Space>",
+					clear_filter = "c",
+					edit_todo = "e",
+					edit_tag = "e",
+					edit_priorities = "p",
+					delete_tag = "d",
+					search_todos = "/",
+					add_time_estimation = "T",
+					remove_time_estimation = "R",
+					import_todos = "I",
+					export_todos = "E",
+					remove_duplicates = "<leader>D",
+					open_todo_scratchpad = "s",
+					refresh_todos = "<leader>f",
+					share_todos = "<leader>s",
+				},
+
+				calendar = {
+					language = "en",
+					icon = "",
+					keymaps = {
+						previous_day = "h",
+						next_day = "l",
+						previous_week = "k",
+						next_week = "j",
+						previous_month = "H",
+						next_month = "L",
+						select_day = "<CR>",
+						close_calendar = "q",
+					},
+				},
+
+				-- Priority settings
+				priorities = {
+					{
+						name = "important",
+						weight = 4,
+					},
+					{
+						name = "urgent",
+						weight = 2,
+					},
+				},
+				priority_groups = {
+					high = {
+						members = { "important", "urgent" },
+						color = nil,
+						hl_group = "DiagnosticError",
+					},
+					medium = {
+						members = { "important" },
+						color = nil,
+						hl_group = "DiagnosticWarn",
+					},
+					low = {
+						members = { "urgent" },
+						color = nil,
+						hl_group = "DiagnosticHint",
+					},
+				},
+				hour_score_value = 1 / 8,
+				done_sort_by_completed_time = false,
+			})
+		end,
+	},
 
 	-- Render markdowns in normal mode
 	{
@@ -131,13 +282,6 @@ return {
 			})
 		end,
 	},
-
-	-- Markdown tables
-	-- {
-	--   -- I feel like this table plugin does not really work well with rendered tables? Or whatever, some issues
-	--   "dhruvasagar/vim-table-mode",
-	--   lazy = false,
-	-- },
 
 	-- obsidian.nvim (Edit, search, ... obsidian notes in Neovim)
 	{

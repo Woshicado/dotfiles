@@ -1,4 +1,4 @@
-# My dotfiles 
+# My dotfiles
 
 ## Usage
 - Clone to `$Home/dotfiles`
@@ -20,7 +20,7 @@
 - ...
 - AND MORE [TODO]
 
-Command:
+Command (fedora):
 ```
 sudo dnf install zsh neovim lsd git-delta gping glow ranger hexyl fd-find dutree
 ```
