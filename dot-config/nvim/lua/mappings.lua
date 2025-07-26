@@ -14,6 +14,9 @@ local keys = {
   "<leader>wl",
   "<leader>wr",
   "<leader>ws",
+  "<leader>cm",
+  "<leader>th",
+  "<leader>x",
 }
 
 for _, key in ipairs(keys) do
@@ -28,30 +31,26 @@ local map = vim.keymap.set
 map("i", "jk", "<ESC>")
 
 -- Save keybinds
-map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>") -- Save on Ctrl-S
-map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>") -- Save on Cmd-S
-
+map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S
+map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Cmd-S
+map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save File" })
 
 -- Exit keybinds
-map({ "n", "i", "v"}, "<C-q>", "<cmd> :q! <CR>", { desc = "Close session without saving", noremap=true })
+-- map({ "n", "i", "v"}, "<C-q>", "<cmd>:q!<CR>", { desc = "Close window without saving", noremap=true })
+map("n", "<leader>qq", "<cmd>:q!<CR>", { desc = "Close window without saving", noremap=true })
 map({ "n", "i", "v"}, "<M-q>", "<cmd> :qa! <CR>", { desc = "Close session without saving", noremap=true })
 
 -- Misc Meta
--- map({ "n", "i", "v"}, "<C-a>", "ggVG", { desc = "Select all", noremap=true }) -- Select all in current file
 map({ "n", "v"}, "<leader><C-w>", "<cmd> :set wrap!<CR>", { desc = "Toggle word wrap", noremap=true }) -- Toogle word wrap
 map({ "n", "i", "v"}, "<M-e>", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree", noremap=true })
 map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>", {desc = "Toggle absolute/relative surrounding line numbers.", noremap=true})
 
-
 -- Buffer navigation
-map({ "n", "v"}, "<leader><Left>",  "<cmd> :bp!<CR>", { desc = "Switch to previous buffer", noremap=true })
-map({ "n", "v"}, "<leader><Right>", "<cmd> :bn!<CR>", { desc = "Switch to next buffer", noremap=true })
-map({ "n", "v"}, "<M-x>",           "<cmd> :bd <CR>", { desc = "Close current file", noremap=true })
+map({ "n", "v"}, "<leader><Left>",  "<cmd>bp!<CR>", { desc = "Switch to previous buffer", noremap=true })
+map({ "n", "v"}, "<leader><Right>", "<cmd>bn!<CR>", { desc = "Switch to next buffer", noremap=true })
+map({ "n", "v"}, "<M-x>",           "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
+map({ "n", "v"}, "<leader>x",       "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
 map({ "n", "v"}, "<C-S-o>",         "<C-i>",          { desc = "Forward", noremap=true })
-
--- Overwrite pasting since it breaks with newlines and ext_keys in kitty with tmux
-map("i", "<M-v>", "<C-o>p", { desc = "Paste in insert mode" })
-map("n", "<M-v>", "p", { desc = "Paste in normal mode" })
 
 -- Tmux integration
 map("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>", { desc = "window left", noremap=true })
@@ -59,7 +58,6 @@ map("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>", { desc = "window right", norema
 map("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>", { desc = "window down", noremap=true })
 map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up", noremap=true })
 map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap=true })
-
 
 -- German umlauts
 -- map({"i", "t"}, "<M-o>", "<C-S-k>o:", { desc = "ö" })
@@ -105,6 +103,7 @@ map("n", "<leader>fb", "<cmd>FzfLua buffers<CR>", { noremap = true, desc = "Fuzz
 map("n", "<leader>fo", "<cmd>FzfLua oldfiles<CR>", { noremap = true, desc = "Fuzzy find recent files" })
 map("n", "<leader>fr", "<cmd>FzfLua resume<CR>", { noremap = true, desc = "Fuzzy find recent files" })
 map("n", "<leader>fw", "<cmd>FzfLua grep_cword<CR>", { noremap = true, desc = "Fuzzy find word in project" })
+map("n", "<leader>fc", "<cmd>FzfLua grep_cWORD<CR>", { noremap = true, desc = "Fuzzy find files" })
 map("n", "<leader>fl", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
 map("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
 map("n", "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", { noremap = true, desc = "Fuzzy live current buffer" })
@@ -113,25 +112,15 @@ map("n", "<leader>fp", "<cmd>FzfLua paths<CR>", { noremap = true, desc = "Fuzzy 
 
 
 -- Telescope git pickers
-map("n", "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
-map("n", "<leader>gt", "<cmd>FzfLua git_status<CR>", { noremap = true, desc = "Fuzzy git status" })
-map("n", "<leader>gc", "<cmd>FzfLua git_commits<CR>", { noremap = true, desc = "Fuzzy git commits" })
-map("n", "<leader>gb", "<cmd>FzfLua git_branches<CR>", { noremap = true, desc = "Fuzzy git branches" })
-map("n", "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
+map({ "n", "x" }, "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
+map({"n", "x" }, "<leader>gt", "<cmd>FzfLua git_status<CR>", { noremap = true, desc = "Fuzzy git status" })
+map({"n", "x" }, "<leader>gc", "<cmd>FzfLua git_bcommits<CR>", { noremap = true, desc = "Fuzzy git buffer commits" })
+map({"n", "x" }, "<leader>ga", "<cmd>FzfLua git_commits<CR>", { noremap = true, desc = "Fuzzy git commits" })
+map({"n", "x" }, "<leader>gb", "<cmd>FzfLua git_branches<CR>", { noremap = true, desc = "Fuzzy git branches" })
+map({"n", "x" }, "<leader>gl", "<cmd>FzfLua git_blame<CR>", { noremap = true, desc = "Fuzzy git blame" })
+map({"n", "x" }, "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
 
 
--- delete unused mappings
-local nomap = vim.keymap.del
-nomap("n", "<leader>cm")
-nomap("n", "<leader>th")
-
-
--- Session management
--- map("n", "<leader>wr", "<cmd>SessionSearch<CR>", { noremap = true, desc = "Session search" })
--- map("n", "<leader>ws", "<cmd>SessionSave<CR>", { noremap = true, desc = "Save session" })
--- map("n", "<leader>wa", "<cmd>SessionToggleAutoSave<CR>", { noremap = true, desc = "Toggle autosave" })
-
-map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save session" })
 
 -- Terminal mappings
 map('t', '<c-\\><ESC>', '<C-\\><C-n>', { noremap = true, desc = "Defocus terminal" })
@@ -271,7 +260,7 @@ map("n", "<leader>qc", ":copen<CR>", { noremap = true, silent = true })
 map("n", "<leader>ql", ":lopen<CR>", { noremap = true, silent = true })
 map("n", "<leader>qp", ":colder<CR>", { noremap = true, silent = true })
 map("n", "<leader>qn", ":cnewer<CR>", { noremap = true, silent = true })
-map("n", "<leader>qq", ":cclose<CR>", { noremap = true, silent = true })
+-- map("n", "<leader>qq", ":cclose<CR>", { noremap = true, silent = true })
 map("n", "<leader>q[", ":cprev<CR>", { noremap = true, silent = true })
 map("n", "<leader>q]", ":cnext<CR>", { noremap = true, silent = true })
 map("n", "<leader>qP", ":cpf<CR>", { noremap = true, silent = true })
