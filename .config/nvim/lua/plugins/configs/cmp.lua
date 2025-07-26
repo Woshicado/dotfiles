@@ -84,6 +84,7 @@ return {
 		"hrsh7th/cmp-emoji",
 		"chrisgrieser/cmp_yanky",
 		"gbprod/yanky.nvim",
+		"saadparwaiz1/cmp_luasnip",
 	},
-	opts = config
+	opts = config,
 }

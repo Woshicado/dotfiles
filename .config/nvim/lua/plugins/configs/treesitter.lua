@@ -18,6 +18,8 @@ return {
 			"yaml",
 			"xml",
 			"bash",
+			"bibtex",
+			"latex",
 		},
 		indent = {
 			enable = true,
@@ -25,8 +27,7 @@ return {
 		},
 		highlight = {
 			enable = true,
-			disable = {},
+			disable = {"latex", "bibtex"},
 		},
 	},
 }
-

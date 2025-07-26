@@ -1,6 +1,25 @@
 require "nvchad.mappings"
 require "complicated_mappings"
 
+-- delete unwanted nvchad mappings first
+
+local del = vim.keymap.del
+
+-- Normal mode bindings to delete
+local keys = {
+  "<leader>w",
+  "<leader>wK",
+  "<leader>wa",
+  "<leader>wk",
+  "<leader>wl",
+  "<leader>wr",
+  "<leader>ws",
+}
+
+for _, key in ipairs(keys) do
+  pcall(del, "n", key)
+end
+
 -- add yours here
 
 local map = vim.keymap.set
@@ -108,10 +127,11 @@ nomap("n", "<leader>th")
 
 
 -- Session management
-map("n", "<leader>wr", "<cmd>SessionSearch<CR>", { noremap = true, desc = "Session search" })
-map("n", "<leader>ws", "<cmd>SessionSave<CR>", { noremap = true, desc = "Save session" })
+-- map("n", "<leader>wr", "<cmd>SessionSearch<CR>", { noremap = true, desc = "Session search" })
+-- map("n", "<leader>ws", "<cmd>SessionSave<CR>", { noremap = true, desc = "Save session" })
 -- map("n", "<leader>wa", "<cmd>SessionToggleAutoSave<CR>", { noremap = true, desc = "Toggle autosave" })
 
+map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save session" })
 
 -- Terminal mappings
 map('t', '<c-\\><ESC>', '<C-\\><C-n>', { noremap = true, desc = "Defocus terminal" })
@@ -172,8 +192,10 @@ map("v", "<Tab>",   ">gv",   { desc = "Indent using tab in visual mode", noremap
 map("v", "<S-Tab>", "<gv",   { desc = "Indent using tab in visual mode", noremap=true })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent in insert mode", noremap=true })
 
--- Paste without yanking to clipboard
+-- Paste/Delete/Substitute without yanking to clipboard
 map("x", "p", [["_dP]])
+map("x", "x", [["_x]])
+map("x", "s", [["_s]])
 
 -- Github copilot
 map('i', '<C-c>', 'copilot#Accept("")', { expr = true, replace_keycodes = false })

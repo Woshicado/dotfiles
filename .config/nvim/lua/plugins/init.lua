@@ -15,7 +15,7 @@ return {
 	require("plugins.configs.timber"),
 	require("plugins.configs.nvim-tree"),
 	require("plugins.configs.menu"),
-  require("plugins.configs.cmp"),
+	require("plugins.configs.cmp"),
 	require("plugins.configs.yanky"),
 	require("plugins.configs.lspconfig"),
 	require("plugins.configs.oil"),
@@ -39,8 +39,11 @@ return {
 	require("plugins.configs.fzf-lua"),
 	require("plugins.configs.volt"),
 	require("plugins.configs.minty"),
-	require("plugins.configs.copilot"),
+  require("plugins.configs.copilot"),
 	require("plugins.configs.lsp-signature"),
 	require("plugins.configs.vim-tmux-navigator"),
-	require("plugins.configs.puppeteer")
+	require("plugins.configs.puppeteer"),
+	require("plugins.configs.modes"),
+	require("plugins.configs.which-key"),
+  require("plugins.configs.luasnip"),
 }
