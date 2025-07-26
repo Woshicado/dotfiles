@@ -111,9 +111,7 @@ blocks:
         type: executiontime
         style: plain
       - properties:
-          api_key: a4b721444a8e7148766870c45de4e128
           http_timeout: 100
-          location: Saarbrücken,66111,DE
           units: metric
         cache:
           duration: 10m0s

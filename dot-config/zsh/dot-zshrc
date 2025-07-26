@@ -1,3 +1,6 @@
+### VERY FIRST THING: DECRYPT KEYS
+export $(sops --decrypt ~/dotfiles/secrets.env | xargs)
+
 # Path to your oh-my-zsh installation.
 export XDG_CONFIG_HOME="$HOME/.config"
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
@@ -267,9 +270,6 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
-
-### DEEPL
-export DEEPL_AUTH_KEY="9ab11644-e033-4b12-6aee-67649d6fabe6:fx"
 
 # Detect source and translate to
 ts() {
