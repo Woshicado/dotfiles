@@ -1,0 +1,23 @@
+return {
+	"tpope/vim-eunuch",
+	event = "VeryLazy",
+  -- cmd = {
+  -- 	"Delete",
+  -- 	"Remove",
+  -- 	"Unlink",
+  -- 	"Copy",
+  -- 	"Duplicate",
+  -- 	"Move",
+  -- 	"Rename",
+  -- 	"Chmod",
+  -- 	"Mkdir",
+  -- 	"Cfind",
+  -- 	"Lfind",
+  -- 	"Clocate",
+  -- 	"Llocate",
+  -- 	"SudoEdit",
+  -- 	"SudoWrite",
+  -- 	"Wall",
+  -- 	"W",
+  -- },
+}

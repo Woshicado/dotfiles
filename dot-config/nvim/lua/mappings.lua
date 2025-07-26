@@ -59,6 +59,16 @@ map("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>", { desc = "window down", noremap=
 map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up", noremap=true })
 map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap=true })
 
+vim.keymap.set("n", "<leader>sw", function()
+  local ve = vim.o.virtualedit  -- returns a string, e.g. "", "all", "block,onemore"
+  if ve:find("all") then
+    vim.opt.virtualedit = ""
+    vim.notify("virtualedit disabled")
+  else
+    vim.opt.virtualedit = "all"
+    vim.notify("virtualedit = all")
+  end
+end, { desc = "Toggle virtualedit=all" })
 -- German umlauts
 -- map({"i", "t"}, "<M-o>", "<C-S-k>o:", { desc = "ö" })
 -- map({"i", "t"}, "<M-u>", "<C-S-k>u:", { desc = "ü" })
@@ -112,14 +122,13 @@ map("n", "<leader>fp", "<cmd>FzfLua paths<CR>", { noremap = true, desc = "Fuzzy 
 
 
 -- Telescope git pickers
-map({ "n", "x" }, "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
+map({"n", "x" }, "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
 map({"n", "x" }, "<leader>gt", "<cmd>FzfLua git_status<CR>", { noremap = true, desc = "Fuzzy git status" })
 map({"n", "x" }, "<leader>gc", "<cmd>FzfLua git_bcommits<CR>", { noremap = true, desc = "Fuzzy git buffer commits" })
 map({"n", "x" }, "<leader>ga", "<cmd>FzfLua git_commits<CR>", { noremap = true, desc = "Fuzzy git commits" })
 map({"n", "x" }, "<leader>gb", "<cmd>FzfLua git_branches<CR>", { noremap = true, desc = "Fuzzy git branches" })
 map({"n", "x" }, "<leader>gl", "<cmd>FzfLua git_blame<CR>", { noremap = true, desc = "Fuzzy git blame" })
 map({"n", "x" }, "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
-
 
 
 -- Terminal mappings

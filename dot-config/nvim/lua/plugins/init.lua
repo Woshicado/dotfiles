@@ -46,4 +46,5 @@ return {
 	require("plugins.configs.modes"),
 	require("plugins.configs.which-key"),
   require("plugins.configs.luasnip"),
+  require("plugins.configs.eunuch"),
 }
