@@ -1,0 +1,38 @@
+#!/bin/bash
+
+### Verify version match between __init__.py and pyproject.toml
+### Shouldn't be necessary with dynamic versioning.
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Automatically find __init__.py that defines __version__
+INIT_FILE=$(grep -rl '__version__ *= *"' . --include="__init__.py" | head -n 1)
+PYPROJECT_FILE="pyproject.toml"
+
+# Exit silently if no pyproject.toml or no __version__ found
+if [[ -z "$INIT_FILE" || ! -f "$PYPROJECT_FILE" ]]; then
+    exit 0
+fi
+
+# Extract version from __init__.py
+init_version=$(grep -Po '__version__\s*=\s*"\K[^"]+' "$INIT_FILE")
+
+# Extract version from pyproject.toml
+pyproject_version=$(grep -Po '^version\s*=\s*"\K[^"]+' "$PYPROJECT_FILE")
+
+if [[ "$init_version" != "$pyproject_version" ]]; then
+    echo -e "${RED}--- Version mismatch ---${NC}"
+    echo -e "   ${BLUE}v$init_version${NC} in $INIT_FILE"
+    echo -e "   ${BLUE}v$pyproject_version${NC} in pyproject.toml"
+    echo "Please make sure both versions match before pushing."
+    exit 1
+else
+  echo -e "${GREEN}Version check passed${NC} (${BLUE}v$init_version${NC})"
+fi
+
+exit 0

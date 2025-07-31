@@ -59,7 +59,7 @@ map("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>", { desc = "window down", noremap=
 map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up", noremap=true })
 map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap=true })
 
-vim.keymap.set("n", "<leader>sw", function()
+vim.keymap.set({"n", "x"}, "<leader>sw", function()
   local ve = vim.o.virtualedit  -- returns a string, e.g. "", "all", "block,onemore"
   if ve:find("all") then
     vim.opt.virtualedit = ""
@@ -182,6 +182,8 @@ map("i", "<M-/>", "<C-o><leader>/",   { desc = "Toggle comment", remap=true })
 
 -- Code format
 map({ "n", "v" }, "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, { desc = "Format code", noremap=true })
+map("n", "<leader>cs","<cmd>Shades<CR>", { desc = "Shadify", noremap=true })
+map("n", "<leader>ch","<cmd>Huefy<CR>", { desc = "Shadify", noremap=true })
 
 -- Indentations
 map("v", ">",       ">gv",   { desc = "Keep selection after indent", noremap=true })

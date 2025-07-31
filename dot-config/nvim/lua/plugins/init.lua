@@ -39,12 +39,14 @@ return {
 	require("plugins.configs.fzf-lua"),
 	require("plugins.configs.volt"),
 	require("plugins.configs.minty"),
-  require("plugins.configs.copilot"),
+	require("plugins.configs.copilot"),
 	require("plugins.configs.lsp-signature"),
 	require("plugins.configs.vim-tmux-navigator"),
 	require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
 	require("plugins.configs.which-key"),
-  require("plugins.configs.luasnip"),
-  require("plugins.configs.eunuch"),
+	require("plugins.configs.luasnip"),
+	require("plugins.configs.eunuch"),
+	require("plugins.configs.matchup"),
+	-- require("plugins.configs.noice"),  -- I really don't like the 'bloat' of this... Always trying, never satisfied
 }

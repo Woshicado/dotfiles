@@ -20,6 +20,18 @@ return {
 				},
 			},
 			formatters = {
+				yamlfix = {
+					env = {
+						YAMLFIX_WHITELINES = "1",
+						YAMLFIX_COMMENTS_WHITELINES = "1",
+            YAMLFIX_SECTION_WHITELINES = "1",
+						YAMLFIX_LINE_LENGTH = "80",
+						YAMLFIX_NONE_REPRESENTATION = "null",
+						YAMLFIX_quote_basic_values = "true",
+						YAMLFIX_quote_representation = '"',
+						YAMLFIX_quote_keys_and_basic_values = "false",
+					},
+				},
 				yamlfix_frontmatter = {
 					command = "bash",
 					args = {
