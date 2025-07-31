@@ -1,0 +1,14 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = "Joshua Meyer"
+email = "s8jjmeye@stud.uni-saarland.de"
+
+[signing]
+behavior = "own"
+backend = "gpg"
+
+[ui]
+show-cryptographic-signatures = true
+default-command = "log"
+

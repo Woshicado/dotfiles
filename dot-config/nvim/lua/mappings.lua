@@ -4,6 +4,7 @@ require "complicated_mappings"
 -- delete unwanted nvchad mappings first
 
 local del = vim.keymap.del
+local map = vim.keymap.set
 
 -- Normal mode bindings to delete
 local keys = {
@@ -22,13 +23,14 @@ local keys = {
 for _, key in ipairs(keys) do
   pcall(del, "n", key)
 end
+pcall(del, "i", "jj")
 
--- add yours here
+map({'i', 'v', 'n'}, '<Up>', '<Nop>')
+map({'i', 'v', 'n'}, '<Down>', '<Nop>')
+map({'i', 'v', 'n'}, '<Left>', '<Nop>')
+map({'i', 'v', 'n'}, '<Right>', '<Nop>')
 
-local map = vim.keymap.set
-
--- map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
+-- map("i", "jk", "<ESC>")  -- Already mapped, I guess by nvchad
 
 -- Save keybinds
 map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S

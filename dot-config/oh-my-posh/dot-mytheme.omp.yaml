@@ -1,153 +1,167 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 secondary_prompt:
-  template: '  '
-  foreground: '#555555'
-  background: transparent
+  template: "  "
+  foreground: "#555555"
+  background: "transparent"
+
 transient_prompt:
-  template: '{{ now | date "15:04" }}{{ if .Segments.Executiontime.FormattedMs }}
-    | <yellow>󰶼{{ .Segments.Executiontime.FormattedMs }}</>{{ end }}{{if gt .Code
-    0}} |  {{ .Code }}{{end}} '
-  background: transparent
+  template: "{{ now | date \"15:04\" }}{{ if .Segments.Executiontime.FormattedMs\
+    \ }} | <yellow>\U000F0DBC{{ .Segments.Executiontime.FormattedMs }}</>{{ end }}{{if\
+    \ gt .Code 0}} |  {{ .Code }}{{end}} "
+  background: "transparent"
   foreground_templates:
-    - '{{if gt .Code 0}}red{{end}}'
-    - '{{if eq .Code 0}}blue{{end}}'
-console_title_template: '{{.Shell}} on {{.UserName}}@{{.HostName}}'
+    - "{{if gt .Code 0}}red{{end}}"
+    - "{{if eq .Code 0}}blue{{end}}"
+
+console_title_template: "{{.Shell}} on {{.UserName}}@{{.HostName}}"
+
 blocks:
-  - type: prompt
-    alignment: left
+  - type: "prompt"
+    alignment: "left"
     segments:
       - properties:
-          cache_duration: none
-        template: '{{ if .SSHSession }}󰢹 {{ .HostName }} {{ end }}'
-        foreground: lightYellow
-        type: session
-        style: plain
+          cache_duration: "none"
+        template: "{{ if .SSHSession }}\U000F08B9 {{ .HostName }} {{ end }}"
+        foreground: "lightYellow"
+        type: "session"
+        style: "plain"
       - properties:
-          cache_duration: none
-        template: '{{ if .WSL }}WSL at {{ end }}{{.Icon}}'
-        foreground: green
-        type: os
-        style: powerline
+          cache_duration: "none"
+        template: "{{ if .WSL }}WSL at {{ end }}{{.Icon}}"
+        foreground: "green"
+        type: "os"
+        style: "powerline"
       - properties:
-          cache_duration: none
-          folder_icon: 󰇘
-          folder_separator_icon: 󰿟
-          home_icon: 󰜥
+          cache_duration: "none"
+          folder_icon: "\U000F01D8"
+          folder_separator_icon: "\U000F0FDF"
+          home_icon: "\U000F0725"
           max_depth: 3
-          style: agnoster_short
-        template: ' {{ path .Path .Location }} '
-        foreground: green
-        type: path
-        style: plain
+          style: "agnoster_short"
+        template: " {{ path .Path .Location }} "
+        foreground: "green"
+        type: "path"
+        style: "plain"
       - properties:
-          branch_ahead_icon: ⇡
-          branch_behind_icon: ⇣
+          branch_ahead_icon: "⇡"
+          branch_behind_icon: "⇣"
           branch_max_length: 12
-          cache_duration: none
-          commit_icon: '󰁥 '
+          cache_duration: "none"
+          commit_icon: "\U000F0065 "
           fetch_status: true
-        template: '{{ if not .Detached }}{{ .HEAD }}{{ else }}󰁥 {{ substr 0 7 .Commit.Sha }}{{.Upstream}}{{
-          end }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Staging.Changed
-          }}  {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed)
-          }} |{{ end }}{{ if .Working.Changed }} {{ .Working.String }}{{ end }} '
-        foreground: '#888888'
-        type: git
-        style: plain
+        template: "{{ if not .Detached }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{\
+          \ end }}{{ else }}\U000F0065 {{ substr 0 7 .Commit.Sha }}{{.Upstream}}{{\
+          \ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if\
+          \ and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed\
+          \ }} {{ .Working.String }}{{ end }} "
+        foreground: "#888888"
+        type: "git"
+        style: "plain"
+      - type: "jujutsu"
+        style: "powerline"
+        foreground: "#fad07b"
+        template: "| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
+          \ end }}"
+        properties:
+          fetch_status: true
+          ignore_working_copy: false
     newline: true
-  - type: prompt
-    alignment: right
+  - type: "prompt"
+    alignment: "right"
     segments:
       - properties:
-          cache_duration: none
-        template: '| root '
-        foreground: red
-        type: root
-        style: plain
+          cache_duration: "none"
+        template: "| root "
+        foreground: "red"
+        type: "root"
+        style: "plain"
       - properties:
-          cache_duration: none
-        template: '|  {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} '
-        foreground: '#06A4CE'
-        type: dart
-        style: powerline
+          cache_duration: "none"
+        template: "|  {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} "
+        foreground: "#06A4CE"
+        type: "dart"
+        style: "powerline"
       - properties:
-          cache_duration: none
-        template: '|  {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{
-          .Full }} '
-        foreground: '#6CA35E'
-        type: node
-        style: powerline
+          cache_duration: "none"
+        template: "|  {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{\
+          \ .Full }} "
+        foreground: "#6CA35E"
+        type: "node"
+        style: "powerline"
       - properties:
-          cache_duration: none
+          cache_duration: "none"
           display_default: false
-          display_mode: context
+          display_mode: "context"
           fetch_virtual_env: true
           home_enabled: true
-        template: '{{if .Venv }}|  {{ .Venv }} 󰁥 {{ .Major }}.{{ .Minor }} {{ end }}'
-        foreground: magenta
-        type: python
-        style: plain
+        template: "{{if .Venv }}|  {{ .Venv }} \U000F0065 {{ .Major }}.{{ .Minor\
+          \ }} {{ end }}"
+        foreground: "magenta"
+        type: "python"
+        style: "plain"
       - properties:
-          cache_duration: none
-          charged_icon: '󱟨 '
-          charging_icon: ' '
-        template: '| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error
-          }} 󰏰 '
-        type: battery
-        style: powerline
+          cache_duration: "none"
+          charged_icon: "\U000F17E8 "
+          charging_icon: " "
+        template: "| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error\
+          \ }} \U000F03F0 "
+        type: "battery"
+        style: "powerline"
         foreground_templates:
-          - '{{if eq "Charging" .State.String}}#4caf50{{end}}'
-          - '{{if eq "Discharging" .State.String}}#40c4ff{{end}}'
-          - '{{if eq "Full" .State.String}}#ff0000{{end}}'
+          - "{{if eq \"Charging\" .State.String}}#4caf50{{end}}"
+          - "{{if eq \"Discharging\" .State.String}}#40c4ff{{end}}"
+          - "{{if eq \"Full\" .State.String}}#ff0000{{end}}"
         invert_powerline: true
       - properties:
           always_enabled: false
-          cache_duration: none
-          style: round
+          cache_duration: "none"
+          style: "round"
           threshold: 3000
-        template: '| {{ .FormattedMs }} '
-        foreground: yellow
-        background: transparent
-        type: executiontime
-        style: plain
+        template: "| {{ .FormattedMs }} "
+        foreground: "yellow"
+        background: "transparent"
+        type: "executiontime"
+        style: "plain"
       - properties:
           http_timeout: 100
-          units: metric
+          units: "metric"
         cache:
-          duration: 10m0s
-          strategy: session
-        template: '| {{.Weather}} {{.Temperature}}{{.UnitIcon}} '
-        foreground: cyan
-        type: owm
-        style: plain
+          duration: "10m0s"
+          strategy: "session"
+        template: "| {{.Weather}} {{.Temperature}}{{.UnitIcon}} "
+        foreground: "cyan"
+        type: "owm"
+        style: "plain"
       - properties:
-          cache_duration: none
-        template: '| {{ .CurrentDate | date .Format }}'
-        foreground: lightGreen
-        type: time
-        style: plain
+          cache_duration: "none"
+        template: "| {{ .CurrentDate | date .Format }}"
+        foreground: "lightGreen"
+        type: "time"
+        style: "plain"
         min_width: 80
-  - type: prompt
-    alignment: left
+  - type: "prompt"
+    alignment: "left"
     segments:
       - properties:
           always_enabled: true
-          cache_duration: none
-        template: ' '
-        type: status
-        style: powerline
+          cache_duration: "none"
+        template: " "
+        type: "status"
+        style: "powerline"
         foreground_templates:
-          - '{{if gt .Code 0}}red{{end}}'
-          - '{{if eq .Code 0}}blue{{end}}'
+          - "{{if gt .Code 0}}red{{end}}"
+          - "{{if eq .Code 0}}blue{{end}}"
     newline: true
-  - type: rprompt
+  - type: "rprompt"
     segments:
       - properties:
-          cache_duration: none
-        template: '{{if gt .Code 0 }} {{ .Code }}{{end}}'
-        foreground: red
-        type: status
-        style: plain
+          cache_duration: "none"
+        template: "{{if gt .Code 0 }} {{ .Code }}{{end}}"
+        foreground: "red"
+        type: "status"
+        style: "plain"
+
 version: 3
 shell_integration: true
 enable_cursor_positioning: true

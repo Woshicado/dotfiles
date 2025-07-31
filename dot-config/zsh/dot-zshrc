@@ -205,6 +205,8 @@ alias llat='lsd -la --tree'
 alias pwdy="echo $(pwd) | pbcopy" # Copy current directory to clipboard
 #alias cd='z'
 
+alias lg='lazygit'
+
 # Obsidian
 export O_VAULT_DIR="$HOME/vaults/obsidian-notes"
 alias oo='cd $O_VAULT_DIR'
@@ -234,6 +236,26 @@ alias gsp='git push --recurse-submodules=on-demand'
 alias gs='git status'
 alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar%C(auto)  %D%n%s%n'"
 
+# Custom jj aliases
+alias jjs='jj st'
+function jjbm() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: jjbm <bookmark-name>; Moves current @ to bookmark and creates a new commit."
+    return 1
+  fi
+  jj bookmark move "$1" --to @-
+}
+alias jjgp='jj git push'
+alias jjp='jj prev'
+alias jjn='jj next'
+alias jjc='jj new'
+alias jjl='jj log'
+alias jjd='jj describe'
+alias jjdf='jj diff'
+alias jjt='jj track'
+alias jju='jj undo'
+alias jjut='jj untrack'
+
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 alias univpn="sudo openconnect vpn.hiz-saarland.de --authgroup UdS -u s8jjmeye "
@@ -247,6 +269,7 @@ fi
 bindkey "^K" kill-line
 bindkey "^[^?" backward-kill-line
 bindkey "^W" backward-kill-word
+bindkey '^F' autosuggest-accept
 
 ### TMUX custom function
 function tmuxsc() {
