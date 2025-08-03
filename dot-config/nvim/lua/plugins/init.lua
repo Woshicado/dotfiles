@@ -49,4 +49,5 @@ return {
 	require("plugins.configs.eunuch"),
 	require("plugins.configs.matchup"),
 	-- require("plugins.configs.noice"),  -- I really don't like the 'bloat' of this... Always trying, never satisfied
+  require("plugins.configs.autolist"),
 }

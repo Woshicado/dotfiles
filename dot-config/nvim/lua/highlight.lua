@@ -1,8 +1,10 @@
 local set_hl = vim.api.nvim_set_hl
 
--- Neogit highlight colors. Default ones were unreadable in my theme
--- TODO: Make prettier. Currently these are just functional colors
---
+-- General custom highlights
+set_hl(0, "RenderMarkdownCode", { bg = "none" })
+set_hl(0, "LineNr", { fg = "#4e535d" })
+
+-- NEOGIT HIGHLIGHTS -- Default ones were unreadable in my theme
 set_hl(0, "NeogitDiffDelete", { fg = "#ff5555", bg = "NONE" }) -- Adjust foreground color
 set_hl(0, "NeogitDiffDeleteHighlight", { fg = "#ff5555", bg = "#440000" }) -- Highlighted delete lines
 set_hl(0, "NeogitDiffDeleteCursor", { fg = "#ff9999", bg = "#550000" }) -- Cursor line in deleted changes

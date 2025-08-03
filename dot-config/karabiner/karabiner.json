@@ -6,6 +6,7 @@
                 "rules": [
                     {
                         "description": "Left Shift sends Return when tapped",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -691,6 +692,7 @@
                     },
                     {
                         "description": "Open a terminal window with Ctrl-LCmd-T",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {

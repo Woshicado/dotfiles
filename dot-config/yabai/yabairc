@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+yabai -m config layout bsp
+yabai -m config focus_follows_mouse autoraise
+
+yabai -m config window_opacity on
+yabai -m config active_window_opacity 1.0
+yabai -m config normal_window_opacity 0.85
+
+yabai -m config window_shadow off
+
+# Mouse modifier key = fn. Move w/ left, resize w/ right
+yabai -m config mouse_modifier ctrl
+yabai -m config mouse_action1 move
+yabai -m config mouse_action2 resize
+
+# Disable some applications to use yabai. In particular for apps not allowing for tiling...
+# looking angrily at you macos
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Calculator$" manage=off
+yabai -m rule --add app="^Karabiner-Elements$" manage=off
+yabai -m rule --add app="^Raycast$" manage=off
+yabai -m rule --add app="^KeePassXC$" manage=off
+yabai -m rule --add app="^Creative Cloud$" manage=off

@@ -1,6 +1,17 @@
 local usercmd = vim.api.nvim_create_user_command
 local map = vim.keymap.set
 
+-- Indentation
+
+local o = vim.opt
+
+o.tabstop = 2
+o.shiftwidth = 0
+o.softtabstop = -1
+o.expandtab = true
+
+-- Quotes and Callouts
+
 local function quote(callout)
 	local firstline = vim.fn.line("v")
 	local lastline = vim.api.nvim_win_get_cursor(0)[1]

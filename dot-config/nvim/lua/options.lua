@@ -1,8 +1,8 @@
 require "nvchad.options"
 
--- add yours here!
-
 local o = vim.opt
+
+vim.g.editorconfig = true
 
 o.encoding = "utf-8"
 o.ruler = true
@@ -35,6 +35,8 @@ o.foldtext = ""
 o.foldcolumn = "0"
 o.fillchars:append { fold = " " }
 o.winborder = 'rounded'
+
+o.swapfile = false
 
 -- I don't know if these do anything, or what exactly they are supposed to do
 o.diffopt = {

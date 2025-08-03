@@ -30,7 +30,7 @@ M.ui = {
   },
 }
 
-require "neogithl"
+require "highlight"
 
 local autocmd = vim.api.nvim_create_autocmd
 local usercmd = vim.api.nvim_create_user_command
