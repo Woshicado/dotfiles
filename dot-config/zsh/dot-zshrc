@@ -238,6 +238,7 @@ alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar
 
 # Custom jj aliases
 alias jjs='jj st'
+alias jjbmm='jj bookmark move main --to @-'
 function jjbm() {
   if [[ -z "$1" ]]; then
     echo "Usage: jjbm <bookmark-name>; Moves current @ to bookmark and creates a new commit."
