@@ -27,4 +27,11 @@ Abolish truely truly
 Abolish whereever wherever
 Abolish {in}dependant{,s,ly} {}dependent{}
 Abolish apparant{,ly} apparent{}
+Abolish appeare{,a}nce{,s} {,}appearance{}
+Abolish incorrec{,ly} incorrect{}
 
+" hyphens I might forget
+
+Abolish bruteforce brute-force
+Abolish commonsense common-sense
+Abolish neuro{symbolic,mechanistic,explicit} neuro-{}

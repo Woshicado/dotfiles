@@ -28,6 +28,7 @@ o.smarttab = true
 o.expandtab = true
 o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 o.foldenable = false
+o.smartindent = false
 o.foldlevel = 99
 o.foldmethod = "expr"
 o.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- or v:lua.vim.treesitter.foldexpr()
