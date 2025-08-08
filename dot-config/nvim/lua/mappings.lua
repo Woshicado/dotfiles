@@ -18,6 +18,8 @@ local keys = {
   "<leader>cm",
   "<leader>th",
   "<leader>x",
+  "<leader>h",
+  "<leader>v",
 }
 
 for _, key in ipairs(keys) do
