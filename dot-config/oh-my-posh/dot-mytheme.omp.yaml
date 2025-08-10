@@ -61,8 +61,7 @@ blocks:
       - type: "jujutsu"
         style: "powerline"
         foreground: "#fad07b"
-        template: "| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
-          \ end }}"
+        template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{ end }}{{ end }}"
         properties:
           fetch_status: true
           ignore_working_copy: false
