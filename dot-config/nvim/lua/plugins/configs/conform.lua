@@ -3,6 +3,10 @@ return {
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {
+				typescript = {  "prettierd"  },
+				typescriptreact = {  "prettierd"  },
+				javascript = {  "prettierd"  },
+				javascriptreact = {  "prettierd"  },
 				lua = { "stylua" },
 				css = { "prettierd" },
 				html = { "prettierd" },
@@ -24,7 +28,7 @@ return {
 					env = {
 						YAMLFIX_WHITELINES = "1",
 						YAMLFIX_COMMENTS_WHITELINES = "1",
-            YAMLFIX_SECTION_WHITELINES = "1",
+						YAMLFIX_SECTION_WHITELINES = "1",
 						YAMLFIX_LINE_LENGTH = "80",
 						YAMLFIX_NONE_REPRESENTATION = "null",
 						YAMLFIX_quote_basic_values = "true",

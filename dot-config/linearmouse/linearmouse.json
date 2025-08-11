@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.linearmouse.app/0.10.1",
+  "schemes": [
+    {
+      "buttons": {
+        "universalBackForward": true
+      },
+      "if": {
+        "device": {
+          "category": "mouse"
+        }
+      },
+      "pointer": {
+        "disableAcceleration": true
+      },
+      "scrolling": {
+        "acceleration": 1,
+        "distance": {
+          "horizontal": 1,
+          "vertical": 6
+        },
+        "modifiers": {
+          "vertical": {
+            "command": {
+              "type": "pinchZoom"
+            },
+            "control": {
+              "scale": 5,
+              "type": "changeSpeed"
+            },
+            "option": {
+              "type": "zoom"
+            },
+            "shift": {
+              "type": "auto"
+            }
+          }
+        },
+        "reverse": {
+          "vertical": false
+        },
+        "speed": 0
+      }
+    }
+  ]
+}
+

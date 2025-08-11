@@ -49,6 +49,7 @@ return {
 	require("plugins.configs.eunuch"),
 	require("plugins.configs.matchup"),
 	-- require("plugins.configs.noice"),  -- I really don't like the 'bloat' of this... Always trying, never satisfied
-  require("plugins.configs.autolist"),
+  -- require("plugins.configs.autolist"),  -- breaks <tab> on empty line, as well as deleting lines producing an extra I
 	require("plugins.configs.gitsigns"),
+	require("plugins.configs.vim-bbye"),
 }

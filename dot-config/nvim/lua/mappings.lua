@@ -52,8 +52,8 @@ map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>", {desc = "Tog
 -- Buffer navigation
 map({ "n", "v"}, "<leader><Left>",  "<cmd>bp!<CR>", { desc = "Switch to previous buffer", noremap=true })
 map({ "n", "v"}, "<leader><Right>", "<cmd>bn!<CR>", { desc = "Switch to next buffer", noremap=true })
-map({ "n", "v"}, "<M-x>",           "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
-map({ "n", "v"}, "<leader>x",       "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
+-- map({ "n", "v"}, "<M-x>",           "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
+-- map({ "n", "v"}, "<leader>x",       "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
 map({ "n", "v"}, "<C-S-o>",         "<C-i>",          { desc = "Forward", noremap=true })
 
 -- Tmux integration
