@@ -18,7 +18,31 @@ return {
 		},
 	},
 	config = function()
-		require("nvim-surround").setup({})
+		local surround = require("nvim-surround")
+		surround.setup({
+			surrounds = {
+				-- "e" -> environment
+				e = {
+					add = function()
+						local env = vim.fn.input("environment: ")
+						return {
+							{ "\\begin{" .. env .. "}\n\t" }, -- opening
+							{ "\n\\end{" .. env .. "}" }, -- closing
+						}
+					end,
+				},
+
+				-- "c" -> command
+				c = {
+					add = function()
+						local cmd = vim.fn.input("command: ")
+						return {
+							{ "\\" .. cmd .. "{" }, -- opening
+							{ "}" }, -- closing
+						}
+					end,
+				},
+			},
+		})
 	end,
 }
-

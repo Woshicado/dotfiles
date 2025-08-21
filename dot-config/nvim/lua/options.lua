@@ -53,3 +53,14 @@ o.diffopt = {
 
 vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "none" })
 vim.api.nvim_set_hl(0, "LineNr", { fg = "#4e535d" })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tex",
+  callback = function()
+    -- Use vim.bo (buffer options) or vim.b (buffer vars) is fine, but must be string key
+    vim.b["surround_" .. string.byte("e")] =
+      [[\begin{\1environment: \1}\n\t\r\n\end{\1\1}]]
+    vim.b["surround_" .. string.byte("c")] =
+      [[\\\1command: \1{\r}]]
+  end,
+})

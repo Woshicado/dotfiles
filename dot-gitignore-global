@@ -7,3 +7,4 @@ __pycache__
 .git*
 .idea
 latest_commit.sha
+indent.log

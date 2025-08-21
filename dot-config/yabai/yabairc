@@ -24,3 +24,5 @@ yabai -m rule --add app="^KeePassXC$" manage=off
 yabai -m rule --add app="^Creative Cloud$" manage=off
 yabai -m rule --add app="^linearmouse$" manage=off
 yabai -m rule --add app="^Logi Options+$" manage=off
+yabai -m rule --add app="^Toggl Track$" manage=off
+yabai -m rule --add app="^Print Center$" manage=off
