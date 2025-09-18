@@ -14,6 +14,8 @@ DISABLE_LS_COLORS="true"
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+export SN_USE_SESSION=yes
+
 ### Sort "*2.smth" before "*10.smth"
 setopt numericglobsort
 
@@ -192,6 +194,7 @@ export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 ### DOCKER
 #export DOCKER_DEFAULT_PLATFORM='linux/amd64'
 alias ssh_tb='ssh -L 16006:127.0.0.1:6006'
+alias ssh_mo='ssh -L 12718:127.0.0.1:2718'
 alias rt='trash'
 
 ### HELPFUL ALIASES

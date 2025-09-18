@@ -39,8 +39,14 @@
         "redirectsToScroll" : false
       },
       "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
+        },
         "distance" : {
-          "vertical" : 6
+          "vertical" : "auto"
+        },
+        "speed" : {
+          "vertical" : 0
         }
       }
     },

@@ -26,3 +26,4 @@ yabai -m rule --add app="^linearmouse$" manage=off
 yabai -m rule --add app="^Logi Options+$" manage=off
 yabai -m rule --add app="^Toggl Track$" manage=off
 yabai -m rule --add app="^Print Center$" manage=off
+yabai -m rule --add app="^Ente Auth$" manage=off

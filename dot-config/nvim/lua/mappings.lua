@@ -360,3 +360,21 @@ map("n", "<leader>os", function () require("fzf-lua").files({ cwd = "$O_VAULT_DI
 map("n", "<leader>oz", function () vim.cmd("FzfLua live_grep cwd=\"$O_VAULT_DIR\"") end, { desc = "grep in obsidian notes"})
 map("n", "<leader>ok", ":!mv '%:p' $O_VAULT_DIR/zettelkasten<cr>:bd<cr>", { desc = "Move file to zettelkasten" })
 map("n", "<leader>or", ":!rm '%:p'<cr>:bd<cr>", { desc = "Remove file" })
+
+-- Yank buffer path/name/dir to clipboard
+vim.keymap.set("n", "<leader>yp", function()
+	vim.fn.setreg("+", vim.fn.expand("%:p"))
+end, { desc = "Yank abs path (buffer)" })
+
+vim.keymap.set("n", "<leader>yP", function()
+	vim.fn.setreg("+", vim.fn.expand("%"))
+end, { desc = "Yank rel path (buffer)" })
+
+vim.keymap.set("n", "<leader>yd", function()
+	vim.fn.setreg("+", vim.fn.expand("%:p:h"))
+end, { desc = "Yank abs path (directory)" })
+
+vim.keymap.set("n", "<leader>yn", function()
+	vim.fn.setreg("+", vim.fn.expand("%:t"))
+end, { desc = "Yank filename (buffer)" })
+
