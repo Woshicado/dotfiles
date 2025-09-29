@@ -10,11 +10,13 @@ return {
 				lua = { "stylua" },
 				css = { "prettierd" },
 				html = { "prettierd" },
-				python = { "ruff_organize_imports", "ruff_fix", "ruff_format" },
+				python = { "ruff_fix", "ruff_format" },
 				yaml = { "yamlfix" },
 				json = { "jq" },
 				markdown = { "yamlfix", "prettierd" },
 				tex = { "latexindent" },
+        java = { "google-java-format" },
+        xml = { "xmlformatter"  },
 			},
 			opts = {
 				format = {

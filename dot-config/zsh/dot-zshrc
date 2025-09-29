@@ -496,3 +496,9 @@ fi
 export PATH="$PATH:/Users/joshua/.cache/lm-studio/bin"
 # End of LM Studio CLI section
 
+# Android Studio and SDK
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+

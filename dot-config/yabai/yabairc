@@ -17,10 +17,10 @@ yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
 
 # Automatically float non-resizable windows, such as palettes, system settings etc.
-# yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | /Users/boli/.nix-profile/bin/jq -er ".\"can-resize\" or .\"is-floating\"" || yabai -m window $YABAI_WINDOW_ID --toggle float'
 
 # Disable some applications to use yabai. In particular for apps not allowing for tiling...
 # looking angrily at you macos
+yabai -m config window_manager_check  off
 yabai -m rule --add app=".*" float=on  # Float all windows by default
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off
@@ -33,3 +33,12 @@ yabai -m rule --add app="^Logi Options+$" manage=off
 yabai -m rule --add app="^Toggl Track$" manage=off
 yabai -m rule --add app="^Print Center$" manage=off
 yabai -m rule --add app="^Ente Auth$" manage=off
+yabai -m rule --add app="^Python$" manage=off
+yabai -m rule --add label="^Finder$" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="^App Store$" app="^App Store$" manage=off
+yabai -m rule --add label="^mpv$" app="^mpv$" manage=off
+
+# yabai -m signal --add event=window_created action='
+#   yabai -m query --windows --window $yabai_window_id | jq -er ".\"can-resize\" or .\"is-floating\"" || \
+#   yabai -m window $yabai_window_id --toggle float --layer above --grid 4:4:1:1:2:2
+# '

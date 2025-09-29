@@ -378,3 +378,11 @@ vim.keymap.set("n", "<leader>yn", function()
 	vim.fn.setreg("+", vim.fn.expand("%:t"))
 end, { desc = "Yank filename (buffer)" })
 
+-- open definition in split view
+local bufopts = { noremap = true, silent = true }
+vim.keymap.set("n", "<leader>gv", function() vim.cmd("vsplit") vim.lsp.buf.definition() end, bufopts)
+vim.keymap.set("n", "<leader>gh", function() vim.cmd("split") vim.lsp.buf.definition() end, bufopts)
+
+vim.keymap.set("n", "gp", "`[v`]", { desc = "Visual pasted" })
+vim.keymap.set("n", "gP", "`]v`[", { desc = "Visual pasted" })
+

@@ -1,4 +1,5 @@
 return {
+  require("plugins.configs.nvim-java"),
 	require("plugins.configs.conform"),
 	require("plugins.configs.mini"),
 	require("plugins.configs.mini-jump"),

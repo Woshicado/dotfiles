@@ -8,7 +8,7 @@ return {
 		local lspconfig = require("lspconfig")
 
 		-- EXAMPLE
-		local servers = { "html", "cssls", "ts_ls", "clangd", "ltex", "marksman", "tailwindcss" }
+		local servers = { "html", "cssls", "ts_ls", "clangd", "ltex", "marksman", "tailwindcss", "jdtls" }
 		local nvlsp = require("nvchad.configs.lspconfig")
 
 		-- Local dictionary
@@ -20,6 +20,7 @@ return {
 		-- Custom Server Settings
 
 		local server_settings = {
+      jdtls = {},
 			tailwindcss = {
 				tailwindCSS = {
 					experimental = {
