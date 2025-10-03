@@ -245,6 +245,7 @@ alias tte='toggl start -a Main -o Exploration'
 
 # Copy directory over ssh
 alias rcp='rsync -saLPz --port 22 -e ssh '
+alias rcps='rsync -saLPz --port 22 --chmod=F600,D700 -e ssh '
 
 # Custom git aliases for submodules
 alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
@@ -276,6 +277,7 @@ alias jjut='jj untrack'
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 alias univpn="sudo openconnect vpn.hiz-saarland.de --authgroup UdS -u s8jjmeye "
+alias nonzero_mean="grep -rnPo ' \"mean\": (?!0\.0\b,)[0-9]+(?:\.[0-9]+)?'"
 
 # Start obsidian (flatpak installation) manually to allow for gpg-signing
 if [[ ! "$OSTYPE" == "darwin"* ]]; then

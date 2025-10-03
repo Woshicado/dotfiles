@@ -13,6 +13,8 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy_config = require "lazy-config"
 
+vim.g.python3_host_prog = os.getenv("HOME") .. "/.local/pipx/venvs/pynvim/bin/python"
+
 -- load plugins
 require("lazy").setup({
   {

@@ -207,7 +207,7 @@ map("x", "s", [["_s]])
 -- Github copilot
 map('i', '<C-c>', 'copilot#Accept("")', { expr = true, replace_keycodes = false })
 map('i', '<C-f>', '<Plug>(copilot-accept-line)', { noremap = false })
-map('i', '<C-g>', '<Plug>(copilot-suggest)', { noremap = false })
+-- map('i', '<C-g>', '<Plug>(copilot-suggest)', { noremap = false })
 vim.g.copilot_no_tab_map = true
 
 -- Smart home/end keys; Cmd for home and end
