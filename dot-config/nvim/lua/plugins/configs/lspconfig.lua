@@ -85,7 +85,7 @@ return {
 						mccabe = { enabled = false },
 						pylsp_mypy = {
 							enabled = true,
-              -- dmypy = true,
+							-- dmypy = true,
 							live_mode = true, -- Enable live mode for Mypy
 							report_progress = true, -- Report progress for Mypy
 							-- overrides = { "--python-executable", python_path, "--ignore-missing-imports" }, -- Use the virtual environment's Python executable
@@ -132,8 +132,16 @@ return {
 
 		-- Diagnostics in new line
 		vim.diagnostic.config({
-      -- virtual_text = true,
-      virtual_lines = { current_line = true }
+			-- virtual_text = true,
+			virtual_lines = { current_line = true },
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = "",
+          [vim.diagnostic.severity.WARN] = "",
+          [vim.diagnostic.severity.HINT] = "",
+          [vim.diagnostic.severity.INFO] = "",
+        },
+      },
 		})
 	end,
 }

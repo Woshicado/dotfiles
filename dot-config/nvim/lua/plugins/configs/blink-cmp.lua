@@ -1,0 +1,303 @@
+return {
+	"saghen/blink.cmp",
+	event = "VeryLazy",
+	-- optional: provides snippets for the snippet source
+	dependencies = {
+		"rafamadriz/friendly-snippets",
+		"onsails/lspkind.nvim",
+		"nvim-mini/mini.icons",
+		-- "kdheepak/cmp-latex-symbols",
+		-- "hrsh7th/cmp-emoji",
+		{ "L3MON4D3/LuaSnip", version = "v2.*" },
+		-- { "marcoSven/blink-cmp-yanky", },
+		"moyiz/blink-emoji.nvim",
+	},
+	config = function(_, opts)
+		require("mini.icons").setup({
+			lsp = {
+				["function"] = { glyph = "󰡱" },
+				array = { glyph = "󰅪" },
+				color = { glyph = "" },
+				constant = { glyph = "󰏿" },
+				constructor = { glyph = "" },
+				enum = { glyph = "" },
+				event = { glyph = "󱐋" },
+				file = { glyph = "" },
+				folder = { glyph = "󰉋" },
+				interface = { glyph = "" },
+				key = { glyph = "󰌋" },
+				keyword = { glyph = "󰌋" },
+				method = { glyph = "󰆧" },
+				-- module = { glyph = "" },
+				namespace = { glyph = "󰅩" },
+				object = { glyph = "󰅩" },
+				snippet = { glyph = "󰩫" },
+				string = { glyph = "󰉾" },
+				-- text = { glyph = "" },
+				typeparameter = { glyph = "󰆩" },
+				value = { glyph = "󰎠" },
+				-- variable = { glyph = "" },
+
+				breakstatement = { glyph = "󰙦", hl = "MiniIconsGreen" },
+				["break"] = { glyph = "󰙦", hl = "MiniIconsAzure" },
+				call = { glyph = "󰃷", hl = "MiniIconsGrey" },
+				calc = { glyph = "󰃬", hl = "MiniIconsOrange" },
+				casestatement = { glyph = "󱃙", hl = "MiniIconsPurple" },
+				codeium = { glyph = "", hl = "MiniIconsGreen" },
+				continuestatement = { glyph = "→", hl = "MiniIconsAzure" },
+				copilot = { glyph = "", hl = "MiniIconsGreen" },
+				declaration = { glyph = "󰙠", hl = "MiniIconsYellow" },
+				delete = { glyph = "", hl = "MiniIconsRed" },
+				dostatement = { glyph = "󰑖", hl = "MiniIconsPurple" },
+				forstatement = { glyph = "󰑖", hl = "MiniIconsPurple" },
+				h1marker = { glyph = "󰉫", hl = "MiniIconsBlue" }, -- Used by markdown treesitter parser
+				h2marker = { glyph = "󰉬", hl = "MiniIconsBlue" },
+				h3marker = { glyph = "󰉭", hl = "MiniIconsBlue" },
+				h4marker = { glyph = "󰉮", hl = "MiniIconsBlue" },
+				h5marker = { glyph = "󰉯", hl = "MiniIconsBlue" },
+				h6marker = { glyph = "󰉰", hl = "MiniIconsBlue" },
+				identifier = { glyph = "󰀫", hl = "MiniIconsCyan" },
+				ifstatement = { glyph = "󰇉", hl = "MiniIconsPurple" },
+				list = { glyph = "󰅪", hl = "MiniIconsAzure" },
+				log = { glyph = "", hl = "MiniIconsGrey" },
+				lsp = { glyph = "", hl = "MiniIconsYellow" },
+				macro = { glyph = "󰁌", hl = "MiniIconsRed" },
+				markdownh1 = { glyph = "󰉫", hl = "MiniIconsBlue" }, -- Used by builtin markdown source
+				markdownh2 = { glyph = "󰉬", hl = "MiniIconsBlue" },
+				markdownh3 = { glyph = "󰉭", hl = "MiniIconsBlue" },
+				markdownh4 = { glyph = "󰉮", hl = "MiniIconsBlue" },
+				markdownh5 = { glyph = "󰉯", hl = "MiniIconsBlue" },
+				markdownh6 = { glyph = "󰉰", hl = "MiniIconsBlue" },
+				regex = { glyph = "", hl = "MiniIconsCyan" },
+				["repeat"] = { glyph = "󰑖", hl = "MiniIconsOrange" },
+				scope = { glyph = "󰅩", hl = "MiniIconsGreen" },
+				specifier = { glyph = "󰦪", hl = "MiniIconsOrange" },
+				statement = { glyph = "󰅩", hl = "MiniIconsYellow" },
+				switchstatement = { glyph = "󰺟", hl = "MiniIconsPurple" },
+				treesitter = { glyph = "", hl = "MiniIconsGreen" },
+				type = { glyph = "", hl = "MiniIconsOrange" },
+				whilestatement = { glyph = "󰑖", hl = "MiniIconsPurple" },
+
+				question = { glyph = "", hl = "MiniIconsPurple" },
+				hint = { glyph = "", hl = "MiniIconsGreen" },
+				info = { glyph = "", hl = "MiniIconsCyan" },
+				warning = { glyph = "", hl = "MiniIconsYellow" },
+				error = { glyph = "", hl = "MiniIconsRed" },
+				bug = { glyph = "", hl = "MiniIconsRed" },
+			},
+		})
+		local miniIconHLs = {
+			"MiniIconsRed",
+			"MiniIconsBlue",
+			"MiniIconsCyan",
+			"MiniIconsGrey",
+			"MiniIconsAzure",
+			"MiniIconsGreen",
+			"MiniIconsOrange",
+			"MiniIconsPurple",
+			"MiniIconsYellow",
+		}
+
+		for _, hl_name in ipairs(miniIconHLs) do
+			pcall(function()
+				local hl_def = vim.api.nvim_get_hl_by_name(hl_name, true)
+				local new_hl = { italic = true }
+				if hl_def.foreground then
+					new_hl.fg = string.format("#%06x", hl_def.foreground)
+				end
+				if hl_def.background then
+					new_hl.bg = string.format("#%06x", hl_def.background)
+				end
+				vim.api.nvim_set_hl(0, hl_name .. "It", new_hl)
+			end)
+		end
+
+		require("mini.icons").tweak_lsp_kind()
+		require("blink.cmp").setup(opts)
+
+		-- Set highlight color that isn't really set by blink.cmp
+		vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", { fg = "#61afef", bg = "NONE", bold = true })
+	end,
+
+	-- use a release tag to download pre-built binaries
+	version = "1.*",
+	-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+	-- build = 'cargo build --release',
+	-- If you use nix, you can build from source using latest nightly rust with:
+	-- build = 'nix run .#build-plugin',
+
+	---@module 'blink.cmp'
+	---@type blink.cmp.Config
+	opts = {
+		-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+		-- 'super-tab' for mappings similar to vscode (tab to accept)
+		-- 'enter' for enter to accept
+		-- 'none' for no mappings
+		--
+		-- All presets have the following mappings:
+		-- C-space: Open menu or open docs if already open
+		-- C-n/C-p or Up/Down: Select next/previous item
+		-- C-e: Hide menu
+		-- C-k: Toggle signature help (if signature.enabled = true)
+		--
+		-- See :h blink-cmp-config-keymap for defining your own keymap
+		keymap = {
+			preset = "none",
+			["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+			["<C-e>"] = { "hide", "fallback" },
+			["<C-y>"] = { "select_and_accept", "fallback" },
+			["<CR>"] = { "accept", "fallback" },
+
+			["<Up>"] = { "select_prev", "fallback" },
+			["<Down>"] = { "select_next", "fallback" },
+			["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+			["<C-n>"] = { "select_next", "fallback_to_mappings" },
+
+			["<C-b>"] = { "scroll_documentation_up", "fallback" },
+			["<C-f>"] = { "scroll_documentation_down", "fallback" },
+      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+
+			["<Tab>"] = { "select_next", "fallback_to_mappings", "snippet_forward", "fallback" },
+			["<S-Tab>"] = { "select_prev", "fallback_to_mappings", "snippet_backward", "fallback" },
+		},
+
+		appearance = {
+			highlight_ns = vim.api.nvim_create_namespace("blink_cmp"),
+			-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+			-- Adjusts spacing to ensure icons are aligned
+			nerd_font_variant = "mono",
+		},
+
+		-- (Default) Only show the documentation popup when manually triggered
+		completion = {
+			list = {
+				selection = { preselect = false },
+			},
+			documentation = {
+				auto_show = true,
+				auto_show_delay_ms = 200,
+				window = {
+					max_width = 80,
+					max_height = 40,
+					winblend = 10,
+				},
+			},
+			menu = {
+				max_height = 20,
+				scrolloff = 3,
+				draw = {
+					gap = 2,
+					columns = {
+						{ "kind_icon" },
+						{ "label", "label_description", gap = 1 },
+						{ "kind" },
+					},
+					components = {
+						kind_icon = {
+							text = function(ctx)
+								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+								return " " .. kind_icon .. ctx.icon_gap .. " "
+							end,
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+								return hl
+							end,
+						},
+						kind = {
+							text = function(ctx)
+								return "<" .. ctx.kind .. ">"
+								-- return "" .. ctx.kind .. ""
+							end,
+
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+								return hl .. "It"
+							end,
+						},
+						label = {
+							width = { fill = true, max = 60 },
+							text = function(ctx)
+								return ctx.label .. ctx.label_detail
+							end,
+							highlight = function(ctx)
+								-- label and label details
+								local highlights = {
+									{
+										0,
+										#ctx.label,
+										group = ctx.deprecated and "BlinkCmpLabelDeprecated" or "BlinkCmpLabel",
+									},
+								}
+								if ctx.label_detail then
+									table.insert(
+										highlights,
+										{ #ctx.label, #ctx.label + #ctx.label_detail, group = "BlinkCmpLabelDetail" }
+									)
+								end
+
+								-- characters matched on the label by the fuzzy matcher
+								for _, idx in ipairs(ctx.label_matched_indices) do
+									table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
+								end
+
+								return highlights
+							end,
+						},
+					},
+				},
+			},
+		},
+
+		-- Default list of enabled providers defined so that you can extend it
+		-- elsewhere in your config, without redefining it, due to `opts_extend`
+
+		cmdline = {
+			enabled = true,
+			keymap = { preset = "cmdline" },
+			completion = {
+				list = { selection = { preselect = false } },
+				menu = {
+					auto_show = function(ctx)
+						return vim.fn.getcmdtype() == ":"
+					end,
+				},
+				ghost_text = { enabled = true },
+			},
+		},
+
+		sources = {
+			default = {
+				"lsp",
+				path = {
+					opts = {
+						get_cwd = function(_)
+							return vim.fn.getcwd()
+						end,
+					},
+				},
+				"snippets",
+				"buffer",
+				"emoji",
+			},
+			providers = {
+				emoji = {
+					module = "blink-emoji",
+					name = "Emoji",
+					score_offset = 15, -- Tune by preference
+				},
+			},
+		},
+
+		fuzzy = {
+			implementation = "prefer_rust_with_warning",
+		},
+
+		signature = {
+			enabled = true,
+		},
+	},
+	opts_extend = { "sources.default" },
+}
