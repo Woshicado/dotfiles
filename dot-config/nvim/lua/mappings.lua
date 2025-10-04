@@ -38,7 +38,7 @@ map("n", "<leader>v", "^v$", { desc = "Select non-whitespace line", noremap=true
 -- map("i", "jk", "<ESC>")  -- Already mapped, I guess by nvchad
 
 -- Save keybinds
-map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S
+-- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S
 map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Cmd-S
 map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save File" })
 

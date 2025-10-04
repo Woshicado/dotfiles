@@ -4,13 +4,17 @@ return {
 	-- optional: provides snippets for the snippet source
 	dependencies = {
 		"rafamadriz/friendly-snippets",
-		"onsails/lspkind.nvim",
+		-- "onsails/lspkind.nvim",
 		"nvim-mini/mini.icons",
 		-- "kdheepak/cmp-latex-symbols",
 		-- "hrsh7th/cmp-emoji",
 		{ "L3MON4D3/LuaSnip", version = "v2.*" },
 		-- { "marcoSven/blink-cmp-yanky", },
 		"moyiz/blink-emoji.nvim",
+		{
+			"Kaiser-Yang/blink-cmp-dictionary",
+			dependencies = { "nvim-lua/plenary.nvim" },
+		},
 	},
 	config = function(_, opts)
 		require("mini.icons").setup({
@@ -84,6 +88,8 @@ return {
 				warning = { glyph = "", hl = "MiniIconsYellow" },
 				error = { glyph = "", hl = "MiniIconsRed" },
 				bug = { glyph = "", hl = "MiniIconsRed" },
+        dict = { glyph = "󰘝", hl = "MiniIconsPurple" },
+        -- emoji = { glyph = "󰞅", hl = "MiniIconsYellow" },  -- Alas emoji is coded as 'Text' kind
 			},
 		})
 		local miniIconHLs = {
@@ -152,11 +158,13 @@ return {
 			["<Down>"] = { "select_next", "fallback" },
 			["<C-p>"] = { "select_prev", "fallback_to_mappings" },
 			["<C-n>"] = { "select_next", "fallback_to_mappings" },
+			["<S-k>"] = { "select_prev", "fallback_to_mappings" },
+			["<S-j>"] = { "select_next", "fallback_to_mappings" },
 
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
-      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+			["<C-u>"] = { "scroll_documentation_up", "fallback" },
+			["<C-d>"] = { "scroll_documentation_down", "fallback" },
 
 			["<Tab>"] = { "select_next", "fallback_to_mappings", "snippet_forward", "fallback" },
 			["<S-Tab>"] = { "select_prev", "fallback_to_mappings", "snippet_backward", "fallback" },
@@ -196,8 +204,7 @@ return {
 					components = {
 						kind_icon = {
 							text = function(ctx)
-								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-								return " " .. kind_icon .. ctx.icon_gap .. " "
+								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind) return " " .. kind_icon .. ctx.icon_gap .. " "
 							end,
 							-- (optional) use highlights from mini.icons
 							highlight = function(ctx)
@@ -215,35 +222,6 @@ return {
 							highlight = function(ctx)
 								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
 								return hl .. "It"
-							end,
-						},
-						label = {
-							width = { fill = true, max = 60 },
-							text = function(ctx)
-								return ctx.label .. ctx.label_detail
-							end,
-							highlight = function(ctx)
-								-- label and label details
-								local highlights = {
-									{
-										0,
-										#ctx.label,
-										group = ctx.deprecated and "BlinkCmpLabelDeprecated" or "BlinkCmpLabel",
-									},
-								}
-								if ctx.label_detail then
-									table.insert(
-										highlights,
-										{ #ctx.label, #ctx.label + #ctx.label_detail, group = "BlinkCmpLabelDetail" }
-									)
-								end
-
-								-- characters matched on the label by the fuzzy matcher
-								for _, idx in ipairs(ctx.label_matched_indices) do
-									table.insert(highlights, { idx, idx + 1, group = "BlinkCmpLabelMatch" })
-								end
-
-								return highlights
 							end,
 						},
 					},
@@ -280,6 +258,7 @@ return {
 				},
 				"snippets",
 				"buffer",
+				"dictionary",
 				"emoji",
 			},
 			providers = {
@@ -287,6 +266,41 @@ return {
 					module = "blink-emoji",
 					name = "Emoji",
 					score_offset = 15, -- Tune by preference
+				},
+				dictionary = {
+					module = "blink-cmp-dictionary",
+					name = "Dict",
+					score_offset = -20,
+					enabled = true,
+					max_items = 6,
+					min_keyword_length = 3,
+					opts = {
+						get_command = "rg",
+						get_command_args = function(prefix, _)
+							-- /usr/share/dict/words
+							local dict_file1 = os.getenv("HOME") .. "/dotfiles/dictionaries/words"
+							local dict_file2 = os.getenv("HOME") .. "/dotfiles/dot-config/nvim/spell/en.utf-8.add"
+							return {
+								"--color=never",
+								"--no-line-number",
+								"--no-messages",
+								"--no-filename",
+								"--ignore-case",
+								"--",
+								prefix,
+								dict_file1,
+								dict_file2,
+							}
+						end,
+						documentation = {
+							enable = true,
+							get_command = {
+								"wn", -- brew install wordnet
+								"${word}",
+								"-over",
+							},
+						},
+					},
 				},
 			},
 		},
