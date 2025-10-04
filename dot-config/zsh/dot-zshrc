@@ -123,16 +123,17 @@ mvln() {
 }
 
 # Replace `man` escape sequences to colorize instead
-man() {
-  export GROFF_NO_SGR=1   # Do not emit SGR sequences. These are different than the replaced ones
-  LESS_TERMCAP_md=$'\e[01;31m' \
-  LESS_TERMCAP_me=$'\e[0m' \
-  LESS_TERMCAP_us=$'\e[01;32m' \
-  LESS_TERMCAP_ue=$'\e[0m' \
-  LESS_TERMCAP_so=$'\e[45;93m' \
-  LESS_TERMCAP_se=$'\e[0m' \
-  command man "$@"
-}
+# man() {
+#   export GROFF_NO_SGR=1   # Do not emit SGR sequences. These are different than the replaced ones
+#   LESS_TERMCAP_md=$'\e[01;31m' \
+#   LESS_TERMCAP_me=$'\e[0m' \
+#   LESS_TERMCAP_us=$'\e[01;32m' \
+#   LESS_TERMCAP_ue=$'\e[0m' \
+#   LESS_TERMCAP_so=$'\e[45;93m' \
+#   LESS_TERMCAP_se=$'\e[0m' \
+#   command man "$@"
+# }
+export MANPAGER='nvim +Man!'
 
 # Source .source_me when entering a directory
 autoload -U add-zsh-hook
@@ -203,10 +204,17 @@ alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
 alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
-alias n='nvim' # nevoim 0.10.4, 0.11 with current config broken
-alias v='n'
-alias c='xclip -sel c -r'
+alias n='nvim'
+alias n.='nvim .'
+alias v='nvim'
+alias v.='nvim .'
 alias pdf='zathura'
+
+if [[ ! "$OSTYPE" == "darwin"* ]]; then
+  alias c='xclip -sel c -r'
+else
+  alias c='pbcopy'
+fi
 
 # Directory aliases
 alias ols='/bin/ls -l'
