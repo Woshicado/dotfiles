@@ -9,8 +9,53 @@ M.map = function(mode, lhs, rhs, opts)
 end
 
 M.is_empty_line = function()
-	local current_line = vim.api.nvim_get_current_line()
-	return current_line:match("^%s*$") ~= nil
+	return vim.fn.getline("."):match("^%s*$")
+end
+
+M.is_visual_selection_empty = function()
+	local mode = vim.fn.mode()
+	if mode ~= "v" and mode ~= "V" and mode ~= "" then
+		return false
+	end
+
+	local start_pos = vim.fn.getpos("'<")
+	local end_pos = vim.fn.getpos("'>")
+
+	if start_pos[2] > end_pos[2] then
+		start_pos, end_pos = end_pos, start_pos
+	end
+
+	local start_line = start_pos[2]
+	local start_col = start_pos[3]
+	local end_line = end_pos[2]
+	local end_col = end_pos[3]
+
+	if start_line == end_line then
+		local line = vim.fn.getline(start_line)
+		local selection = string.sub(line, start_col, end_col)
+		return selection:match("^%s*$")
+	end
+
+	-- Check first line
+	local first_line = vim.fn.getline(start_line)
+	if not string.sub(first_line, start_col):match("^%s*$") then
+		return false
+	end
+
+	-- Check lines in between
+	for i = start_line + 1, end_line - 1 do
+		if not vim.fn.getline(i):match("^%s*$") then
+			return false
+		end
+	end
+
+	-- Check last line
+	local last_line = vim.fn.getline(end_line)
+	if not string.sub(last_line, 1, end_col):match("^%s*$") then
+		return false
+	end
+
+	return true
 end
 
 M.open_or_create_session = function(path)
@@ -31,7 +76,7 @@ M.open_or_create_session = function(path)
 	end
 end
 
-M.toggle_diffview =  function(cmd)
+M.toggle_diffview = function(cmd)
 	if next(require("diffview.lib").views) == nil then
 		vim.cmd(cmd)
 	else
