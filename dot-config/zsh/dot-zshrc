@@ -255,6 +255,7 @@ alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar
 
 # Custom jj aliases
 alias jjs='jj st'
+alias jja='jj abandon'
 alias jjbmm='jj bookmark move main --to @-'
 function jjbm() {
   if [[ -z "$1" ]]; then
