@@ -88,8 +88,8 @@ return {
 				warning = { glyph = "", hl = "MiniIconsYellow" },
 				error = { glyph = "", hl = "MiniIconsRed" },
 				bug = { glyph = "", hl = "MiniIconsRed" },
-        dict = { glyph = "󰘝", hl = "MiniIconsPurple" },
-        -- emoji = { glyph = "󰞅", hl = "MiniIconsYellow" },  -- Alas emoji is coded as 'Text' kind
+				dict = { glyph = "󰘝", hl = "MiniIconsPurple" },
+				-- emoji = { glyph = "󰞅", hl = "MiniIconsYellow" },  -- Alas emoji is coded as 'Text' kind
 			},
 		})
 		local miniIconHLs = {
@@ -160,6 +160,8 @@ return {
 			["<C-n>"] = { "select_next", "fallback_to_mappings" },
 			["<S-k>"] = { "select_prev", "fallback_to_mappings" },
 			["<S-j>"] = { "select_next", "fallback_to_mappings" },
+			["<C-k>"] = { "select_prev", "fallback_to_mappings" },
+			["<C-j>"] = { "select_next", "fallback_to_mappings" },
 
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
@@ -179,6 +181,11 @@ return {
 
 		-- (Default) Only show the documentation popup when manually triggered
 		completion = {
+			accept = {
+				auto_brackets = {
+					enabled = true,
+				},
+			},
 			list = {
 				selection = { preselect = false },
 			},
@@ -204,7 +211,8 @@ return {
 					components = {
 						kind_icon = {
 							text = function(ctx)
-								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind) return " " .. kind_icon .. ctx.icon_gap .. " "
+								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+								return " " .. kind_icon .. ctx.icon_gap .. " "
 							end,
 							-- (optional) use highlights from mini.icons
 							highlight = function(ctx)
@@ -229,9 +237,6 @@ return {
 			},
 		},
 
-		-- Default list of enabled providers defined so that you can extend it
-		-- elsewhere in your config, without redefining it, due to `opts_extend`
-
 		cmdline = {
 			enabled = true,
 			keymap = { preset = "cmdline" },
@@ -249,19 +254,79 @@ return {
 		sources = {
 			default = {
 				"lsp",
-				path = {
-					opts = {
-						get_cwd = function(_)
-							return vim.fn.getcwd()
-						end,
-					},
-				},
+				"path",
 				"snippets",
 				"buffer",
 				"dictionary",
 				"emoji",
 			},
 			providers = {
+				buffer = {
+					module = "blink.cmp.sources.buffer",
+					score_offset = -3,
+					opts = {
+						-- default to all visible buffers
+						get_bufnrs = function()
+							return vim.iter(vim.api.nvim_list_wins())
+								:map(function(win)
+									return vim.api.nvim_win_get_buf(win)
+								end)
+								:filter(function(buf)
+									return vim.bo[buf].buftype ~= "nofile"
+								end)
+								:totable()
+						end,
+						-- buffers when searching with `/` or `?`
+						get_search_bufnrs = function()
+							return { vim.api.nvim_get_current_buf() }
+						end,
+						max_sync_buffer_size = 20000,
+						max_async_buffer_size = 200000,
+						max_total_buffer_size = 500000,
+						retention_order = { "focused", "visible", "recency", "largest" },
+						use_cache = true,
+						-- Whether to enable buffer source in substitute (:s) and global (:g) commands.
+						-- Note: Enabling this option will temporarily disable Neovim's 'inccommand' feature
+						-- while editing Ex commands, due to a known redraw issue (see neovim/neovim#9783).
+						-- This means you will lose live substitution previews when using :s, :smagic, or :snomagic
+						-- while buffer completions are active.
+						enable_in_ex_commands = false, -- Alas, still breaks inccommand
+					},
+				},
+				lsp = {
+					name = "LSP",
+					module = "blink.cmp.sources.lsp",
+					opts = { tailwind_color_icon = "󱓻" },
+					async = false, -- Whether we should show the completions before this provider returns, without waiting for it
+					timeout_ms = 1000, -- How long to wait for the provider to return before showing completions and treating it as asynchronous
+					transform_items = function(_, items)
+						local types = require("blink.cmp.types").CompletionItemKind
+						return vim.tbl_filter(function(item)
+							return item.kind ~= types.File and item.kind ~= types.Folder
+						end, items)
+					end,
+					should_show_items = true,
+					max_items = nil,
+					min_keyword_length = 0,
+					fallbacks = { "buffer" },
+					score_offset = 0,
+					override = nil, -- Override the source's functions
+				},
+				path = {
+					module = "blink.cmp.sources.path",
+					score_offset = 3,
+					fallbacks = { "buffer" },
+					opts = {
+						trailing_slash = true,
+						label_trailing_slash = true,
+						get_cwd = function(context)
+							return vim.fn.expand(("#%d:p:h"):format(context.bufnr))
+						end,
+						show_hidden_files_by_default = false,
+						-- Treat `/path` as starting from the current working directory (cwd) instead of the root of your filesystem
+						ignore_root_slash = false,
+					},
+				},
 				emoji = {
 					module = "blink-emoji",
 					name = "Emoji",
@@ -311,6 +376,19 @@ return {
 
 		signature = {
 			enabled = true,
+			trigger = {
+				enabled = true,
+				-- Show the signature help window after typing any of alphanumerics, `-` or `_`
+				show_on_keyword = false,
+				blocked_trigger_characters = {},
+				blocked_retrigger_characters = {},
+				-- Show the signature help window after typing a trigger character
+				show_on_trigger_character = true,
+				-- Show the signature help window when entering insert mode
+				show_on_insert = true,
+				-- Show the signature help window when the cursor comes after a trigger character when entering insert mode
+				show_on_insert_on_trigger_character = true,
+			},
 		},
 	},
 	opts_extend = { "sources.default" },

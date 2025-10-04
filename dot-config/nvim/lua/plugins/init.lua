@@ -42,7 +42,7 @@ return {
 	require("plugins.configs.volt"),
 	require("plugins.configs.minty"),
 	require("plugins.configs.copilot"),
-	require("plugins.configs.lsp-signature"),
+  -- require("plugins.configs.lsp-signature"),
 	require("plugins.configs.vim-tmux-navigator"),
 	require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
