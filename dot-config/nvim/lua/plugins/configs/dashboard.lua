@@ -34,13 +34,13 @@ return {
 					{
 						desc = " Neovim",
 						group = "@string",
-						action = "SessionRestore " .. os.getenv("XDG_CONFIG_HOME") .. "/nvim",
+						action = "AutoSession restore " .. os.getenv("XDG_CONFIG_HOME") .. "/nvim",
 						key = "n",
 					},
 					{
 						desc = " Sessions",
 						group = "Define",
-						action = "SessionSearch",
+						action = "AutoSession search",
 						key = "s",
 					},
 				},

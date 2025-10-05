@@ -9,6 +9,11 @@ return {
 		vim.g.vimtex_compiler_latexmk = {
 			out_dir = "./out",
 		}
+    vim.g.vimtex_compiler_latexmk_engines = {
+      _ = '-pdflatex',
+      xelatex = '-xelatex',
+      lualatex = '-lualatex',
+    }
 		vim.g.vimtex_syntax_conceal = {
 			acents = 1,
 			ligatures = 1,

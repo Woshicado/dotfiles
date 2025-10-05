@@ -67,7 +67,7 @@ M.open_or_create_session = function(path)
 
 	if vim.fn.filereadable(session_file) == 1 then
 		-- If the session file exists, restore the session
-		require("auto-session").RestoreSession(vim.fn.fnameescape(path))
+		require("auto-session").restore_session(vim.fn.fnameescape(path))
 	else
 		-- If the session file does not exist, open fzf-lua
 		-- require("fzf-lua").files({ cwd = path })
