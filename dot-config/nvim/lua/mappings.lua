@@ -280,8 +280,9 @@ map("n", "glh", function() require("timber.actions").insert_log({ template = "fi
 map("n", "glc", function() require("timber.actions").clear_log_statements({ global = false }) end, { desc = "[G]o [L]og [C]lean" })
 map("n", "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, { desc = "[G]o [L]og [P]retty print" })
 
--- Toggle theme on <leader>tt
-map("n", "<leader>tt", function() require("base46").toggle_theme() end, { desc = "Toggle theme", })
+-- Toggle twilight/zenmode
+map("n", "<leader>tt", "<cmd>Twilight<cr>", { desc = "Toggle Twilight", })
+map("n", "<leader>tz", "<cmd>ZenMode<cr>", { desc = "Toggle Twilight", })
 
 -- Toggle transparency on <leader>to
 map("n", "<leader>to", function() require("base46").toggle_transparency() end, { desc = "Toggle transparency" })

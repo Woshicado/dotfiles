@@ -46,6 +46,8 @@ return {
 	require("plugins.configs.vim-tmux-navigator"),
 	require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
+  require("plugins.configs.twilight"),
+  require("plugins.configs.zen-mode"),
 	require("plugins.configs.which-key"),
 	require("plugins.configs.luasnip"),
 	require("plugins.configs.eunuch"),
