@@ -5,6 +5,7 @@ return {
 		"sindrets/diffview.nvim",
 		"ibhagwan/fzf-lua",
 	},
+  cmd = { "Neogit" },
 	config = function()
 		require("neogit").setup({
 			graph_style = "kitty",

@@ -6,12 +6,12 @@ return {
 	lazy = false,
 	config = function()
 		require("oil").setup({
-			use_default_keymaps = true,
+			use_default_keymaps = false,
 			keymaps = {
 				["g?"] = { "actions.show_help", mode = "n" },
 				["<CR>"] = "actions.select",
-				["<C-s>"] = { "actions.select", opts = { vertical = true } },
-				["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+				["<leader>s"] = { "actions.select", opts = { vertical = true } },
+				["<leader>h"] = { "actions.select", opts = { horizontal = true } },
 				["<C-t>"] = { "actions.select", opts = { tab = true } },
 				["<C-p>"] = "actions.preview",
 				["<C-c>"] = { "actions.close", mode = "n" },
