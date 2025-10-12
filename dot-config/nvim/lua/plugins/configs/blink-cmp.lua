@@ -211,11 +211,17 @@ return {
 					components = {
 						kind_icon = {
 							text = function(ctx)
+								if require("blink.cmp.sources.lsp.hacks.tailwind").get_hex_color(ctx.item) then
+									return " 󱓻" .. ctx.icon_gap .. " "
+								end
 								local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
 								return " " .. kind_icon .. ctx.icon_gap .. " "
 							end,
 							-- (optional) use highlights from mini.icons
 							highlight = function(ctx)
+								if ctx.kind == "Color" then
+									return ctx.kind_hl
+								end
 								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
 								return hl
 							end,
