@@ -1,6 +1,9 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	opts = {
+		fold = {
+			fold_one_line_after = true,
+		},
 		ensure_installed = {
 			"vim",
 			"lua",
@@ -27,7 +30,7 @@ return {
 		},
 		highlight = {
 			enable = true,
-			disable = {"latex", "bibtex"},
+			disable = { "latex", "bibtex" },
 		},
 	},
 }

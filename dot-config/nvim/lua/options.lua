@@ -27,10 +27,11 @@ o.softtabstop = -1
 o.smarttab = true
 o.expandtab = true
 o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-o.foldenable = false
+o.foldenable = true
 o.smartindent = false
 o.foldlevel = 99
-o.foldmethod = "expr"
+o.foldlevelstart = 99
+o.foldmethod = "manual"
 o.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- or v:lua.vim.treesitter.foldexpr()
 o.foldtext = ""
 o.foldcolumn = "0"
@@ -51,8 +52,7 @@ o.diffopt = {
     "iwhite" -- I toggle this one, it doesn't fit all cases.
 }
 
-vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "none" })
-vim.api.nvim_set_hl(0, "LineNr", { fg = "#4e535d" })
+require("highlight")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "tex",

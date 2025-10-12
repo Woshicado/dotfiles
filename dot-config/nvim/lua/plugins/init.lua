@@ -1,5 +1,6 @@
 return {
-  require("plugins.configs.nvim-java"),
+	require("plugins.configs.nvim-ufo"),
+	require("plugins.configs.nvim-java"),
 	require("plugins.configs.conform"),
 	require("plugins.configs.mini"),
 	require("plugins.configs.mini-jump"),
@@ -16,8 +17,8 @@ return {
 	require("plugins.configs.timber"),
 	require("plugins.configs.nvim-tree"),
 	require("plugins.configs.menu"),
-  -- require("plugins.configs.cmp"),
-  require("plugins.configs.blink-cmp"),
+	-- require("plugins.configs.cmp"),
+	require("plugins.configs.blink-cmp"),
 	require("plugins.configs.yanky"),
 	require("plugins.configs.lspconfig"),
 	require("plugins.configs.oil"),
@@ -42,18 +43,18 @@ return {
 	require("plugins.configs.volt"),
 	require("plugins.configs.minty"),
 	require("plugins.configs.copilot"),
-  -- require("plugins.configs.lsp-signature"),
+	-- require("plugins.configs.lsp-signature"),
 	require("plugins.configs.vim-tmux-navigator"),
 	require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
-  require("plugins.configs.twilight"),
-  require("plugins.configs.zen-mode"),
+	require("plugins.configs.twilight"),
+	require("plugins.configs.zen-mode"),
 	require("plugins.configs.which-key"),
 	require("plugins.configs.luasnip"),
 	require("plugins.configs.eunuch"),
 	require("plugins.configs.matchup"),
 	-- require("plugins.configs.noice"),  -- I really don't like the 'bloat' of this... Always trying, never satisfied
-  -- require("plugins.configs.autolist"),  -- breaks <tab> on empty line, as well as deleting lines producing an extra I
+	-- require("plugins.configs.autolist"),  -- breaks <tab> on empty line, as well as deleting lines producing an extra I
 	require("plugins.configs.gitsigns"),
 	require("plugins.configs.vim-bbye"),
 }

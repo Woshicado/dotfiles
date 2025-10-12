@@ -47,16 +47,16 @@ autocmd({ "BufWritePre" }, {
 })
 
 -- Set the correct fold method if treesitter is available for the given filetype
-autocmd({ "FileType" }, {
-  callback = function()
-    if require("nvim-treesitter.parsers").has_parser() then
-      vim.opt.foldmethod = "expr"
-      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-    else
-      vim.opt.foldmethod = "syntax"
-    end
-  end,
-})
+-- autocmd({ "FileType" }, {
+--   callback = function()
+--     if require("nvim-treesitter.parsers").has_parser() then
+--       vim.opt.foldmethod = "expr"
+--       vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+--     else
+--       vim.opt.foldmethod = "syntax"
+--     end
+--   end,
+-- })
 
 
 -- quickfix UI update

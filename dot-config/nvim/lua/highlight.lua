@@ -19,8 +19,14 @@ set_hl(0, "NeogitGraphRed", { fg = "#ff6666" })
 set_hl(0, "NeogitSignatureBad", { fg = "#ff3333", bg = "NONE", bold = true }) -- Bad signatures
 set_hl(0, "NeogitSignatureGoodRevokedKey", { fg = "#ffaa00", bold = true }) -- Revoked key warnings
 
--- Misc
+-- ufo
+set_hl(0, "UfoVirtText", { fg = "#39a6d7", bg = "NONE" }) -- Ellipsis for folded text
+set_hl(0, "RenderMarkdownCode", { bg = "none" })
+set_hl(0, "LineNr", { fg = "#4e535d" })
+
+-- neogit
 set_hl(0, "NeogitChangeDuntracked", { fg = "#ffaa55", bg = "NONE" }) -- Untracked changes
 set_hl(0, "NeogitChangeDunstaged", { fg = "#ffbb77", bg = "NONE" }) -- Unstaged changes
 set_hl(0, "NeogitChangeDstaged", { fg = "#ffcc88", bg = "NONE" }) -- Staged changes
 set_hl(0, "NeogitWinSeparator", { fg = "#666666", bg = "NONE" }) -- Window separators
+
