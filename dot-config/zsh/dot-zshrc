@@ -223,6 +223,7 @@ alias n.='nvim .'
 alias v='nvim'
 alias v.='nvim .'
 alias pdf='zathura'
+alias bt='btop'
 
 if [[ ! "$OSTYPE" == "darwin"* ]]; then
   alias c='xclip -sel c -r'
