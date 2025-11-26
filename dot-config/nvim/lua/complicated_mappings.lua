@@ -54,9 +54,9 @@ map("n", "C", function()
 	return utils.is_empty_line() and '"_C' or "C"
 end, { expr = true, desc = "delete blank lines to black hole register" })
 
-map("v", "d", function()
-	return utils.is_visual_selection_empty() and '"_d' or "d"
-end, { expr = true, desc = "delete blank lines to black hole register" })
+-- map("v", "d", function()
+-- 	return utils.is_visual_selection_empty() and '"_d' or "d"
+-- end, { expr = true, desc = "delete blank lines to black hole register" })
 
 local function match_case(from, to)
 	if from:upper() == from then

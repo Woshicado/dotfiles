@@ -12,6 +12,7 @@ return {
 			actions = {
 				files = {
 					["ctrl-q"] = actions.file_sel_to_qf,
+					["alt-q"] = { fn = require("fzf-lua").actions.file_sel_to_qf, prefix = "select-all" },
 					["ctrl-t"] = actions.toggle_ignore,
 					["ctrl-h"] = actions.toggle_hidden,
 					["enter"] = actions.file_edit_or_qf,

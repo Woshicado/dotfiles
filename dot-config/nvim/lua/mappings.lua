@@ -117,11 +117,12 @@ map("n", "<leader>fo", "<cmd>FzfLua oldfiles<CR>", { noremap = true, desc = "Fuz
 map("n", "<leader>fr", "<cmd>FzfLua resume<CR>", { noremap = true, desc = "Fuzzy find recent files" })
 map("n", "<leader>fw", "<cmd>FzfLua grep_cword<CR>", { noremap = true, desc = "Fuzzy find word in project" })
 map("n", "<leader>fc", "<cmd>FzfLua grep_cWORD<CR>", { noremap = true, desc = "Fuzzy find files" })
-map("n", "<leader>fl", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
 map("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
 map("n", "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", { noremap = true, desc = "Fuzzy live current buffer" })
 map("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { noremap = true, desc = "Fuzzy marks" })
 map("n", "<leader>fp", "<cmd>FzfLua paths<CR>", { noremap = true, desc = "Fuzzy complete path" })
+map("n", "<leader>fq", "<cmd>FzfLua grep_quickfix<CR>", { noremap = true, desc = "Fuzzy quickfix list" })
+map("n", "<leader>fl", "<cmd>FzfLua lgrep_loclist<CR>", { noremap = true, desc = "Fuzzy location list" })
 
 -- Telescope git pickers
 map({ "n", "x" }, "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
@@ -315,3 +316,12 @@ map("n", "<leader>gh", function() vim.cmd("split") vim.lsp.buf.definition() end,
 
 map("n", "gp", "`[v`]", { desc = "Visual pasted" })
 map("n", "gP", "`]v`[", { desc = "Visual pasted" })
+
+-- Paste from number registers conveniently
+for i = 0, 9 do
+  vim.keymap.set('n', '<leader>' .. i, '"' .. i .. 'p', { desc = 'Paste from register ' .. i })
+  -- yank into number registers; not sure whether that helpful yet since nvim cycles through them automatically...
+  vim.keymap.set('n', '<leader>y' .. i, '"' .. i .. 'y', { desc = 'Yank into register ' .. i })
+  vim.keymap.set('v', '<leader>y' .. i, '"' .. i .. 'y', { desc = 'Yank into register ' .. i })
+end
+vim.keymap.set('n', '<leader>-', '"-p', { desc = 'Paste from small delete register' })

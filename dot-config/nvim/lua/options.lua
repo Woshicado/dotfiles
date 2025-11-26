@@ -13,7 +13,7 @@ o.cc = { 80, 100 }
 o.linebreak = true
 o.breakindent = true
 o.showbreak = "=>"
-o.conceallevel = 2
+o.conceallevel = 0
 o.spellfile = vim.fn.stdpath "config" .. "/spell/en.utf-8.add"
 o.relativenumber = true
 o.autoindent = true

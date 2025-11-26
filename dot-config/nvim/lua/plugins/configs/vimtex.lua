@@ -1,6 +1,7 @@
 return {
 	"lervag/vimtex",
-	ft = { 'tex', 'latex', 'plaintex' },
+	cmd = { "VimtexCompile", "VimtexView", "VimtexStop", "VimtexInverseSearch" },
+	ft = { "tex", "latex", "plaintex" },
 	init = function()
 		vim.g.vimtex_view_method = "skim"
 		vim.g.vimtex_view_skim_sync = 1
@@ -9,11 +10,11 @@ return {
 		vim.g.vimtex_compiler_latexmk = {
 			out_dir = "./out",
 		}
-    vim.g.vimtex_compiler_latexmk_engines = {
-      _ = '-pdflatex',
-      xelatex = '-xelatex',
-      lualatex = '-lualatex',
-    }
+		vim.g.vimtex_compiler_latexmk_engines = {
+			_ = "-pdflatex",
+			xelatex = "-xelatex",
+			lualatex = "-lualatex",
+		}
 		vim.g.vimtex_syntax_conceal = {
 			acents = 1,
 			ligatures = 1,
@@ -40,4 +41,3 @@ return {
 		}
 	end,
 }
-

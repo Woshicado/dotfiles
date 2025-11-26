@@ -6,6 +6,7 @@
   compression = 9
   whitespace = error
   preloadindex = true
+	ignorecase = false
 
 [url "git@github.com:woshicado/"]
   insteadOf = "wc:"
