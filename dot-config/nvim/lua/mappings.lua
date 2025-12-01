@@ -1,24 +1,64 @@
-require("nvchad.mappings")
+-- require("nvchad.mappings")
 require("complicated_mappings")
 
--- delete unwanted nvchad mappings first
 local del = vim.keymap.del
 local map = vim.keymap.set
 
+-- NvChad mappings, copied over to not have to use all of them
+map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
+map("i", "<C-e>", "<End>", { desc = "move end of line" })
+map("i", "<C-h>", "<Left>", { desc = "move left" })
+map("i", "<C-l>", "<Right>", { desc = "move right" })
+map("i", "<C-j>", "<Down>", { desc = "move down" })
+map("i", "<C-k>", "<Up>", { desc = "move up" })
+
+map("n", "<C-h>", "<C-w>h", { desc = "switch window left" })
+map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
+map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
+map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
+
+map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
+
+map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+
+map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
+map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
+map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+
+if require("nvconfig").ui.tabufline.enabled then
+  map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
+
+  map("n", "<tab>", function()
+    require("nvchad.tabufline").next()
+  end, { desc = "buffer goto next" })
+
+  map("n", "<S-tab>", function()
+    require("nvchad.tabufline").prev()
+  end, { desc = "buffer goto prev" })
+
+end
+
+map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
+map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
+
+map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
+
+map({ "n", "t" }, "<A-i>", function()
+  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
+end, { desc = "terminal toggle floating term" })
+
+-- delete unwanted nvchad mappings first
 -- Normal mode bindings to delete
 local keys = {
 	"<leader>w",
-	"<leader>wK",
 	"<leader>wa",
-	"<leader>wk",
 	"<leader>wl",
 	"<leader>wr",
 	"<leader>ws",
 	"<leader>cm",
-	"<leader>th",
-	"<leader>x",
-	"<leader>h",
-	"<leader>v",
+  -- "<leader>th",
+  -- "<leader>h",
+  -- "<leader>v",
 }
 
 for _, key in ipairs(keys) do

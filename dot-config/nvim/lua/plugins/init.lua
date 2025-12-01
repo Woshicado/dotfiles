@@ -1,4 +1,6 @@
 return {
+  require("plugins.disable"),
+
 	require("plugins.configs.nvim-ufo"),
 	require("plugins.configs.nvim-java"),
 	require("plugins.configs.conform"),

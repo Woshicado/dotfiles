@@ -1,3 +1,16 @@
+local map = vim.keymap.set
+
+function custom_on_attach(_, bufnr)
+	local function opts(desc)
+		return { buffer = bufnr, desc = "LSP " .. desc }
+	end
+
+	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
+
+	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
+	map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
+end
+
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {},
@@ -15,6 +28,7 @@ return {
 			"pylsp",
 			-- "GitHub Copilot",
 		}
+
 		local nvlsp = require("nvchad.configs.lspconfig")
 
 		-- Local dictionary
@@ -33,7 +47,7 @@ return {
 			tailwindcss = {
 				tailwindCSS = {
 					experimental = {
-						classRegex = {
+						classRegex = { -- react-native typescript support
 							"tw`([^`]*)",
 							"tw\\(([^)]*)",
 							"tw\\.\\w+\\(`([^`]*)",
@@ -44,8 +58,15 @@ return {
 			},
 			ltex = {
 				ltex = {
+					language = "en-US", -- default; change with '% LTeX: language=de-DE', or YAML frontmatter
 					dictionary = {
 						["en-US"] = words,
+						["de-DE"] = words,
+					},
+					additionalRules = {
+						enablePickyRules = true, -- sent. length, passive voice, ... (disable if too many)
+						motherTongue = "de-DE",
+						languageModel = "~/.models/ngrams/", -- ngram models path; download from: https://languagetool.org/download/ngram-data/
 					},
 					enabled = {
 						"bibtex",
@@ -60,6 +81,7 @@ return {
 						"context",
 						"mail",
 						"plaintext",
+						"markdown",
 					},
 				},
 			},
@@ -121,7 +143,7 @@ return {
 		-- Configure each server
 		for _, lsp in ipairs(servers) do
 			vim.lsp.config(lsp, {
-				on_attach = nvlsp.on_attach,
+				on_attach = custom_on_attach,
 				on_init = nvlsp.on_init,
 				capabilities = nvlsp.capabilities,
 				settings = server_settings[lsp],
@@ -134,14 +156,14 @@ return {
 		vim.diagnostic.config({
 			-- virtual_text = true,
 			virtual_lines = { current_line = true },
-      signs = {
-        text = {
-          [vim.diagnostic.severity.ERROR] = "",
-          [vim.diagnostic.severity.WARN] = "",
-          [vim.diagnostic.severity.HINT] = "",
-          [vim.diagnostic.severity.INFO] = "",
-        },
-      },
+			signs = {
+				text = {
+					[vim.diagnostic.severity.ERROR] = "",
+					[vim.diagnostic.severity.WARN] = "",
+					[vim.diagnostic.severity.HINT] = "",
+					[vim.diagnostic.severity.INFO] = "",
+				},
+			},
 		})
 	end,
 }
