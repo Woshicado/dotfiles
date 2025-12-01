@@ -28,6 +28,23 @@ Command (fedora):
 sudo dnf install zsh neovim lsd git-delta gping glow ranger hexyl fd-find dutree
 ```
 
+Download ngrams for ltex language server from the [Language Tool Website](https://languagetool.org/download/ngram-data/) into `~/.models`.
+
+At the time of writing
+```bash
+mkdir -p ~/.models
+
+wget https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip -O ~/.models/ngrams-de.zip
+wget https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip -O ~/.models/ngrams-en.zip
+wget https://languagetool.org/download/ngram-data/ngrams-es-20150915.zip -O ~/.models/ngrams-es.zip
+
+unzip ~/.models/ngrams-de.zip -d ~/.models
+unzip ~/.models/ngrams-en.zip -d ~/.models
+unzip ~/.models/ngrams-es.zip -d ~/.models
+
+rm ~/.models/ngrams-*.zip
+```
+
 ## Otional
 
 - hyperfine for automatic benchmarking (with multiple runs and warmup and timing)

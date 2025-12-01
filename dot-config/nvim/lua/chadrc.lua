@@ -46,6 +46,27 @@ autocmd({ "BufWritePre" }, {
   command = [[%s/\s\+$//e]],
 })
 
+
+-- Open .bin files in binary mode
+vim.api.nvim_create_augroup("BinaryFiles", { clear = true })
+
+vim.api.nvim_create_autocmd("BufReadPre", {
+  group = "BinaryFiles",
+  pattern = "*.bin",
+  callback = function()
+    vim.opt_local.binary = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = "BinaryFiles",
+  pattern = "*.bin",
+  callback = function()
+    vim.cmd("e ++binary")
+  end,
+})
+
+
 -- Set the correct fold method if treesitter is available for the given filetype
 -- autocmd({ "FileType" }, {
 --   callback = function()
