@@ -3,10 +3,10 @@ return {
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {
-				typescript = {  "prettierd"  },
-				typescriptreact = {  "prettierd"  },
-				javascript = {  "prettierd"  },
-				javascriptreact = {  "prettierd"  },
+				typescript = { "prettierd" },
+				typescriptreact = { "prettierd" },
+				javascript = { "prettierd" },
+				javascriptreact = { "prettierd" },
 				lua = { "stylua" },
 				css = { "prettierd" },
 				html = { "prettierd" },
@@ -14,9 +14,9 @@ return {
 				yaml = { "yamlfix" },
 				json = { "jq" },
 				markdown = { "yamlfix", "prettierd" },
-				tex = { "latexindent" },
-        java = { "google-java-format" },
-        xml = { "xmlformatter"  },
+				tex = { "latexindent_m" },
+				java = { "google-java-format" },
+				xml = { "xmlformatter" },
 			},
 			opts = {
 				format = {
@@ -37,6 +37,10 @@ return {
 						YAMLFIX_quote_representation = '"',
 						YAMLFIX_quote_keys_and_basic_values = "false",
 					},
+				},
+				latexindent_m = {
+					command = "latexindent",
+					args = { "-m" },
 				},
 				yamlfix_frontmatter = {
 					command = "bash",

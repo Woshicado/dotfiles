@@ -1,0 +1,124 @@
+---
+verbatimEnvironments:
+  outline: 0
+
+noIndentBlock:
+  noindent: 1
+  # use commented like this:
+  # % \begin{noindent}
+  # ...
+  # % \end{noindent}
+
+# This alas does not work as I want it to
+indentAfterItems:
+  outline: 1
+
+itemNames:
+  1: 1
+  2: 1
+  3: 1
+  4: 1
+
+indentRules:
+  1: "   "
+  2: "   "
+  3: "   "
+  4: "   "
+
+specialBeginEnd:
+  leftRightSquare:
+    begin: "\\\\left\\["
+    end: "\\\\right\\]"
+    lookForThis: 1
+  displayMath:
+    begin: "(?<!\\\\)\\\\\\["  # \[ but *not* \\[
+    end: "\\\\\\]"  # \]
+    lookForThis: 1
+  inlineMath:
+    begin: "(?<!\\$)(?<!\\\\)\\$(?!\\$)"  # $ but *not* \$ or $$
+    body: "[^$]*?"  # anything *except* $
+    end: "(?<!\\\\)\\$(?!\\$)"  # $ but *not* \$ or $$
+    lookForThis: 1
+  displayMathTeX:
+    begin: "\\$\\$"  # $$
+    end: "\\$\\$"  # $$
+    lookForThis: 1
+  If:
+    begin: "\\\\If"
+    middle: ["\\\\ElsIf", "\\\\Else"]
+    end: "\\\\EndIf"
+    lookForThis: 1
+  ForStatement:
+    begin: "\\\\For\\{[^}]+?\\}"
+    end: "\\\\EndFor"
+  FORStatement:
+    begin: "\\\\FOR\\{[^}]+?\\}"
+    end: "\\\\ENDFOR"
+  WhileStatement:
+    begin: "\\\\While\\{[^}]+?\\}"
+    end: "\\\\EndWhile"
+  WHILEStatement:
+    begin: "\\\\WHILE\\{[^}]+?\\}"
+    end: "\\\\ENDWHILE"
+  ForAllStatement:
+    begin: "\\\\ForAll\\{[^}]+?\\}"
+    end: "\\\\EndFor"
+  LoopStatement:
+    begin: "\\\\Loop"
+    end: "\\\\EndLoop"
+  RepeatStatement:
+    begin: "\\\\Repeat"
+    end: "\\\\Until\\{[^}]+?\\}"
+  ProcedureStatement:
+    begin: "\\\\Procedure\\{[^}]+?\\}\\{[^}]+?\\}"
+    end: "\\\\EndProcedure"
+  FunctionStatement:
+    begin: "\\\\Function\\{[^}]+?\\}\\{[^}]+?\\}"
+    end: "\\\\EndFunction"
+  IfStatement:
+    begin: "\\\\If\\{[^}]+?\\}"
+    middle: ["\\\\Else", "\\\\ElsIf\\{[^}]+?\\}"]
+    end: "\\\\EndIf"
+  IFStatement:
+    begin: "\\\\IF\\{[^}]+?\\}"
+    middle: ["\\\\ELSE", "\\\\ELSIF\\{[^}]+?\\}"]
+    end: "\\\\ENDIF"
+  path:
+    begin: "\\\\path"
+    end: ";"
+  specialBeforeCommand: 1
+
+lookForAlignDelims:
+  path:
+    delimiterRegEx: "(edge|node\\h*\\{[0-9,A-Z]+\\})"
+
+modifyLineBreaks:
+  preserveBlankLines: 1  # 0/1
+  condenseMultipleBlankLinesInto: 1  # 0/1
+  oneSentencePerLine:
+    manipulateSentences: 1  # 0/1
+    removeSentenceLineBreaks: 1  # 0/1
+    multipleSpacesToSingle: 1  # 0/1
+    textWrapSentences: 0  # 1 disables main textWrap
+    sentenceIndent: ""
+    sentencesFollow:
+      par: 1  # 0/1
+      blankLine: 1  # 0/1
+      fullStop: 1  # 0/1
+      exclamationMark: 1  # 0/1
+      questionMark: 1  # 0/1
+      rightBrace: 1  # 0/1
+      commentOnPreviousLine: 1  # 0/1
+      other: "\\)"  # regex
+    sentencesBeginWith:
+      A-Z: 1  # 0/1
+      a-z: 0  # 0/1
+      other: "\\$|[0-9]"  # regex
+    sentencesEndWith:
+      basicFullStop: 0  # 0/1
+      betterFullStop: 1  # 0/1
+      exclamationMark: 1  # 0/1
+      questionMark: 1  # 0/1
+      other: 0  # regex
+    sentencesDoNOTcontain:
+      other: "\\\\begin|\\\\end|\\\\[0-9]"  # regex
