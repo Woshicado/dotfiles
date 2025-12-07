@@ -255,10 +255,10 @@ alias nvl="nvim --listen 127.0.0.1:2006"
 # Time tracking via toggl track python cli (https://github.com/AuHau/toggl-cli)
 alias tt='toggl start'
 alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
-alias ttws='toggl start -a Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
-alias tts='toggl start -a Service'
-alias ttm='toggl start -a Main'
-alias ttd='toggl start -a Side'
+alias ttws='toggl start -o Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
+alias tts='toggl start -o Service'
+alias ttm='toggl start -o Main'
+alias ttd='toggl start -o Side'
 alias ttt='toggl stop'
 alias ttl="toggl ls -f+id"
 alias ttr="toggl rm"
