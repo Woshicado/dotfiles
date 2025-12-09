@@ -5,6 +5,7 @@ function custom_on_attach(_, bufnr)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
 
+  map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
 	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
 
 	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
@@ -67,6 +68,14 @@ return {
 						enablePickyRules = true, -- sent. length, passive voice, ... (disable if too many)
 						motherTongue = "de-DE",
 						languageModel = "~/.models/ngrams/", -- ngram models path; download from: https://languagetool.org/download/ngram-data/
+					},
+					latex = {
+						environments = {
+							tabular = "ignore",
+							tabularx = "ignore",
+							algorithm = "ignore",
+							["algorithm*"] = "ignore",
+						},
 					},
 					enabled = {
 						"bibtex",
