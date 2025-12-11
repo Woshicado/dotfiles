@@ -71,7 +71,7 @@ map({ "i", "v", "n" }, "<Down>", "<Nop>")
 map({ "i", "v", "n" }, "<Left>", "<Nop>")
 map({ "i", "v", "n" }, "<Right>", "<Nop>")
 
-map("n", "<leader>v", "^v$", { desc = "Select non-whitespace line", noremap = true })
+map("n", "<leader>v", "^vg_", { desc = "Select non-whitespace line", noremap = true })
 
 -- map("i", "jk", "<ESC>")  -- Already mapped, I guess by nvchad
 
