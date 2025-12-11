@@ -9,7 +9,7 @@
         "language": [
           "tex"
         ],
-        "path": "./latex/tex-snippets.json"
+        "path": "./latex/tex.json"
       }
     ]
   }

@@ -1,0 +1,77 @@
+{
+  "minipage": {
+    "prefix": [
+      "BMP",
+      "minipage"
+    ],
+    "body": [
+      "\\begin{minipage}[${1:htbp}]{$2\\textwidth}",
+      "\t${3:${TM_SELECTED_TEXT}}",
+      "\\end{minipage}%",
+      "$0"
+    ],
+    "description": "Add a table"
+  },
+  "frame": {
+    "prefix": [
+      "BFR",
+      "frame"
+    ],
+    "body": [
+      "\\begin{frame}",
+      "\t\\frametitle{${1:<title>}}",
+      "\t${2:${TM_SELECTED_TEXT}}",
+      "\\end{frame}",
+      "$0"
+    ],
+    "description": "frame"
+  },
+  "figure": {
+    "prefix": [
+      "BFI",
+      "figure"
+    ],
+    "body": [
+      "\\begin{figure}[${1:htbp}]",
+      "\t\\centering",
+      "\t\\includegraphics[width=\\textwidth]{assets/${2:<file>}}",
+      "\t\\caption{${3:<caption>}}",
+      "\t\\label{fig:${4:<label>}}",
+      "\\end{figure}",
+      "$0"
+    ],
+    "description": "figure"
+  },
+  "columns": {
+    "prefix": [
+      "BCO",
+      "columns"
+    ],
+    "body": [
+      "\\begin{columns}",
+      "\t\\begin{column}{${1:0.5}\\textwidth}",
+      "\t\t${2:${TM_SELECTED_TEXT}}",
+      "\t\\end{column}",
+      "\t%",
+      "\t\\begin{column} {${3:0.5}\\textwidth}",
+      "\t\t${4:${TM_SELECTED_TEXT}}",
+      "\t\\end{column}",
+      "\\end{columns}",
+      "$0"
+    ],
+    "description": "columns"
+  },
+  "outline": {
+    "prefix": [
+      "BOU",
+      "outline"
+    ],
+    "body": [
+      "\\begin{outline}[${1:enumerate}]",
+      "\t\\1 ${2:${TM_SELECTED_TEXT}}",
+      "\\end{outline}",
+      "$0"
+    ],
+    "description": "outline"
+  }
+}

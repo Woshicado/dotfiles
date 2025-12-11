@@ -365,3 +365,11 @@ for i = 0, 9 do
   vim.keymap.set('v', '<leader>y' .. i, '"' .. i .. 'y', { desc = 'Yank into register ' .. i })
 end
 vim.keymap.set('n', '<leader>-', '"-p', { desc = 'Paste from small delete register' })
+
+
+
+
+local ls = require("luasnip")
+
+vim.keymap.set({ "i", "s" }, "<C-a>", function() ls.jump(1) end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-q>", function() ls.jump(-1) end, { silent = true })

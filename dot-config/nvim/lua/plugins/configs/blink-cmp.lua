@@ -8,7 +8,7 @@ return {
 		"nvim-mini/mini.icons",
 		-- "kdheepak/cmp-latex-symbols",
 		-- "hrsh7th/cmp-emoji",
-		{ "L3MON4D3/LuaSnip", version = "v2.*" },
+    -- "L3MON4D3/LuaSnip",
 		-- { "marcoSven/blink-cmp-yanky", },
 		"moyiz/blink-emoji.nvim",
 		{
@@ -198,6 +198,8 @@ return {
 		-- C-e: Hide menu
 		-- C-k: Toggle signature help (if signature.enabled = true)
 		--
+    snippets = { preset = 'luasnip' },
+
 		-- See :h blink-cmp-config-keymap for defining your own keymap
 		keymap = {
 			preset = "none",
