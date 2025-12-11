@@ -229,9 +229,6 @@ map("n", "<leader>ch", "<cmd>Huefy<CR>", { desc = "Shadify", noremap = true })
 -- Indentations
 map("v", ">", ">gv", { desc = "Keep selection after indent", noremap = true })
 map("v", "<", "<gv", { desc = "Keep selection after indent", noremap = true })
-map("v", "<Tab>", ">gv", { desc = "Indent using tab in visual mode", noremap = true })
-map("v", "<S-Tab>", "<gv", { desc = "Indent using tab in visual mode", noremap = true })
-map("i", "<S-Tab>", "<C-d>", { desc = "Unindent in insert mode", noremap = true })
 
 -- Paste/Delete/Substitute without yanking to clipboard
 map("x", "p", [["_dP]])

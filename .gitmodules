@@ -1,0 +1,3 @@
+[submodule "dot-config/nvim/snippets"]
+	path = dot-config/nvim/snippets
+	url = git@github.com:Woshicado/my-snippets.git
