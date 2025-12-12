@@ -8,9 +8,12 @@ return {
 	config = function()
 		local luasnip = require("luasnip")
 		luasnip.config.set_config({
-			history = true,
+			keep_roots = true,
+			link_roots = true,
+			exit_roots = false,
+			-- TODO: Configure autosnippets. Do not apply generally as some would conflict with normal tuyping
 			updateevents = "TextChanged,TextChangedI",
-      store_selection_keys = "<Tab>",
+			cut_selection_keys = "<Tab>",
 		})
 
 		-- Load default friendly-snippets and your custom snippets

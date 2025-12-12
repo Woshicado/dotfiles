@@ -11,7 +11,7 @@ return {
 				format = "#c79585",
         insert = "#23605b",
 				replace = "#4095af",
-        select = "#9745be", -- Optional param, defaults to visual
+        select = "#c75c6a", -- Optional param, defaults to visual
         visual = "#9745be",
 			},
 
