@@ -3,12 +3,12 @@ return {
 	event = "VeryLazy",
 	-- optional: provides snippets for the snippet source
 	dependencies = {
-    -- "rafamadriz/friendly-snippets",
+		-- "rafamadriz/friendly-snippets",
 		-- "onsails/lspkind.nvim",
 		"nvim-mini/mini.icons",
 		-- "kdheepak/cmp-latex-symbols",
 		-- "hrsh7th/cmp-emoji",
-		 "L3MON4D3/LuaSnip",
+		"L3MON4D3/LuaSnip",
 		-- { "marcoSven/blink-cmp-yanky", },
 		"moyiz/blink-emoji.nvim",
 		{
@@ -198,7 +198,7 @@ return {
 		-- C-e: Hide menu
 		-- C-k: Toggle signature help (if signature.enabled = true)
 		--
-    snippets = { preset = 'luasnip' },
+		snippets = { preset = "luasnip" },
 
 		-- See :h blink-cmp-config-keymap for defining your own keymap
 		keymap = {
