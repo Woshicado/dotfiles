@@ -19,7 +19,7 @@ Abolish anyways anyway
 Abolish maintainance maintenance
 Abolish threshhold threshold
 Abolish twelth twelfth
-Abolish suc{,c}es{,s}ful{ly,ness} successful{}
+Abolish suc{,c}es{,s}ful{ly,ness} {,}{,}successful{}
 Abolish existance existence
 Abolish tendancy tendency
 Abolish resistence{,s} resistance{}

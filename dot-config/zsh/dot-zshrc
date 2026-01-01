@@ -308,11 +308,52 @@ if [[ ! "$OSTYPE" == "darwin"* ]]; then
   alias obsidian="/var/lib/flatpak/app/md.obsidian.Obsidian/current/active/files/obsidian"
 fi
 
+# suffix aliases
+alias -s md="bat"
+alias -s png="open"
+alias -s jpg="open"
+alias -s jpeg="open"
+alias -s pdf="open"
+alias -s mp4="open"
+alias -s mov="open"
+alias -s js="$EDITOR"
+alias -s ts="$EDITOR"
+alias -s yaml="jless --yaml"
+alias -s yml="jless --yaml"
+alias -s json="jless"
+
+# global aliases
+alias -g NE='2>/dev/null'  # Ignore stderr
+alias -g ND='>/dev/null'  # Ignore stdout
+alias -g NUL='>/dev/null 2>1'  # Ignore both stdout and stderr
+alias -g L='| less'  # Pipe to less with raw control chars
+
+
+if [[ ! "$OSTYPE" == "darwin"* ]]; then
+  alias -g C='| xclip -sel c -r'
+else
+  alias -g C='| pbcopy'
+fi
+
+# named dirs
+hash -d sfl="/Users/joshua/Documents/Uni/phd/exploration/see-far/logs"
+hash -d sf="/Users/joshua/Documents/Uni/phd/exploration/see-far/code"
+hash -d df="$HOME/dotfiles"
+hash -d obs="$HOME/vaults/obsidian-notes"
+
+
 ### HANDY KEYBINDS
+copy-command() {
+    echo -n $BUFFER | pbcopy
+    zle -M "Copied to clipboard"
+}
+zle -N copy-command
+
 bindkey "^K" kill-line
 bindkey "^[^?" backward-kill-line
 bindkey "^W" backward-kill-word
-bindkey '^F' autosuggest-accept
+bindkey "^F" autosuggest-accept
+bindkey "^Xc" copy-command
 
 ### TMUX custom function
 function tmuxsc() {

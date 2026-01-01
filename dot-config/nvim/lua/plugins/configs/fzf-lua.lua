@@ -51,6 +51,9 @@ return {
 						["ctrl-x"] = { fn = actions.git_reset, reload = true },
 					},
 				},
+        diff = {
+          prompt = "GitDiff❯ ",
+        },
 				blame = {
 					prompt = "Blame> ",
 					cmd = [[git blame --color-lines {file}]],

@@ -1,6 +1,7 @@
 return {
 	require("plugins.disable"),
 
+  require("plugins.configs.difft"),
 	require("plugins.configs.nvim-ufo"),
 	require("plugins.configs.nvim-java"),
 	require("plugins.configs.conform"),
@@ -48,7 +49,7 @@ return {
 	require("plugins.configs.copilot"),
 	-- require("plugins.configs.lsp-signature"),
 	require("plugins.configs.vim-tmux-navigator"),
-	require("plugins.configs.puppeteer"),
+  -- require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
 	require("plugins.configs.twilight"),
 	require("plugins.configs.zen-mode"),

@@ -11,7 +11,7 @@ classic: false
 # layout.
 # Possible values: permission, user, group, context, size, date, name, inode, links, git
 blocks:
-  - git
+  # - git  # Slow for some directories
   - permission
   - size
   - name

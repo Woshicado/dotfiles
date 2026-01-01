@@ -43,6 +43,12 @@ blocks:
         foreground: "green"
         type: "path"
         style: "plain"
+        options:
+          mapped_locations:
+            ~/dotfiles: "\U000F0725df"
+            ~/Documents/Uni/phd/exploration/see-far/code: "\U000F0725sf"
+            ~/Documents/Uni/phd/exploration/see-far/logs: "\U000F0725sfl"
+            ~/vaults/obsidian-notes: "\U000F0725obs"
       - properties:
           branch_ahead_icon: "⇡"
           branch_behind_icon: "⇣"
@@ -122,16 +128,16 @@ blocks:
         background: "transparent"
         type: "executiontime"
         style: "plain"
-      - properties:
-          http_timeout: 100
-          units: "metric"
-        cache:
-          duration: "10m0s"
-          strategy: "session"
-        template: "| {{.Weather}} {{.Temperature}}{{.UnitIcon}} "
-        foreground: "cyan"
-        type: "owm"
-        style: "plain"
+        # - properties:
+        #     http_timeout: 100
+        #     units: "metric"
+        #   cache:
+        #     duration: "10m0s"
+        #     strategy: "session"
+        #   template: "| {{.Weather}} {{.Temperature}}{{.UnitIcon}} "
+        #   foreground: "cyan"
+        #   type: "owm"
+        #   style: "plain"
       - properties:
           cache_duration: "none"
         template: "| {{ .CurrentDate | date .Format }}"

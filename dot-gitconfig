@@ -1,79 +1,88 @@
 # ~/.gitconfig
 [core]
-  autocrlf = input
-  pager = delta --hyperlinks
-  excludesFile = ~/.gitignore-global
-  compression = 9
-  whitespace = error
-  preloadindex = true
+	autocrlf = input
+	pager = delta --hyperlinks
+	excludesFile = ~/.gitignore-global
+	compression = 9
+	whitespace = error
+	preloadindex = true
 	ignorecase = false
 
 [url "git@github.com:woshicado/"]
-  insteadOf = "wc:"
+	insteadOf = "wc:"
 [url "git@github.com:"]
-  insteadOf = "gh:"
+	insteadOf = "gh:"
 [url "ssh://git@mgit/phd-joshua/"]
-  insteadOf = "phd:"
+	insteadOf = "phd:"
 [url "ssh://git@mgit/"]
-  insteadOf = "mgit:"
+	insteadOf = "mgit:"
 
 [push]
-  autoSetupRemote = true
-  default = current
-  followTags = true
+	autoSetupRemote = true
+	default = current
+	followTags = true
 
 [pull]
-  default = current
-  rebase = true
+	default = current
+	rebase = true
 
 [rebase]
-  autoStash = true
-  missingCommitsCheck = warn
+	autoStash = true
+	missingCommitsCheck = warn
 
 [advice]
-  addEmptyPathspec = false
-  statusHints = false
+	addEmptyPathspec = false
+	statusHints = false
 
 [log]
-  abbrevCommit = true
-  graphColors = blue,yellow,cyan,magenta,green,red
+	abbrevCommit = true
+	graphColors = blue,yellow,cyan,magenta,green,red
 
 [color "decorate"]
-  HEAD = red
-  branch = blue
-  rag = yellow
-  remoteBranch = magenta
+	HEAD = red
+	branch = blue
+	rag = yellow
+	remoteBranch = magenta
 
 [interactive]
-  diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [delta]
-  navigate = true
-  light = false
-  side-by-side = true
-  line-numbers = true
+	navigate = true
+	light = false
+	side-by-side = false
+	line-numbers = true
 
 [merge]
-  conflictstyle = diff3
+	conflictstyle = diff3
 
 [diff]
-  colorMoved = default
+	colorMoved = default
 
 [init]
-  defaultBranch = main
-  templateDir = ~/.git-templates
+	defaultBranch = main
+	templateDir = ~/.git-templates
 
 [alias]
-  pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+	pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+
+	# Difftastic aliases
+	dlog = -c diff.external=difft log --ext-diff
+	dshow = -c diff.external=difft show --ext-diff
+	ddiff = -c diff.external=difft diff
+	dl = -c diff.external=difft log --ext-diff
+	ds = -c diff.external=difft show --ext-diff
+	dw = -c diff.external=difft show --ext-diff HEAD~1
+	dd = -c diff.external=difft diff
 
 [commit]
-  gpgsign = true
+	gpgsign = true
 
 [include]
-  path = .gitconfig-personal
+	path = .gitconfig-personal
 
 [includeIf "gitdir:~/Documents/Uni/"]
-  path = .gitconfig-uni
+	path = .gitconfig-uni
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
