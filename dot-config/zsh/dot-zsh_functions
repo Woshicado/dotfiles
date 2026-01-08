@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+jview() {
+  local -a filter_keys
+  local -a display_keys
+  local file=""
+
+  # 1. Parse Arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -f)
+        if [[ -n "$2" ]]; then
+          filter_keys+=("$2")
+          shift 2
+        else
+          echo "Error: -f requires a key argument." >&2
+          return 1
+        fi
+        ;;
+      *)
+        if [[ -z "$file" ]]; then
+          file="$1"
+        else
+          display_keys+=("$1")
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  # 2. Validation
+  if [[ -z "$file" ]]; then
+    echo "Usage: jview [-f filter_key]... filename [display_key]..." >&2
+    return 1
+  fi
+
+  if [[ ! -f "$file" ]]; then
+    echo "Error: File '$file' not found." >&2
+    return 1
+  fi
+
+  if [[ ${#display_keys[@]} -eq 0 ]]; then
+    echo "Error: You must provide at least one key to display." >&2
+    return 1
+  fi
+
+  # 3. Default Filter Logic
+  # If no -f flags provided, filter by the first display key
+  if [[ ${#filter_keys[@]} -eq 0 ]]; then
+    filter_keys+=("${display_keys[1]}")
+  fi
+
+  # 4. Build jq 'select' string (combines filters with 'and')
+  local select_cond=""
+  for key in "${filter_keys[@]}"; do
+    if [[ -n "$select_cond" ]]; then
+      select_cond+=" and "
+    fi
+    # Constructs: ."key_name" != null
+    select_cond+=".\"$key\" != null"
+  done
+
+  # 5. Build jq projection string
+  local project_cond=""
+  for key in "${display_keys[@]}"; do
+    project_cond+="\"$key\", "
+  done
+  project_cond="${project_cond%, }" # Remove trailing comma
+
+  # 6. Execute
+  jq "select($select_cond) | { $project_cond }" "$file" | jless
+}
+
+# AUTOCOMPLETION FOR jview keys
+_jview() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments -C \
+    '*-f[Filter by key]:json_key:->keys' \
+    '1:json_file:_files' \
+    '*:json_key:->keys'
+
+  case "$state" in
+    keys)
+      local json_file=""
+
+      # Find the filename in the current command line
+      for w in "${words[@]}"; do
+        if [[ -f "$w" ]]; then
+          json_file="$w"
+          break
+        fi
+      done
+
+      if [[ -f "$json_file" ]]; then
+        local -a json_keys
+        local IFS=$'\n'
+
+        if [[ "$json_file" == *.jsonl ]]; then
+          # === OPTIMIZED FOR JSONL ===
+          # 1. Take first 2000 lines (head).
+          # 2. Use 'reduce inputs' to merge keys from those lines.
+          json_keys=($(head -n 2000 "$json_file" | jq -n -r 'reduce inputs as $i ({}; . + $i) | keys[]' 2>/dev/null))
+
+        else
+          # === STANDARD JSON ===
+          # Must read the full file to maintain valid syntax.
+          # Handles both Arrays of Objects and single Objects.
+          json_keys=($(jq -r 'if type=="array" then .[] else . end | keys[]' "$json_file" 2>/dev/null | sort -u))
+        fi
+
+        _describe 'keys' json_keys
+      else
+        _message "Enter a filename first to trigger key completion"
+      fi
+      ;;
+  esac
+}
+compdef _jview jview

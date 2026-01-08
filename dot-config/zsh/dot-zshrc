@@ -6,6 +6,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
 export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
+export BOOKMARKS="$XDG_CONFIG_HOME/zsh/.zsh_hashes"
 
 export WANDB_MODE="online"
 
@@ -321,12 +322,15 @@ alias -s ts="$EDITOR"
 alias -s yaml="jless --yaml"
 alias -s yml="jless --yaml"
 alias -s json="jless"
+alias -s jsonl="jless"
 
 # global aliases
 alias -g NE='2>/dev/null'  # Ignore stderr
 alias -g ND='>/dev/null'  # Ignore stdout
 alias -g NUL='>/dev/null 2>1'  # Ignore both stdout and stderr
 alias -g L='| less'  # Pipe to less with raw control chars
+alias -g WC='| wc -w'  # word count
+alias -g WCL='| wc -l'  # word count
 
 
 if [[ ! "$OSTYPE" == "darwin"* ]]; then
@@ -335,12 +339,14 @@ else
   alias -g C='| pbcopy'
 fi
 
-# named dirs
-hash -d sfl="/Users/joshua/Documents/Uni/phd/exploration/see-far/logs"
-hash -d sf="/Users/joshua/Documents/Uni/phd/exploration/see-far/code"
-hash -d df="$HOME/dotfiles"
-hash -d obs="$HOME/vaults/obsidian-notes"
-
+# Load hash aliases
+if [[ -f ~/.config/zsh/.zsh_hashes ]]; then
+  source ~/.config/zsh/.zsh_hashes
+fi
+# Load custom zsh functions
+if [[ -f ~/.config/zsh/.zsh_functions ]]; then
+  source ~/.config/zsh/.zsh_functions
+fi
 
 ### HANDY KEYBINDS
 copy-command() {

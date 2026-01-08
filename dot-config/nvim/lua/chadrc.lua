@@ -40,6 +40,14 @@ usercmd("Format", function()
   require("conform").format()
 end, {})
 
+usercmd("BDCloseFT", function(opts)
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[buf].filetype == opts.args and not vim.bo[buf].modified then
+      vim.api.nvim_buf_delete(buf, {})
+    end
+  end
+end, { nargs = 1 })
+
 -- auto delete trailing whitespace
 autocmd({ "BufWritePre" }, {
   pattern = { "*" },
