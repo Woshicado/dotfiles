@@ -2,6 +2,8 @@ return {
 	require("plugins.disable"),
 
   require("plugins.configs.difft"),
+  require("plugins.configs.codeshot"),
+  require("plugins.configs.early-retirement"),
 	require("plugins.configs.nvim-ufo"),
 	require("plugins.configs.nvim-java"),
 	require("plugins.configs.conform"),

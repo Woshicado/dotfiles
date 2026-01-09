@@ -45,25 +45,44 @@ jview() {
   fi
 
   # 3. Default Filter Logic
-  # If no -f flags provided, filter by the first display key
   if [[ ${#filter_keys[@]} -eq 0 ]]; then
-    filter_keys+=("${display_keys[1]}")
+    # Zsh vs Bash array indexing check
+    if [ -n "$BASH_VERSION" ]; then
+       filter_keys=("${display_keys[0]}")
+    else
+       filter_keys=("${display_keys[1]}")
+    fi
   fi
 
-  # 4. Build jq 'select' string (combines filters with 'and')
+  # --- HELPER: Format key for jq ---
+  # Transforms "a.b" -> ."a"."b"
+  # Transforms "a/b" -> ."a/b"
+  # This treats '.' as a nested separator, but keeps everything else (like /) literal.
+  get_jq_path() {
+    local input="$1"
+    # Escape existing double quotes in the key first
+    local escaped="${input//\"/\\\"}"
+    # Replace dots with quote-dot-quote:  .  ->  "."
+    local dotted="${escaped//./\".\"}"
+    # Wrap entire string in starting/ending quotes and prepend dot
+    echo ".\"$dotted\""
+  }
+
+  # 4. Build jq 'select' string
   local select_cond=""
   for key in "${filter_keys[@]}"; do
     if [[ -n "$select_cond" ]]; then
       select_cond+=" and "
     fi
-    # Constructs: ."key_name" != null
-    select_cond+=".\"$key\" != null"
+    local jq_path=$(get_jq_path "$key")
+    select_cond+="$jq_path != null"
   done
 
   # 5. Build jq projection string
   local project_cond=""
   for key in "${display_keys[@]}"; do
-    project_cond+="\"$key\", "
+    local jq_path=$(get_jq_path "$key")
+    project_cond+="\"$key\": $jq_path, "
   done
   project_cond="${project_cond%, }" # Remove trailing comma
 
@@ -71,7 +90,7 @@ jview() {
   jq "select($select_cond) | { $project_cond }" "$file" | jless
 }
 
-# AUTOCOMPLETION FOR jview keys
+# --- AUTOCOMPLETION (unchanged from previous valid version) ---
 _jview() {
   local context state state_descr line
   typeset -A opt_args
@@ -84,8 +103,6 @@ _jview() {
   case "$state" in
     keys)
       local json_file=""
-
-      # Find the filename in the current command line
       for w in "${words[@]}"; do
         if [[ -f "$w" ]]; then
           json_file="$w"
@@ -96,18 +113,13 @@ _jview() {
       if [[ -f "$json_file" ]]; then
         local -a json_keys
         local IFS=$'\n'
+        # Finds deep keys (paths) and joins them with dots
+        local jq_query='paths(scalars) | map(tostring) | join(".")'
 
         if [[ "$json_file" == *.jsonl ]]; then
-          # === OPTIMIZED FOR JSONL ===
-          # 1. Take first 2000 lines (head).
-          # 2. Use 'reduce inputs' to merge keys from those lines.
-          json_keys=($(head -n 2000 "$json_file" | jq -n -r 'reduce inputs as $i ({}; . + $i) | keys[]' 2>/dev/null))
-
+          json_keys=($(head -n 1000 "$json_file" | jq -r "$jq_query" 2>/dev/null | sort -u))
         else
-          # === STANDARD JSON ===
-          # Must read the full file to maintain valid syntax.
-          # Handles both Arrays of Objects and single Objects.
-          json_keys=($(jq -r 'if type=="array" then .[] else . end | keys[]' "$json_file" 2>/dev/null | sort -u))
+          json_keys=($(jq -r "$jq_query" "$json_file" 2>/dev/null | sort -u))
         fi
 
         _describe 'keys' json_keys
