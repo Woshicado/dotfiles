@@ -15,6 +15,7 @@ return {
 				json = { "jq" },
 				markdown = { "yamlfix", "prettierd" },
 				tex = { "latexindent_m" },
+				toml = { "taplo" },
 				java = { "google-java-format" },
 				xml = { "xmlformatter" },
 			},

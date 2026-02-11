@@ -35,6 +35,7 @@ require "nvchad.autocmds"
 require "options"
 
 vim.api.nvim_set_hl(0, "Folded", { bg = "#2c2956", fg = "#888888" }) -- Folded text
+vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 
 vim.schedule(function()
   require "mappings"

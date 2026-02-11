@@ -21,7 +21,7 @@ map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
-map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
+-- map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
 map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
 
@@ -319,7 +319,7 @@ map("n", "glc", function() require("timber.actions").clear_log_statements({ glob
 map("n", "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, { desc = "[G]o [L]og [P]retty print" })
 
 -- Toggle twilight/zenmode
-map("n", "<leader>tt", "<cmd>Twilight<cr>", { desc = "Toggle Twilight", })
+map("n", "<leader>tw", "<cmd>Twilight<cr>", { desc = "Toggle Twilight", })
 map("n", "<leader>tz", "<cmd>ZenMode<cr>", { desc = "Toggle Twilight", })
 
 -- Toggle transparency on <leader>to
@@ -363,10 +363,24 @@ for i = 0, 9 do
 end
 vim.keymap.set('n', '<leader>-', '"-p', { desc = 'Paste from small delete register' })
 
-
-
-
 local ls = require("luasnip")
 
 vim.keymap.set({ "i", "s" }, "<C-a>", function() ls.jump(1) end, { silent = true })
 vim.keymap.set({ "i", "s" }, "<C-q>", function() ls.jump(-1) end, { silent = true })
+
+-- Move lines
+map('v', '<C-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+map('v', '<C-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+
+-- notmuch
+map("n", "<leader>nm", "<CMD>Notmuch<CR>", { desc = "Open Notmuch email client" })
+map("n", "<leader>ni", "<CMD>Inbox<CR>", { desc = "Open Notmuch inbox" })
+map("n", "<leader>nt", "<CMD>NmSearch tag:inbox and date:today<CR>", { desc = "Open todays inbox" })
+map("n", "<leader>nd", "<CMD>NmSearch tag:todo<CR>", { desc = "Open ToDos" })
+map("n", "<leader>np", "<CMD>NmSearch tag:important<CR>", { desc = "Open important" })
+map("n", "<leader>nw", "<CMD>NmSearch tag:inbox and date:week<CR>", { desc = "Open this week's inbox" })
+map("n", "<leader>nc", "<CMD>ComposeMail<CR>", { desc = "Compose Mail using notmuch" })
+
+map("n", "<leader>ti", "<CMD>TagToggle important<CR>", { desc = "Toggle important" })
+map("n", "<leader>tt", "<CMD>TagToggle todo<CR>", { desc = "Toggle todo" })
+

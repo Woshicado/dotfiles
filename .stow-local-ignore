@@ -11,6 +11,9 @@ CVS
 _darcs
 \.hg
 
+\.jj$
+\.jj/.*
+
 \.git
 \.gitignore
 \.gitmodules

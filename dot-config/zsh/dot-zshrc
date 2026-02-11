@@ -41,6 +41,16 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
+fzf-home-widget() {
+  local file
+  file=$(cd ~ && fd --type f --hidden --follow --exclude ".git" . | fzf)
+  [[ -n $file ]] && LBUFFER+="$HOME/$file"
+  zle redisplay
+}
+
+zle -N fzf-home-widget
+bindkey '^[t' fzf-home-widget   # Alt-T
+
 # CASE_SENSITIVE="true"    # a == A ?
 HYPHEN_INSENSITIVE="true"  # - == _ ?
 
@@ -71,16 +81,17 @@ DISABLE_FZF_KEY_BINDINGS="false"
 
 ### PLUGINS
 plugins=(
-  git # With tmux, we do not really need this
+  # git # With tmux, we do not really need this
   z       # Easy fuzzy navigation
-  vscode  # cmd shortcuts. E.g.: `vscd f1 f2` opens diff in code
+  # vscode  # cmd shortcuts. E.g.: `vscd f1 f2` opens diff in code
   sudo    # Double escape sudo's last command
   #dirhistory
   #history
-  copybuffer
+  # copybuffer
   zsh-autosuggestions
-  virtualenv
+  # virtualenv
   fzf
+  mise
 )
 
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
@@ -226,6 +237,13 @@ alias v.='nvim .'
 alias pdf='zathura'
 alias bt='btop'
 
+alias m="mise"
+alias mx="mise exec"
+alias mp="mise prepare"
+alias mu="mise use"
+alias mup="mise upgrade"
+alias mr="mise run"
+
 if [[ ! "$OSTYPE" == "darwin"* ]]; then
   alias c='xclip -sel c -r'
 else
@@ -246,6 +264,7 @@ alias pwdy="echo $(pwd) | pbcopy" # Copy current directory to clipboard
 #alias cd='z'
 
 alias lg='lazygit'
+alias jless='jless --line-numbers --relative-line-numbers'
 
 # Obsidian
 export O_VAULT_DIR="$HOME/vaults/obsidian-notes"
@@ -469,7 +488,7 @@ fi
 source $XDG_CONFIG_HOME/zsh/lscolors.sh
 
 # Load base env (macOS does not seem to do that by default)
-workon base
+# workon base
 
 ### CUSTOM ZSH PROMPT
 
@@ -575,3 +594,5 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/tools
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export GOOGLE_CLOUD_PROJECT="see-far"
+
+eval "$(mise activate zsh)"

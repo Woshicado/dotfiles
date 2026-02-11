@@ -716,6 +716,7 @@
                         "product_id": 45108,
                         "vendor_id": 1133
                     },
+                    "ignore": false,
                     "mouse_flip_vertical_wheel": true
                 },
                 {

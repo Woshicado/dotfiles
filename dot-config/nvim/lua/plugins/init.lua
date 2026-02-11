@@ -1,6 +1,7 @@
 return {
 	require("plugins.disable"),
 
+  require("plugins.configs.notmuch"),
   require("plugins.configs.difft"),
   require("plugins.configs.codeshot"),
   require("plugins.configs.early-retirement"),

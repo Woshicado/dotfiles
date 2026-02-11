@@ -45,10 +45,12 @@ blocks:
         style: "plain"
         options:
           mapped_locations:
+            # START_MAPPINGS
             ~/dotfiles: "\U000F0725df"
             ~/Documents/Uni/phd/exploration/see-far/code: "\U000F0725sf"
             ~/Documents/Uni/phd/exploration/see-far/logs: "\U000F0725sfl"
             ~/vaults/obsidian-notes: "\U000F0725obs"
+            # END_MAPPINGS
       - properties:
           branch_ahead_icon: "⇡"
           branch_behind_icon: "⇣"

@@ -1,0 +1,117 @@
+# ===========================
+# ACCOUNT 1: joshua.meyer@cs.uni-saarland.de
+# ===========================
+
+# 1. The Remote Account (IMAP)
+IMAPAccount cs
+Host imap.cs.uni-saarland.de
+User joshua.meyer
+Port 993
+# Ideally use 'PassCmd "gpg ..."' but for setup, paste the raw password below.
+# If using Gmail/Outlook with 2FA, you MUST use an 'App Password' here.
+PassCmd "security find-generic-password -a 'joshua.meyer@cs.uni-saarland.de' -s 'mbsync' -w"
+TLSType IMAPS
+AuthMechs LOGIN
+
+# 2. The Remote Connection
+IMAPStore cs-remote
+Account cs
+
+# 3. The Local Storage (Maildir)
+MaildirStore cs-local
+Path ~/mail/cs/
+# The trailing slash is important!
+Inbox ~/mail/cs/inbox
+SubFolders Verbatim
+
+# 4. The Channel (Syncs Remote <-> Local)
+Channel cs-inbox
+Far :cs-remote:
+Near :cs-local:
+# Synchronize All folders
+Patterns *
+# Sync state files location
+Create Both
+Expunge Both
+SyncState *
+
+# ===========================
+# ACCOUNT 2: s8jjmeye@stud.uni-saarland.de
+# ===========================
+
+# 1. The Remote Account (IMAP)
+IMAPAccount student
+Host mail.hiz-saarland.de
+User s8jjmeye
+Port 993
+# Ideally use 'PassCmd "gpg ..."' but for setup, paste the raw password below.
+# If using Gmail/Outlook with 2FA, you MUST use an 'App Password' here.
+PassCmd "security find-generic-password -a 's8jjmeye@stud.uni-saarland.de' -s 'mbsync' -w"
+TLSType IMAPS
+AuthMechs LOGIN
+
+# 2. The Remote Connection
+IMAPStore student-remote
+Account student
+
+# 3. The Local Storage (Maildir)
+MaildirStore student-local
+Path ~/mail/student/
+# The trailing slash is important!
+Inbox ~/mail/student/inbox
+SubFolders Verbatim
+
+# 4. The Channel (Syncs Remote <-> Local)
+Channel student-inbox
+Far :student-remote:
+Near :student-local:
+# Synchronize All folders
+Patterns *
+# Sync state files location
+Create Both
+Expunge Both
+SyncState *
+
+# ===========================
+# ACCOUNT 3: joshua.meyer@dfki.de
+# ===========================
+
+# 1. The Remote Account (IMAP)
+IMAPAccount dfki
+Host outlook.office365.com
+User jome04@dfki.de
+AuthMechs XOAUTH2
+PassCmd "oama access jome04@dfki.de"
+TLSType IMAPS
+Port 993
+
+# 2. The Remote Connection
+IMAPStore dfki-remote
+Account dfki
+
+# 3. The Local Storage (Maildir)
+MaildirStore dfki-local
+Path ~/mail/dfki/
+# The trailing slash is important!
+Inbox ~/mail/dfki/inbox
+SubFolders Verbatim
+
+# 4. The Channel (Syncs Remote <-> Local)
+Channel dfki-inbox
+Far :dfki-remote:
+Near :dfki-local:
+# Synchronize All folders
+Patterns *
+# Sync state files location
+Create Both
+Expunge Both
+SyncState *
+
+# ===========================
+# GROUPS
+# ===========================
+# This allows 'mbsync all' to sync both
+Group all
+Channel student-inbox
+Channel dfki-inbox
+Channel cs-inbox

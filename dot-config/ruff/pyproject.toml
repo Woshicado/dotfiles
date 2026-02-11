@@ -2,12 +2,6 @@
 respect-gitignore = true
 line-length = 100
 #indent-width = 2
-select = [
-  "ALL",
-]
-fixable = [
-  "ALL",
-]
 
 [tool.ruff.format]
 #indent-style="tab"
@@ -15,6 +9,12 @@ quote-style = "double"
 
 [tool.ruff.lint]
 # https://docs.astral.sh/ruff/rules/#pandas-vet-pd
+select = [
+  "ALL",
+]
+fixable = [
+  "ALL",
+]
 ignore = [
   "D", # Docstring rules
   "ANN",  # Missing type annotation

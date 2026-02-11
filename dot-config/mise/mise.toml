@@ -1,0 +1,28 @@
+[settings]
+jobs = 4
+env_file = ".env"
+python.uv_venv_auto = "source"
+experimental = true
+
+[env]
+
+[tools]
+"github:pdobsan/oama" = "latest"
+go = "latest"
+"pipx:academic" = "latest"
+"pipx:mypy" = "latest"
+"pipx:pynvim" = "latest"
+"pipx:togglcli" = "latest"
+python = "3"
+usage = "latest"
+uv = "latest"
+
+[prepare]
+[prepare.uv]
+[prepare.npm]
+[prepare.go]
+
+[tasks]
+[tasks.edit]
+description = "Edit the projects configuration file"
+run = "$EDITOR pyproject.toml"
