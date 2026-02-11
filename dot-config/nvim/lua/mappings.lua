@@ -380,7 +380,3 @@ map("n", "<leader>nd", "<CMD>NmSearch tag:todo<CR>", { desc = "Open ToDos" })
 map("n", "<leader>np", "<CMD>NmSearch tag:important<CR>", { desc = "Open important" })
 map("n", "<leader>nw", "<CMD>NmSearch tag:inbox and date:week<CR>", { desc = "Open this week's inbox" })
 map("n", "<leader>nc", "<CMD>ComposeMail<CR>", { desc = "Compose Mail using notmuch" })
-
-map("n", "<leader>ti", "<CMD>TagToggle important<CR>", { desc = "Toggle important" })
-map("n", "<leader>tt", "<CMD>TagToggle todo<CR>", { desc = "Toggle todo" })
-
