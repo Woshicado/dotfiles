@@ -88,3 +88,5 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[url "git@gitlab_cs:"]
+	insteadOf = git@gitlab.cs.uni-saarland.de:
