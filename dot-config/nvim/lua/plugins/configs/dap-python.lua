@@ -1,6 +1,6 @@
 return {
 	"mfussenegger/nvim-dap-python",
-  ft = { "python" },
+	ft = { "python" },
 	config = function()
 		require("dap-python").setup(
 			"/Users/joshua/.virtualenvs/base/bin/python",
@@ -49,4 +49,3 @@ return {
 		}
 	end,
 }
-

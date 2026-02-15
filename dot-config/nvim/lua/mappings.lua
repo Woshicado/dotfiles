@@ -77,7 +77,7 @@ map("n", "<leader>v", "^vg_", { desc = "Select non-whitespace line", noremap = t
 
 -- Save keybinds
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S
-map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Cmd-S
+-- map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Cmd-S
 map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save File" })
 
 -- Exit keybinds

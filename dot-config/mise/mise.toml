@@ -26,3 +26,7 @@ uv = "latest"
 [tasks.edit]
 description = "Edit the projects configuration file"
 run = "$EDITOR pyproject.toml"
+
+[hooks]
+# cd = "script -q /dev/null lsd --color always --icon always | head -n 2"
+enter = "mise run info 2>/dev/null || true"

@@ -1,0 +1,43 @@
+# Set default values for all following accounts.
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/cert.pem
+logfile        ~/.config/msmtp/msmtp.log
+
+# CS Account
+account         cs
+host            smtp.cs.uni-saarland.de
+port            587
+from            joshua.meyer@cs.uni-saarland.de
+user            joshua.meyer
+passwordeval    "security find-generic-password -a 'joshua.meyer@cs.uni-saarland.de' -s 'mbsync' -w"
+from_full_name  Joshua Meyer
+set_from_header on
+set_to_header   on
+
+# Student Account
+account         student
+host            mail.hiz-saarland.de
+port            587
+from            s8jjmeye@stud.uni-saarland.de
+user            s8jjmeye
+passwordeval    "security find-generic-password -a 's8jjmeye@stud.uni-saarland.de' -s 'mbsync' -w"
+from_full_name  Joshua Meyer
+set_from_header on
+set_to_header   on
+
+# DFKI Account
+account         dfki
+auth            xoauth2
+host            outlook.office365.com
+port            587
+from            joshua.meyer@dfki.de
+user            jome04@dfki.de
+passwordeval    "oama access jome04@dfki.de"
+from_full_name  Joshua Meyer
+set_from_header on
+set_to_header   on
+
+# Set a default account
+account default : cs

@@ -1,3 +1,6 @@
 [submodule "dot-config/nvim/snippets"]
 	path = dot-config/nvim/snippets
 	url = git@github.com:Woshicado/my-snippets.git
+[submodule "treesitter-mail"]
+	path = dot-config/nvim/custom/tree-sitter-mail
+	url = git@github.com:Woshicado/tree-sitter-mail.git

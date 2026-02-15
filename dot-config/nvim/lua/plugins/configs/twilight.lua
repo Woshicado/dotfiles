@@ -1,6 +1,6 @@
 return {
 	"folke/twilight.nvim",
-  cmd = { "Twilight", "TwilightEnable", "TwilightDisable" },
+	cmd = { "Twilight", "TwilightEnable", "TwilightDisable" },
 	opts = {
 		dimming = {
 			alpha = 0.25, -- amount of dimming
@@ -12,6 +12,7 @@ return {
 		context = 15,
 		treesitter = true,
 		expand = {
+			"message",
 			"function",
 			"method",
 			"table",

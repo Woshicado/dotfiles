@@ -1,5 +1,5 @@
 return {
-	"yousefakbar/notmuch.nvim",
+	"woshicado/notmuch.nvim",
 	cmd = {
 		"Notmuch",
 		"NmSearch",

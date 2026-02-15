@@ -11,6 +11,15 @@ return {
 		fold = {
 			fold_one_line_after = true,
 		},
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				init_selection = "<CR>",
+				node_incremental = "<CR>",
+				scope_incremental = "<S-CR>",
+				node_decremental = "<BS>",
+			},
+		},
 		ensure_installed = {
 			"vim",
 			"lua",
@@ -37,7 +46,11 @@ return {
 		},
 		highlight = {
 			enable = true,
-			disable = { "latex", "bibtex" },
+			disable = { "latex", "bibtex", "mail" },
+			additional_vim_regex_highlighting = { "mail" },
 		},
 	},
+	config = function(_, opts)
+		require("nvim-treesitter.configs").setup(opts)
+	end,
 }

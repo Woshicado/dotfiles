@@ -5,12 +5,14 @@ function custom_on_attach(_, bufnr)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
 
-  map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
+	map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
 	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
 
 	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
 	map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
 end
+
+vim.lsp.set_log_level("error")
 
 return {
 	"neovim/nvim-lspconfig",
@@ -60,6 +62,7 @@ return {
 			ltex = {
 				ltex = {
 					language = "en-US", -- default; change with '% LTeX: language=de-DE', or YAML frontmatter
+					logLevel = "warn",
 					dictionary = {
 						["en-US"] = words,
 						["de-DE"] = words,
@@ -117,7 +120,7 @@ return {
 						pylsp_mypy = {
 							enabled = true,
 							-- dmypy = true,
-							live_mode = true, -- Enable live mode for Mypy
+							live_mode = false, -- Enable live mode for Mypy
 							report_progress = true, -- Report progress for Mypy
 							-- overrides = { "--python-executable", python_path, "--ignore-missing-imports" }, -- Use the virtual environment's Python executable
 							-- dmypy_command = { "~/.local/share/nvim/mason/packages/python-lsp-server/venv/bin/dmypy" }
