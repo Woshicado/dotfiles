@@ -195,6 +195,7 @@ alias gsua='git submodule update --remote --recursive && git add . && git commit
 alias gsp='git push --recurse-submodules=on-demand'
 alias gs='git status'
 alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar%C(auto)  %D%n%s%n'"
+alias gd='git ddiff'
 
 # Custom jj aliases
 alias jjs='jj st'
