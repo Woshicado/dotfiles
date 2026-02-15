@@ -78,8 +78,8 @@ blocks:
         template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
           \ end }}{{ end }}"
         properties:
-          fetch_status: false
-          cache_duration: 10
+          fetch_status: true
+          cache_duration: 0
           ignore_working_copy: false
     newline: true
   - type: "prompt"
