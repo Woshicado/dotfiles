@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### Verify version match between __init__.py and pyproject.toml
 ### Shouldn't be necessary with dynamic versioning.

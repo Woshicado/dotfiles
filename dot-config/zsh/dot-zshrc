@@ -212,6 +212,7 @@ alias jju='jj undo'
 alias jjut='jj untrack'
 alias neogit="nvim +\"lua vim.defer_fn(function() require('neogit').open() end, 0)\""
 alias ng='neogit'
+alias dt='difft'
 
 # Always start ipython with current venv
 alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
