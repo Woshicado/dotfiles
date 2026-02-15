@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+_toggl() {
+  eval $(env COMMANDLINE="${words[1,$CURRENT]}" _TOGGL_COMPLETE=complete-zsh  toggl)
+}
+

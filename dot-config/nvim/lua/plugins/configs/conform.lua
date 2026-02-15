@@ -18,6 +18,7 @@ return {
 				toml = { "taplo" },
 				java = { "google-java-format" },
 				xml = { "xmlformatter" },
+        sh = { "shfmt" },
 			},
 			opts = {
 				format = {

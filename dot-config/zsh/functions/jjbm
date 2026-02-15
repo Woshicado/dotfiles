@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function jjbm() {
+  if [[ -z "$1" ]]; then
+    echo 'Usage: jjbm <bookmark-name>; Moves current @ to bookmark and creates a new commit.'
+    return 1
+  fi
+  jj bookmark move "$1" --to @-
+}

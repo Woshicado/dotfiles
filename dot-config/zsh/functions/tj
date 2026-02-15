@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+tj() {
+  if [ "$1" = "-d" ]; then
+    shift
+    deepl text --to=ja --show-detected-source "$*"
+  else
+    deepl text --to=ja "$*"
+  fi
+}
+

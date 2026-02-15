@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function check_git_dirty() {
+  for dir in ./*; do
+    if ! [ -d "$dir/.git" ]; then
+      # echo "not a dir: $dir/.git"
+      continue
+    fi
+    cd $dir || continue
+    if [ -n "$(git status --porcelain=v1 -uno)" ]; then
+      echo "Dirty: $dir"
+    fi
+    cd ..
+  done
+}
+

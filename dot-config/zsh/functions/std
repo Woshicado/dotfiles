@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+std() { deepl text --to=de --from=es "$*" }

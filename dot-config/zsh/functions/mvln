@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+mvln() {
+    if [ $# -ne 2 ]; then
+        echo "Usage: mvslink <source> <destination>"
+        return 1
+    fi
+    src="$1"
+    dest="$2"
+
+    mv "$src" "$dest" && ln -s "$dest" "$src"
+}
+

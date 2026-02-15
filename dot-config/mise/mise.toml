@@ -10,6 +10,7 @@ experimental = true
 "github:pdobsan/oama" = "latest"
 go = "latest"
 "pipx:academic" = "latest"
+"pipx:deepl" = "latest"
 "pipx:mypy" = "latest"
 "pipx:pynvim" = "latest"
 "pipx:togglcli" = "latest"

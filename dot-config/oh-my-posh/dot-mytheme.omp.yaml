@@ -21,19 +21,19 @@ blocks:
     alignment: "left"
     segments:
       - properties:
-          cache_duration: "none"
+          cache_duration: 3600
         template: "{{ if .SSHSession }}\U000F08B9 {{ .HostName }} {{ end }}"
         foreground: "lightYellow"
         type: "session"
         style: "plain"
       - properties:
-          cache_duration: "none"
+          cache_duration: 3600
         template: "{{ if .WSL }}WSL at {{ end }}{{.Icon}}"
         foreground: "green"
         type: "os"
         style: "powerline"
       - properties:
-          cache_duration: "none"
+          cache_duration: 0
           folder_icon: "\U000F01D8"
           folder_separator_icon: "\U000F0FDF"
           home_icon: "\U000F0725"
@@ -47,15 +47,21 @@ blocks:
           mapped_locations:
             # START_MAPPINGS
             ~/dotfiles: "\U000F0725df"
+            ~/Documents/Uni/phd: "\U000F0725uni"
+            ~/vaults/obsidian-notes: "\U000F0725obs"
             ~/Documents/Uni/phd/exploration/see-far/code: "\U000F0725sf"
             ~/Documents/Uni/phd/exploration/see-far/logs: "\U000F0725sfl"
-            ~/vaults/obsidian-notes: "\U000F0725obs"
+            ~/Documents/Uni/phd/exploration/lge-rt: "\U000F0725lge"
+            ~/Documents/Personal/websites/woshicado_web: "\U000F0725ww"
+            ~/Documents/Personal/websites/photography_web: "\U000F0725pw"
+            ~/Documents/Uni/websites/mosi-own-try: "\U000F0725nmm"
+            ~/Documents/Uni/websites/rtg-website: "\U000F0725rtgw"
             # END_MAPPINGS
       - properties:
           branch_ahead_icon: "⇡"
           branch_behind_icon: "⇣"
           branch_max_length: 12
-          cache_duration: "none"
+          cache_duration: 10
           commit_icon: "\U000F0065 "
           fetch_status: true
         template: "{{ if not .Detached }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{\
@@ -69,35 +75,31 @@ blocks:
       - type: "jujutsu"
         style: "powerline"
         foreground: "#fad07b"
-        template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{ end }}{{ end }}"
+        template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
+          \ end }}{{ end }}"
         properties:
-          fetch_status: true
+          fetch_status: false
+          cache_duration: 10
           ignore_working_copy: false
     newline: true
   - type: "prompt"
     alignment: "right"
     segments:
       - properties:
-          cache_duration: "none"
+          cache_duration: 3600
         template: "| root "
         foreground: "red"
         type: "root"
         style: "plain"
       - properties:
-          cache_duration: "none"
-        template: "|  {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} "
-        foreground: "#06A4CE"
-        type: "dart"
-        style: "powerline"
-      - properties:
-          cache_duration: "none"
-        template: "|  {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{\
-          \ .Full }} "
+          cache_duration: 3600
+        template: "|  {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{\n\
+          \     .Full }} "
         foreground: "#6CA35E"
         type: "node"
         style: "powerline"
       - properties:
-          cache_duration: "none"
+          cache_duration: 3600
           display_default: false
           display_mode: "context"
           fetch_virtual_env: true
@@ -108,7 +110,7 @@ blocks:
         type: "python"
         style: "plain"
       - properties:
-          cache_duration: "none"
+          cache_duration: 5
           charged_icon: "\U000F17E8 "
           charging_icon: " "
         template: "| {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error\
@@ -122,7 +124,7 @@ blocks:
         invert_powerline: true
       - properties:
           always_enabled: false
-          cache_duration: "none"
+          cache_duration: 0
           style: "round"
           threshold: 3000
         template: "| {{ .FormattedMs }} "
@@ -141,7 +143,7 @@ blocks:
         #   type: "owm"
         #   style: "plain"
       - properties:
-          cache_duration: "none"
+          cache_duration: 0
         template: "| {{ .CurrentDate | date .Format }}"
         foreground: "lightGreen"
         type: "time"
@@ -152,7 +154,7 @@ blocks:
     segments:
       - properties:
           always_enabled: true
-          cache_duration: "none"
+          cache_duration: 0
         template: " "
         type: "status"
         style: "powerline"
@@ -163,7 +165,7 @@ blocks:
   - type: "rprompt"
     segments:
       - properties:
-          cache_duration: "none"
+          cache_duration: 0
         template: "{{if gt .Code 0 }} {{ .Code }}{{end}}"
         foreground: "red"
         type: "status"
@@ -173,3 +175,4 @@ version: 3
 shell_integration: true
 enable_cursor_positioning: true
 final_space: true
+

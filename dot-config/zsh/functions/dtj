@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+dtj() { deepl text --to=JA --from=DE "$*" }
+

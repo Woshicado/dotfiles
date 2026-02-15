@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+dts() { deepl text --to=ES --from=DE "$*" }
+

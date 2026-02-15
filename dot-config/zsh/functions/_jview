@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+_jview() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments -C \
+    '*-f[Filter by key]:json_key:->keys' \
+    '1:json_file:_files' \
+    '*:json_key:->keys'
+
+  case "$state" in
+    keys)
+      local json_file=""
+      for w in "${words[@]}"; do
+        if [[ -f "$w" ]]; then
+          json_file="$w"
+          break
+        fi
+      done
+
+      if [[ -f "$json_file" ]]; then
+        local -a json_keys
+        local IFS=$'\n'
+        # Finds deep keys (paths) and joins them with dots
+        local jq_query='paths(scalars) | map(tostring) | join(".")'
+
+        if [[ "$json_file" == *.jsonl ]]; then
+          json_keys=($(head -n 1000 "$json_file" | jq -r "$jq_query" 2>/dev/null | sort -u))
+        else
+          json_keys=($(jq -r "$jq_query" "$json_file" 2>/dev/null | sort -u))
+        fi
+
+        _describe 'keys' json_keys
+      else
+        _message "Enter a filename first to trigger key completion"
+      fi
+      ;;
+  esac
+}
+
