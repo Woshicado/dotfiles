@@ -432,6 +432,10 @@ fi
 # export PATH=$PATH:$ANDROID_HOME/tools
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Use GNU tools instead of BSD tools on macOS
+  export PATH="$HOME/.local/gnubin:$PATH"
+fi
 
 ###### THE FOLLOWING SHOULD BE AT THE END.
 eval "$(mise activate zsh)"

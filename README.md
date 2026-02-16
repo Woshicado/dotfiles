@@ -31,6 +31,7 @@ sudo dnf install zsh neovim lsd git-delta gping glow ranger hexyl fd-find dutree
 Download ngrams for ltex language server from the [Language Tool Website](https://languagetool.org/download/ngram-data/) into `~/.models`.
 
 At the time of writing
+
 ```bash
 mkdir -p ~/.models
 
@@ -54,3 +55,16 @@ rm ~/.models/ngrams-*.zip
 ## About `.local/bin`
 
 While the files in there are not strictly dotfiles, they are executables I always find myself installing from anew. Therefore, I just put them there so they are immediately available on a new install.
+
+### GNU tools instead of BSD ones
+
+```bash
+brew install coreutils gnu-sed grep gawk gnu-tar findutils
+
+gln -s /opt/homebrew/opt/coreutils/libexec/gnubin/* ~/.local/gnubin/
+ln -s /opt/homebrew/opt/gnu-sed/libexec/gnubin/* ~/.local/gnubin/
+ln -s /opt/homebrew/opt/grep/libexec/gnubin/* ~/.local/gnubin/
+ln -s /opt/homebrew/opt/gawk/bin/gawk ~/.local/gnubin/awk
+ln -s /opt/homebrew/opt/gnu-tar/libexec/gnubin/* ~/.local/gnubin/
+ln -s /opt/homebrew/opt/findutils/libexec/gnubin/* ~/.local/gnubin/
+```
