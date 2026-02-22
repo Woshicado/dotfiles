@@ -22,21 +22,22 @@ yabai -m config mouse_action2 resize
 # looking angrily at you macos
 yabai -m config window_manager_check  off
 yabai -m rule --add app=".*" float=on  # Float all windows by default
-yabai -m rule --add app="^System Settings$" manage=off
-yabai -m rule --add app="^Calculator$" manage=off
-yabai -m rule --add app="^Karabiner-Elements$" manage=off
-yabai -m rule --add app="^Raycast$" manage=off
-yabai -m rule --add app="^KeePassXC$" manage=off
-yabai -m rule --add app="^Creative Cloud$" manage=off
+yabai -m rule --add app="^[Ss]ystem [Ss]ettings$" manage=off
+yabai -m rule --add app="^[Cc]alculator$" manage=off
+yabai -m rule --add app="^[Kk]arabiner-[Ee]lements$" manage=off
+yabai -m rule --add app="^[Rr]aycast$" manage=off
+yabai -m rule --add app="^[Kk]ee[Pp]ass[Xx][Cc]$" manage=off
+yabai -m rule --add app="^[Cc]reative [Cc]loud$" manage=off
 yabai -m rule --add app="^linearmouse$" manage=off
-yabai -m rule --add app="^Logi Options+$" manage=off
-yabai -m rule --add app="^Toggl Track$" manage=off
-yabai -m rule --add app="^Print Center$" manage=off
-yabai -m rule --add app="^Ente Auth$" manage=off
-yabai -m rule --add app="^Python$" manage=off
-yabai -m rule --add label="^Finder$" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
-yabai -m rule --add label="^App Store$" app="^App Store$" manage=off
-yabai -m rule --add label="^mpv$" app="^mpv$" manage=off
+yabai -m rule --add app="^[Ll]ogi [Oo]ptions*$" manage=off
+yabai -m rule --add app="^[Tt]oggl [Tt]rack$" manage=off
+yabai -m rule --add app="^[Pp]rint [Cc]enter$" manage=off
+yabai -m rule --add app="^[Ee]nte [Aa]uth$" manage=off
+yabai -m rule --add app="^[fF]inder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add app="^[Aa]pp [Ss]tore$" manage=off
+yabai -m rule --add app="^mpv$" manage=off
+yabai -m rule --add app="^[Pp]ython$" manage=off
+yabai -m rule --add app="[Mm]ac[Ww]hisper" manage=off
 
 # yabai -m signal --add event=window_created action='
 #   yabai -m query --windows --window $yabai_window_id | jq -er ".\"can-resize\" or .\"is-floating\"" || \

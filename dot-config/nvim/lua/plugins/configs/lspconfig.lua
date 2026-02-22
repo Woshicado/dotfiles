@@ -1,17 +1,5 @@
 local map = vim.keymap.set
 
-function custom_on_attach(_, bufnr)
-	local function opts(desc)
-		return { buffer = bufnr, desc = "LSP " .. desc }
-	end
-
-	map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
-	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
-
-	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
-	map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
-end
-
 vim.lsp.set_log_level("error")
 
 return {
@@ -19,6 +7,27 @@ return {
 	dependencies = {},
 	config = function()
 		-- EXAMPLE
+		local nvlsp = require("nvchad.configs.lspconfig")
+
+		function custom_on_attach(client, bufnr)
+			local function opts(desc)
+				return { buffer = bufnr, desc = "LSP " .. desc }
+			end
+
+			map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
+			map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
+			map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
+			map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
+
+			if client.name == "ltex" then
+				require("ltex_extra").setup({
+					load_langs = { "en-US", "de-DE" },
+					init_check = true,
+					path = vim.fn.stdpath("config") .. "/spell",
+				})
+			end
+		end
+
 		local servers = {
 			"html",
 			"cssls",
@@ -31,8 +40,6 @@ return {
 			"pylsp",
 			-- "GitHub Copilot",
 		}
-
-		local nvlsp = require("nvchad.configs.lspconfig")
 
 		-- Local dictionary
 		local words = {}
@@ -139,6 +146,7 @@ return {
 						ruff = {
 							enabled = true,
 							formatEnabled = true,
+							unsafeFixes = true,
 							ignore = { "TD002", "TD003", "PD901" }, -- Example ignores, adjust as needed
 							format = { "I" },
 							extendSelect = { "I" },
