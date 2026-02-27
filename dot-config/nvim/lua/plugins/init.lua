@@ -28,7 +28,7 @@ return {
 	require("plugins.configs.blink-cmp"),
 	require("plugins.configs.yanky"),
 	require("plugins.configs.lspconfig"),
-  require("plugins.configs.ltex-extra"),
+  -- require("plugins.configs.ltex-extra"),
 	require("plugins.configs.oil"),
 	require("plugins.configs.repeat"),
 	require("plugins.configs.speeddating"),

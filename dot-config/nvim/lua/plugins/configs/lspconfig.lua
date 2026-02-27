@@ -4,7 +4,7 @@ vim.lsp.set_log_level("error")
 
 return {
 	"neovim/nvim-lspconfig",
-	dependencies = {},
+	dependencies = { "barreiroleo/ltex_extra.nvim" },
 	config = function()
 		-- EXAMPLE
 		local nvlsp = require("nvchad.configs.lspconfig")
@@ -162,12 +162,13 @@ return {
 
 		-- Configure each server
 		for _, lsp in ipairs(servers) do
-			vim.lsp.config(lsp, {
+			config = {
 				on_attach = custom_on_attach,
 				on_init = nvlsp.on_init,
 				capabilities = nvlsp.capabilities,
 				settings = server_settings[lsp],
-			})
+			}
+			vim.lsp.config(lsp, config)
 		end
 
 		vim.lsp.enable(servers)

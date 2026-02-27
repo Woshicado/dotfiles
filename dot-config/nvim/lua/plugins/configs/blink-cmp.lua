@@ -11,10 +11,7 @@ return {
 		"L3MON4D3/LuaSnip",
 		-- { "marcoSven/blink-cmp-yanky", },
 		"moyiz/blink-emoji.nvim",
-		{
-			"Kaiser-Yang/blink-cmp-dictionary",
-			dependencies = { "nvim-lua/plenary.nvim" },
-		},
+		"Kaiser-Yang/blink-cmp-dictionary",
 		{
 			"micangl/cmp-vimtex",
 			dependencies = {
@@ -376,16 +373,16 @@ return {
 					max_items = nil,
 					min_keyword_length = 0,
 					fallbacks = { "buffer" },
-					score_offset = 0,
+					score_offset = 10,
 					override = nil, -- Override the source's functions
 				},
 				path = {
 					module = "blink.cmp.sources.path",
-					score_offset = 3,
+					score_offset = 5,
 					fallbacks = { "buffer" },
 					opts = {
-						trailing_slash = true,
-						label_trailing_slash = true,
+						trailing_slash = false,
+						label_trailing_slash = false,
 						get_cwd = function(context)
 							return vim.fn.expand(("#%d:p:h"):format(context.bufnr))
 						end,
@@ -402,28 +399,36 @@ return {
 				dictionary = {
 					module = "blink-cmp-dictionary",
 					name = "Dict",
-					score_offset = -20,
+					score_offset = -10,
 					enabled = true,
 					max_items = 6,
 					min_keyword_length = 3,
 					opts = {
-						get_command = "rg",
-						get_command_args = function(prefix, _)
-							-- /usr/share/dict/words
-							local dict_file1 = os.getenv("HOME") .. "/dotfiles/dictionaries/words"
-							local dict_file2 = os.getenv("HOME") .. "/dotfiles/dot-config/nvim/spell/en.utf-8.add"
-							return {
-								"--color=never",
-								"--no-line-number",
-								"--no-messages",
-								"--no-filename",
-								"--ignore-case",
-								"--",
-								prefix,
-								dict_file1,
-								dict_file2,
-							}
-						end,
+						dictionary_diretories = nil,
+						force_fallback = false,
+            dictionary_files = {
+              os.getenv("HOME") .. "/dotfiles/dictionaries/words",
+              os.getenv("HOME") .. "/dotfiles/dot-config/nvim/spell/en.utf-8.add",
+            },
+            ---- UNCOMMENT THE FOLLOWING TO USE RG. I WANT TO TEST FZF FOR NOW
+            -- dictionary_files = nil,
+            -- get_command = "rg",
+            -- get_command_args = function(prefix, _)
+            -- 	-- /usr/share/dict/words
+            -- 	local dict_file1 = os.getenv("HOME") .. "/dotfiles/dictionaries/words"
+            -- 	local dict_file2 = os.getenv("HOME") .. "/dotfiles/dot-config/nvim/spell/en.utf-8.add"
+            -- 	return {
+            -- 		"--color=never",
+            -- 		"--no-line-number",
+            -- 		"--no-messages",
+            -- 		"--no-filename",
+            -- 		"--ignore-case",
+            -- 		"--",
+            -- 		prefix,
+            -- 		dict_file1,
+            -- 		dict_file2,
+            -- 	}
+            -- end,
 						documentation = {
 							enable = true,
 							get_command = {
