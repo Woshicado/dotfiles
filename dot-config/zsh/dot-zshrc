@@ -279,6 +279,7 @@ autoload -U td
 autoload -U te
 autoload -U tj
 autoload -U ts
+autoload -U lkey_nojq
 
 ### HANDY KEYBINDS
 copy-command() {

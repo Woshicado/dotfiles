@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+local filename="progress.jsonl"
+local search_key="time/total_timesteps"
+
+# 1. Parse flags
+# Usage: lkey_nojq [-f other_file.json] "key_name"
+while getopts "f:" opt; do
+  case $opt in
+  f) filename="$OPTARG" ;;
+  *) return 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# 2. Handle the positional argument (the key)
+if [[ -n "$1" ]]; then
+  search_key="$1"
+fi
+
+# 3. Execute find with an improved regex
+# Regex breakdown: ([+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?)
+# This covers: integers, decimals, negatives, and scientific notation
+find . -name "$filename" -exec sh -c '
+  key="$1"; file="$2"
+  last_line=$(grep "\"$key\":" "$file" | tail -n 1)
+  val=$(echo "$last_line" | sed -rn "s@.*\"$key\":\s*([+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?).*@\1@p")
+  [[ -n "$val" ]] && printf "%-30s %-20s %s\n" "$file @" "$key:" "$val"
+' sh "$search_key" {} \;
