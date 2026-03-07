@@ -7,9 +7,9 @@ return {
 	yellow = 0xffe7c664,
 	orange = 0xfff39660,
 	magenta = 0xffb39df3,
-	grey = 0xffa9acb4,
+	grey = 0xff9da0a9,
 	transparent = 0xaa000000,
-
+-- #9da0a9
 	disabled_color = 0xffd3d3d3,
 	accent_color = 0xffd79921,
 
