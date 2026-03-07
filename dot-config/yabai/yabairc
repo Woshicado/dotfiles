@@ -23,7 +23,7 @@ yabai -m config mouse_resize_window_by_edge off
 # Disable some applications to use yabai. In particular for apps not allowing for tiling...
 # looking angrily at you macos
 yabai -m config window_manager_check off
-yabai -m rule --add app=".*" float=on # Float all windows by default
+# yabai -m rule --add app=".*" float=on # Float all windows by default
 yabai -m rule --add app="^[Ss]ystem [Ss]ettings$" manage=off
 yabai -m rule --add app="^[Cc]alculator$" manage=off
 yabai -m rule --add app="^[Kk]arabiner-[Ee]lements$" manage=off
@@ -46,6 +46,7 @@ yabai -m rule --add app="^Spotify$" manage=off
 yabai -m rule --add app="^[Ww]hats[Aa]pp$" manage=off
 yabai -m rule --add app="^[Ss]ignal$" manage=off
 yabai -m rule --add app="^[Zz]otero$" title="([Zz]ot[Ss]eek|[Pp]lugins [Mm]anager|[Zz]otero [Ss]ettings)" manage=off
+yabai -m rule --apply
 
 # yabai -m signal --add event=window_created action='
 #   yabai -m query --windows --window $yabai_window_id | jq -er ".\"can-resize\" or .\"is-floating\"" || \
