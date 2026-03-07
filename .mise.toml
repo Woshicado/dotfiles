@@ -1,0 +1,21 @@
+[env]
+_.file = ".env"
+PROJECT_NAME = "dotfiles"
+PYTHON_VERSION = "3.11"
+
+[tasks]
+
+[tasks.stow]
+description = "Install all optional dependencies"
+alias = "s"
+run = "stow --no-folding --dotfiles -R . --adopt"
+
+[tasks.info]
+description = "Print project information"
+alias = "i"
+run = """
+  # Project information
+
+  echo "Project: $PROJECT_NAME"
+  echo "------"
+"""

@@ -17,6 +17,7 @@ return {
 	require("plugins.configs.render-markdown"),
 	require("plugins.configs.obsidian"),
 	require("plugins.configs.obsidian-bridge"),
+  require("plugins.configs.image"),
 	-- require("plugins.configs.dap"),
 	require("plugins.configs.fzf"),
 	-- require("plugins.configs.dap-ui"),

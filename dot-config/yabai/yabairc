@@ -16,6 +16,7 @@ yabai -m config mouse_modifier ctrl
 yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
 
+
 # Automatically float non-resizable windows, such as palettes, system settings etc.
 
 # Disable some applications to use yabai. In particular for apps not allowing for tiling...
@@ -37,11 +38,26 @@ yabai -m rule --add app="^[fF]inder$" title="(Co(py|nnect)|Move|Info|Pref)" mana
 yabai -m rule --add app="^[Aa]pp [Ss]tore$" manage=off
 yabai -m rule --add app="^mpv$" manage=off
 yabai -m rule --add app="^[Pp]ython$" manage=off
-yabai -m rule --add app="[Mm]ac[Ww]hisper" manage=off
-yabai -m rule --add app="[Pp]roton [Vv][Pp][Nn]" manage=off
-yabai -m rule --add app="[Zz]otero" title="([Zz]ot[Ss]eek|[Pp]lugins [Mm]anager|[Zz]otero [Ss]ettings)" manage=off
+yabai -m rule --add app="^[Mm]ac[Ww]hisper$" manage=off
+yabai -m rule --add app="^[Pp]roton [Vv][Pp][Nn]$" manage=off
+yabai -m rule --add app="^Activity Monitor$" manage=off
+yabai -m rule --add app="^Spotify$" manage=off
+yabai -m rule --add app="^[Zz]otero$" title="([Zz]ot[Ss]eek|[Pp]lugins [Mm]anager|[Zz]otero [Ss]ettings)" manage=off
 
 # yabai -m signal --add event=window_created action='
 #   yabai -m query --windows --window $yabai_window_id | jq -er ".\"can-resize\" or .\"is-floating\"" || \
 #   yabai -m window $yabai_window_id --toggle float --layer above --grid 4:4:1:1:2:2
 # '
+
+# Sketchybar padding
+yabai -m config external_bar all:$(sketchybar --query bar | jq .height):0
+
+### https://github.com/FelixKratz/JankyBorders
+borders background_color=0x302c2e34 active_color=0xff95e6cb hdpi=off inactive_color=0xcced8274 width=8.0 blur_radius=25 &
+
+# Padding so the border is visible
+yabai -m config top_padding 12
+yabai -m config bottom_padding 12
+yabai -m config left_padding 12
+yabai -m config right_padding 12
+yabai -m config window_gap 12
