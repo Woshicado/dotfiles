@@ -108,6 +108,7 @@
 
 # CUSTOM
 ctrl + shift + alt - r: yabai --restart-service
+ctrl + alt - y : yabai -m space --layout "$(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "stack" else "bsp" end')"
 
 # Change window focus within space
 alt - j : yabai -m window --focus south
