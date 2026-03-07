@@ -10,7 +10,7 @@ sbar.exec(
 
 local popup_width = 250
 
-local wifi_up = sbar.add("item", "widgets.wifi1", {
+local wifi_up = sbar.add("item", "items.wifi1", {
 	position = "right",
 	padding_left = -5,
 	width = 0,
@@ -35,7 +35,7 @@ local wifi_up = sbar.add("item", "widgets.wifi1", {
 	y_offset = 4,
 })
 
-local wifi_down = sbar.add("item", "widgets.wifi2", {
+local wifi_down = sbar.add("item", "items.wifi2", {
 	position = "right",
 	padding_left = -5,
 	icon = {
@@ -59,13 +59,13 @@ local wifi_down = sbar.add("item", "widgets.wifi2", {
 	y_offset = -4,
 })
 
-local wifi = sbar.add("item", "widgets.wifi.padding", {
+local wifi = sbar.add("item", "items.wifi.padding", {
 	position = "right",
 	label = { drawing = false },
 })
 
 -- Background around the item
-local wifi_bracket = sbar.add("bracket", "widgets.wifi.bracket", {
+local wifi_bracket = sbar.add("bracket", "items.wifi.bracket", {
 	wifi.name,
 	wifi_up.name,
 	wifi_down.name,
@@ -219,7 +219,9 @@ end
 
 wifi_up:subscribe("mouse.clicked", toggle_details)
 wifi_down:subscribe("mouse.clicked", toggle_details)
-wifi:subscribe("mouse.clicked", toggle_details)
+wifi:subscribe("mouse.clicked", function()
+	sbar.exec("open 'x-apple.systempreferences:com.apple.wifi-settings'")
+end)
 wifi:subscribe("mouse.exited.global", hide_details)
 
 local function copy_label_to_clipboard(env)

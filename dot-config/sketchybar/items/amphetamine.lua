@@ -7,7 +7,7 @@ local settings = require("settings")
 -- Icons: You can use an icon from your icons.lua or a raw SF Symbol
 local icon_on = "" -- Filled pill
 local icon_off = "" -- Empty pill
-local active_color = colors.yellow -- Yellow/Gold
+local active_color = colors.green -- Yellow/Gold
 
 local amphetamine = sbar.add("item", "amphetamine", {
 	position = "right",
@@ -99,12 +99,12 @@ amphetamine:subscribe("routine", update_amphetamine)
 amphetamine:subscribe("forced", update_amphetamine)
 
 -- Optional: Bracket for styling
-sbar.add("bracket", "widgets.amphetamine.bracket", { amphetamine.name }, {
+sbar.add("bracket", "items.amphetamine.bracket", { amphetamine.name }, {
 	background = { color = colors.bg1 },
 })
 
 -- Padding
-sbar.add("item", "widgets.amphetamine.padding", {
+sbar.add("item", "items.amphetamine.padding", {
 	position = "right",
 	width = settings.group_paddings,
 })

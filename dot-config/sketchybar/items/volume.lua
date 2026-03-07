@@ -4,7 +4,7 @@ local settings = require("settings")
 
 local popup_width = 250
 
-local volume_percent = sbar.add("item", "widgets.volume1", {
+local volume_percent = sbar.add("item", "items.volume1", {
   position = "right",
   icon = { drawing = false },
   label = {
@@ -14,7 +14,7 @@ local volume_percent = sbar.add("item", "widgets.volume1", {
   },
 })
 
-local volume_icon = sbar.add("item", "widgets.volume2", {
+local volume_icon = sbar.add("item", "items.volume2", {
   position = "right",
   padding_right = -1,
   icon = {
@@ -37,7 +37,7 @@ local volume_icon = sbar.add("item", "widgets.volume2", {
   },
 })
 
-local volume_bracket = sbar.add("bracket", "widgets.volume.bracket", {
+local volume_bracket = sbar.add("bracket", "items.volume.bracket", {
   volume_icon.name,
   volume_percent.name
 }, {
@@ -45,7 +45,7 @@ local volume_bracket = sbar.add("bracket", "widgets.volume.bracket", {
   popup = { align = "center" }
 })
 
-sbar.add("item", "widgets.volume.padding", {
+sbar.add("item", "items.volume.padding", {
   position = "right",
   width = settings.group_paddings
 })

@@ -7,7 +7,7 @@ local function setup_for_display(display_index)
 	local position = display.is_builtin(display_index) and "q" or "center"
 	local suffix = tostring(display_index)
 
-	sbar.add("item", "widgets.notifications" .. suffix, {
+	sbar.add("item", "items.notifications" .. suffix, {
 		display = display_index,
 		position = position,
 	})
@@ -40,7 +40,7 @@ local function setup_for_display(display_index)
 	local app_items = {}
 
 	-- The summary badge (total count) shown on the right
-	local notifications = sbar.add("item", "widgets.notifications" .. suffix, {
+	local notifications = sbar.add("item", "items.notifications" .. suffix, {
 		display = display_index,
 		position = position,
 		icon = {
@@ -56,7 +56,7 @@ local function setup_for_display(display_index)
 		},
 		padding_right = 10,
 		update_freq = 5,
-		drawing = false,
+		drawing = true,
 	})
 
 	-- Parse "AppName:count\n..." into a table { AppName = count, ... }
@@ -81,7 +81,7 @@ local function setup_for_display(display_index)
 		end
 
 		local safe_name = app_name:gsub("%s+", "_"):lower()
-		local item_name = "widgets.notifications." .. safe_name
+		local item_name = "items.notifications." .. safe_name
 
 		-- Use a custom command if provided, otherwise fall back to plain `open -a`
 		local click_cmd = entry.command or ('open -a "' .. app_name .. '"')
@@ -164,15 +164,15 @@ local function setup_for_display(display_index)
 	for _, entry in ipairs(apps_to_track) do
 		local name = normalize(entry).name
 		local safe_name = name:gsub("%s+", "_"):lower()
-		table.insert(bracket_members, "widgets.notifications." .. safe_name .. suffix)
+		table.insert(bracket_members, "items.notifications." .. safe_name .. suffix)
 	end
 
-	sbar.add("bracket", "widgets.notifications" .. suffix .. ".bracket", bracket_members, {
+	sbar.add("bracket", "items.notifications" .. suffix .. ".bracket", bracket_members, {
 		display = display_index,
 		background = { color = colors.bg1 },
 	})
 
-	sbar.add("item", "widgets.notifications" .. suffix .. ".padding", {
+	sbar.add("item", "items.notifications" .. suffix .. ".padding", {
 		display = display_index,
 		position = position,
 		width = settings.group_paddings,
@@ -237,6 +237,7 @@ local function setup_for_display(display_index)
 				})
 			else
 				notifications:set({
+          drawing = true,
 					icon = { string = "|  ", color = colors.grey },
 					label = { string = "0", color = colors.grey },
 				})
@@ -253,10 +254,10 @@ local function setup_for_display(display_index)
 			local name = normalize(entry).name
 			local safe_name = name:gsub("%s+", "_"):lower()
 			sbar.exec(
-				"sketchybar --reorder widgets.notifications."
+				"sketchybar --reorder items.notifications."
 					.. safe_name
 					.. suffix
-					.. " widgets.notifications"
+					.. " items.notifications"
 					.. suffix
 			)
 		end

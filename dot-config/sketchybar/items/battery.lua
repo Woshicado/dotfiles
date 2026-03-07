@@ -2,7 +2,7 @@ local icons = require("icons")
 local colors = require("colors")
 local settings = require("settings")
 
-local battery = sbar.add("item", "widgets.battery", {
+local battery = sbar.add("item", "items.battery", {
   position = "right",
   icon = {
     font = {
@@ -90,11 +90,11 @@ battery:subscribe("mouse.clicked", function(env)
   end
 end)
 
-sbar.add("bracket", "widgets.battery.bracket", { battery.name }, {
+sbar.add("bracket", "items.battery.bracket", { battery.name }, {
   background = { color = colors.bg1 }
 })
 
-sbar.add("item", "widgets.battery.padding", {
+sbar.add("item", "items.battery.padding", {
   position = "right",
   width = settings.group_paddings
 })
