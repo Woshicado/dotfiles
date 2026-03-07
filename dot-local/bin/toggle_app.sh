@@ -14,5 +14,5 @@ IS_FRONTMOST=$(/usr/bin/osascript -e "tell application \"System Events\" to retu
 if [ "$IS_FRONTMOST" = "true" ]; then
   /usr/bin/osascript -e "tell application \"System Events\" to set visible of process \"$APP\" to false"
 else
-  /usr/bin/osascript -e "tell application \"$APP\" to activate"
+  open -a "$APP"
 fi
