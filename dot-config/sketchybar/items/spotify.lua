@@ -6,7 +6,7 @@ local icons = require("helpers.app_icons")
 local settings = require("settings")
 
 local position = "right"
-local max_length = 20 -- Truncate text if longer than this; low because of notch
+local max_length = 30 -- Truncate text if longer than this; low because of notch
 local logo_color = 0xff1db954
 
 -- 1. Create the Main Item
@@ -28,6 +28,10 @@ local spotify_anchor = sbar.add("item", "spotify", {
 
 -- 2. Update Logic
 local function update_spotify()
+	---- ARTIST INFO
+	-- set a to artist of current track
+	-- return t & " - " & a
+
 	sbar.exec(
 		[[osascript -e '
         if application "Spotify" is running then
@@ -74,10 +78,12 @@ local function update_spotify()
 end
 
 local function volume_scroll(env)
-  local delta = env.INFO.delta
-  if not (env.INFO.modifier == "ctrl") then delta = delta * 5.0 end
+	local delta = env.INFO.delta
+	if not (env.INFO.modifier == "ctrl") then
+		delta = delta * 5.0
+	end
 
-  sbar.exec('osascript -e "set volume output volume (output volume of (get volume settings) + ' .. delta .. ')"')
+	sbar.exec('osascript -e "set volume output volume (output volume of (get volume settings) + ' .. delta .. ')"')
 end
 -- 3. Events
 -- Update when Spotify sends a change event
@@ -99,19 +105,15 @@ spotify_anchor:subscribe("mouse.clicked", function(env)
 	end
 end)
 
-
 spotify_anchor:subscribe("mouse.scrolled", volume_scroll)
-
-
-
 
 sbar.add("bracket", "items.spotify.bracket", { spotify_anchor.name }, {
 	background = { color = colors.bg1 },
 })
 
 sbar.add("item", "items.spotify.padding", {
-  position = position,
-  width = settings.group_paddings
+	position = position,
+	width = settings.group_paddings,
 })
 
 -- Initial Load

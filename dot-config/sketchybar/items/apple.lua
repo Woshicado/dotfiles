@@ -10,11 +10,11 @@ local apple = sbar.add("item", {
 		padding_left = 8,
 	},
 	label = { drawing = false },
-	background = {
-		color = colors.bg2,
-		border_color = colors.black,
-		border_width = 1,
-	},
+  -- background = {
+  -- 	color = colors.bg2,
+  -- 	border_color = colors.black,
+  -- 	border_width = 1,
+  -- },
 	padding_left = 1,
 	padding_right = 1,
 })

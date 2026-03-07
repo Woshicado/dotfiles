@@ -159,6 +159,29 @@ local function setup_for_display(display_index)
 		get_or_create_item(entry)
 	end
 
+	sbar.delay(1, function()
+		local order_cmd = "sketchybar --reorder"
+
+		if position == "center" then
+			-- Reverse order for center position since sketchybar mirrors it
+			for i = #apps_to_track, 1, -1 do
+				local name = normalize(apps_to_track[i]).name
+				local safe_name = name:gsub("%s+", "_"):lower()
+				order_cmd = order_cmd .. " items.notifications." .. safe_name .. suffix
+			end
+			order_cmd = order_cmd .. " " .. notifications.name
+		else
+			order_cmd = order_cmd .. " " .. notifications.name
+			for _, entry in ipairs(apps_to_track) do
+				local name = normalize(entry).name
+				local safe_name = name:gsub("%s+", "_"):lower()
+				order_cmd = order_cmd .. " items.notifications." .. safe_name .. suffix
+			end
+		end
+
+		sbar.exec(order_cmd)
+	end)
+
 	-- Bracket wraps all items into one visual pill.
 	local bracket_members = { notifications.name }
 	for _, entry in ipairs(apps_to_track) do
@@ -237,7 +260,7 @@ local function setup_for_display(display_index)
 				})
 			else
 				notifications:set({
-          drawing = true,
+					drawing = true,
 					icon = { string = "|  ", color = colors.grey },
 					label = { string = "0", color = colors.grey },
 				})
@@ -249,19 +272,15 @@ local function setup_for_display(display_index)
 	notifications:subscribe("routine", update_notifications)
 	notifications:subscribe("forced", update_notifications)
 
-	if position == "center" then
-		for _, entry in ipairs(apps_to_track) do
-			local name = normalize(entry).name
-			local safe_name = name:gsub("%s+", "_"):lower()
-			sbar.exec(
-				"sketchybar --reorder items.notifications."
-					.. safe_name
-					.. suffix
-					.. " items.notifications"
-					.. suffix
-			)
-		end
-	end
+	-- if position == "center" then
+	-- 	for _, entry in ipairs(apps_to_track) do
+	-- 		local name = normalize(entry).name
+	-- 		local safe_name = name:gsub("%s+", "_"):lower()
+	-- 		sbar.exec(
+	-- 			"sketchybar --reorder items.notifications." .. safe_name .. suffix .. " items.notifications" .. suffix
+	-- 		)
+	-- 	end
+	-- end
 
 	update_notifications()
 end

@@ -27,11 +27,11 @@ local cal = sbar.add("item", {
 	update_freq = 30,
 	padding_left = 1,
 	padding_right = 1,
-	background = {
-		color = colors.bg2,
-		border_color = colors.black,
-		border_width = 1,
-	},
+  -- background = {
+  -- 	color = colors.bg2,
+  -- 	border_color = colors.black,
+  -- 	border_width = 1,
+  -- },
 	click_script = "open 'msteams://calendar'",  -- I use MSTeams calendar for work
 })
 
