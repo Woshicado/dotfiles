@@ -6,7 +6,7 @@ local icons = require("helpers.app_icons")
 local settings = require("settings")
 
 local position = "right"
-local max_length = 30 -- Truncate text if longer than this
+local max_length = 20 -- Truncate text if longer than this; low because of notch
 local logo_color = 0xff1db954
 
 -- 1. Create the Main Item
@@ -60,7 +60,7 @@ local function update_spotify()
 			else
 				-- Playing State: Green
 				if string.len(status) > max_length then
-					status = string.sub(status, 1, max_length) .. "..."
+					status = string.sub(status, 1, max_length) .. "󰇘"
 				end
 
 				spotify_anchor:set({

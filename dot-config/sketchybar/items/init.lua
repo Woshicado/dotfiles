@@ -1,5 +1,6 @@
 -- left
 require("items.apple")
+require("items.calendar")
 require("items.menus")
 require("items.spaces")
 require("items.front_app")
@@ -8,7 +9,7 @@ require("items.front_app")
 require("items.notifications")
 
 -- right
-require("items.calendar")
+-- require("items.calendar")
 require("items.volume")
 require("items.battery")
 require("items.amphetamine")

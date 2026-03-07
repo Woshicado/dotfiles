@@ -1,8 +1,10 @@
 local settings = require("settings")
 local colors = require("colors")
 
+local position = "left"
+
 -- Padding item required because of bracket
-sbar.add("item", { position = "right", width = settings.group_paddings })
+sbar.add("item", { position = position, width = settings.group_paddings })
 
 local cal = sbar.add("item", {
 	icon = {
@@ -21,7 +23,7 @@ local cal = sbar.add("item", {
 		font = { family = settings.font.numbers },
     y_offset = -1,
 	},
-	position = "right",
+	position = position,
 	update_freq = 30,
 	padding_left = 1,
 	padding_right = 1,
@@ -43,7 +45,7 @@ sbar.add("bracket", { cal.name }, {
 })
 
 -- Padding item required because of bracket
-sbar.add("item", { position = "right", width = settings.group_paddings })
+sbar.add("item", { position = position, width = settings.group_paddings })
 
 cal:subscribe({ "forced", "routine", "system_woke" }, function(env)
 	cal:set({ icon = os.date("%a. %d %b."), label = os.date("%H:%M") })

@@ -2,9 +2,6 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- Padding item required because of bracket
-sbar.add("item", { width = 5 })
-
 local apple = sbar.add("item", {
 	icon = {
 		font = { size = 16.0 },
@@ -20,8 +17,15 @@ local apple = sbar.add("item", {
 	},
 	padding_left = 1,
 	padding_right = 1,
-	click_script = "open -a 'System Settings'", -- "$CONFIG_DIR/helpers/menus/bin/menus -s 0"
 })
+
+apple:subscribe("mouse.clicked", function(env)
+	if env.BUTTON == "left" then -- dropdown
+		sbar.exec("open -a 'System Settings'")
+	elseif env.BUTTON == "right" then -- System Settings
+		sbar.exec("$CONFIG_DIR/helpers/menus/bin/menus -s 0")
+	end
+end)
 
 -- Double border for apple using a single item bracket
 sbar.add("bracket", { apple.name }, {
@@ -31,6 +35,3 @@ sbar.add("bracket", { apple.name }, {
 		border_color = colors.grey,
 	},
 })
-
--- Padding item required because of bracket
-sbar.add("item", { width = 7 })
