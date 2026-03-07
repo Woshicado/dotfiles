@@ -12,15 +12,29 @@ local function setup_for_display(display_index)
 		position = position,
 	})
 
-	-- CONFIG: Match these to your Dock names
+	-- CONFIG: Match these to your Dock names.
+	-- Each entry can be either a plain string (app name) or a table with:
+	--   name    = "App Name"          (required)
+	--   command = "shell command"     (optional, overrides default `open -a "App"`)
 	local apps_to_track = {
-		"Microsoft Teams",
+		{
+			name = "Microsoft Teams",
+			command = "open 'msteams://chats'",
+		},
 		"Thunderbird",
 		"Mattermost",
 		"Signal",
 		"WhatsApp",
 		"Discord",
 	}
+
+	-- Normalize apps_to_track so every entry is a table { name, command }
+	local function normalize(entry)
+		if type(entry) == "string" then
+			return { name = entry, command = nil }
+		end
+		return entry
+	end
 
 	-- Table to hold dynamically created per-app items
 	local app_items = {}
@@ -57,14 +71,20 @@ local function setup_for_display(display_index)
 		return result
 	end
 
-	-- Return (or lazily create) a sketchybar item for a given app
-	local function get_or_create_item(app_name)
+	-- Return (or lazily create) a sketchybar item for a given app entry
+	local function get_or_create_item(entry)
+		entry = normalize(entry)
+		local app_name = entry.name
+
 		if app_items[app_name] then
 			return app_items[app_name]
 		end
 
 		local safe_name = app_name:gsub("%s+", "_"):lower()
 		local item_name = "widgets.notifications." .. safe_name
+
+		-- Use a custom command if provided, otherwise fall back to plain `open -a`
+		local click_cmd = entry.command or ('open -a "' .. app_name .. '"')
 
 		local item = sbar.add("item", item_name .. suffix, {
 			display = display_index,
@@ -84,7 +104,7 @@ local function setup_for_display(display_index)
 				padding_left = 0,
 				padding_right = 0,
 			},
-			click_script = 'open -a "' .. app_name .. '"',
+			click_script = click_cmd,
 		})
 
 		app_items[app_name] = item
@@ -94,8 +114,9 @@ local function setup_for_display(display_index)
 	-- Built once at load time, reused on every update tick
 	local function build_osascript_cmd(app_list)
 		local quoted = {}
-		for _, app in ipairs(app_list) do
-			table.insert(quoted, '"' .. app .. '"')
+		for _, entry in ipairs(app_list) do
+			local name = normalize(entry).name
+			table.insert(quoted, '"' .. name .. '"')
 		end
 
 		local lines = {
@@ -134,14 +155,15 @@ local function setup_for_display(display_index)
 	local OSASCRIPT_CMD = build_osascript_cmd(apps_to_track)
 
 	-- Pre-create all items so the bracket can include them from the start.
-	for _, app_name in ipairs(apps_to_track) do
-		get_or_create_item(app_name)
+	for _, entry in ipairs(apps_to_track) do
+		get_or_create_item(entry)
 	end
 
 	-- Bracket wraps all items into one visual pill.
 	local bracket_members = { notifications.name }
-	for _, app_name in ipairs(apps_to_track) do
-		local safe_name = app_name:gsub("%s+", "_"):lower()
+	for _, entry in ipairs(apps_to_track) do
+		local name = normalize(entry).name
+		local safe_name = name:gsub("%s+", "_"):lower()
 		table.insert(bracket_members, "widgets.notifications." .. safe_name .. suffix)
 	end
 
@@ -163,11 +185,9 @@ local function setup_for_display(display_index)
 	local last_counts = {}
 
 	local function set_app_items_visible(visible)
-    -- I could animate this but it seems laggy and I'd rather have it snappy instead
-		for _, app_name in ipairs(apps_to_track) do
-			local item = get_or_create_item(app_name)
-			local count = last_counts[app_name]
-			-- Only show items that actually have notifications when expanding
+		-- I could animate this but it seems laggy and I'd rather have it snappy instead
+		for _, entry in ipairs(apps_to_track) do
+			local item = get_or_create_item(entry)
 			item:set({ drawing = visible })
 		end
 	end
@@ -189,8 +209,9 @@ local function setup_for_display(display_index)
 				total = total + count
 			end
 
-			for _, app_name in ipairs(apps_to_track) do
-				local item = get_or_create_item(app_name)
+			for _, entry in ipairs(apps_to_track) do
+				local app_name = normalize(entry).name
+				local item = get_or_create_item(entry)
 				local count = app_counts[app_name]
 
 				if count and count > 0 then
@@ -198,7 +219,7 @@ local function setup_for_display(display_index)
 						-- Only draw if currently expanded
 						drawing = expanded,
 						icon = { color = colors.white },
-						label = { string = tostring(count) },
+						label = { string = tostring(count), color = colors.red },
 					})
 				else
 					item:set({
@@ -228,8 +249,9 @@ local function setup_for_display(display_index)
 	notifications:subscribe("forced", update_notifications)
 
 	if position == "center" then
-		for _, app_name in ipairs(apps_to_track) do
-			local safe_name = app_name:gsub("%s+", "_"):lower()
+		for _, entry in ipairs(apps_to_track) do
+			local name = normalize(entry).name
+			local safe_name = name:gsub("%s+", "_"):lower()
 			sbar.exec(
 				"sketchybar --reorder widgets.notifications."
 					.. safe_name

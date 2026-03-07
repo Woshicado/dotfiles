@@ -121,8 +121,9 @@ ctrl + alt - h: yabai -m display --focus west
 ctrl + alt - j: yabai -m display --focus south
 ctrl + alt - k: yabai -m display --focus north
 
-alt - 0x1E : yabai -m display --focus east
+# opt + [ / ]
 alt - 0x21 : yabai -m display --focus west
+alt - 0x1E : yabai -m display --focus east
 
 ## Window Layout Modifications
 ctrl + alt - f : yabai -m window --toggle float --grid 4:4:1:1:2:2
@@ -161,10 +162,10 @@ cmd + shift + alt - k : yabai -m window --resize bottom:0:-20
 # alt - e : yabai -m window --toggle split
 
 # Cycle workspace and carry focussed window along (0x32=backtick)
-cmd - 0x32 : ~/.local/bin/space_cycle_next.sh
-cmd + shift - 0x32 : ~/.local/bin/space_cycle_prev.sh
-cmd + ctrl - 0x32 : ~/.local/bin/space_cycle_next_wWindow.sh
-cmd + ctrl + shift - 0x32 : ~/.local/bin/space_cycle_prev_wWindow.sh
+cmd - 0x32 : $HOME/.local/bin/space_cycle_next.sh
+cmd + shift - 0x32 : $HOME/.local/bin/space_cycle_prev.sh
+cmd + ctrl - 0x32 : $HOME/.local/bin/space_cycle_next_wWindow.sh
+cmd + ctrl + shift - 0x32 : $HOME/.local/bin/space_cycle_prev_wWindow.sh
 
 # focus specific spaces
 ctrl + cmd - 1 : yabai -m space --focus 1
@@ -176,4 +177,28 @@ ctrl + cmd - 6 : yabai -m space --focus 6
 ctrl + cmd - 7 : yabai -m space --focus 7
 ctrl + cmd - 8 : yabai -m space --focus 8
 ctrl + cmd - 9 : yabai -m space --focus 9
-ctrl + cmd - 0  : yabai -m space --focus 10
+ctrl + cmd - 0 : yabai -m space --focus 10
+
+### Start applications ###
+ctrl + shift + alt - c : toggle_app.sh "ChatGPT"
+ctrl + alt - c : toggle_app.sh "Claude"
+ctrl + alt - t : toggle_app.sh "Thunderbird"
+ctrl + alt - a : toggle_app.sh "Ente Auth"
+ctrl + alt - p : toggle_app.sh "Proton Mail"
+# ctrl + alt - g : toggle_app.sh "Vivaldi Apps.localized/Gemini.app"
+ctrl + alt - s : toggle_app.sh "Signal"
+ctrl + alt - w : toggle_app.sh "WhatsApp"
+ctrl + alt - d : toggle_app.sh "DeepL"
+
+ctrl    - 0x32 : toggle_app.sh "KeePassXC"
+ctrl       - 1 : toggle_app.sh "kitty"
+ctrl + alt - 1 : toggle_app.sh "Visual Studio Code"
+ctrl       - 2 : toggle_app.sh "Zen"
+ctrl + alt - 2 : toggle_app.sh "Vivaldi"
+ctrl       - 3 : toggle_app.sh "Microsoft Teams"
+ctrl + alt - 3 : toggle_app.sh "Mattermost"
+ctrl       - 4 : toggle_app.sh "Zotero"
+ctrl + alt - 4 : toggle_app.sh "Obsidian"
+
+### Random scripts
+ctrl - m : python3 $HOME/.local/bin/generate-mail-alias.py

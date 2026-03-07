@@ -168,6 +168,7 @@ alias pwdy="echo $(pwd) | pbcopy" # Copy current directory to clipboard
 
 alias lg='lazygit'
 alias jless='jless --line-numbers --relative-line-numbers'
+alias jl='jless'
 
 # Obsidian
 export O_VAULT_DIR="$HOME/vaults/obsidian-notes"

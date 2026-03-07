@@ -29,3 +29,5 @@ zsh_history
 
 etc
 copy_changes.sh
+Brewfile
+.mise.toml

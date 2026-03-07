@@ -22,7 +22,7 @@ local spotify_anchor = sbar.add("item", "spotify", {
 		string = "Spotify",
 		drawing = true,
 		y_offset = 0,
-		padding_right = 9,
+		padding_right = 8,
 	},
 })
 
