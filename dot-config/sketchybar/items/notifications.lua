@@ -12,26 +12,25 @@ local function setup_for_display(display_index)
 		position = position,
 	})
 
-	-- CONFIG: Match these to your Dock names.
-	-- Each entry can be either a plain string (app name) or a table with:
-	--   name    = "App Name"          (required)
-	--   command = "shell command"     (optional, overrides default `open -a "App"`)
 	local apps_to_track = {
 		{
 			name = "Microsoft Teams",
 			command = "open 'msteams://chats'",
 		},
-		"Thunderbird",
+		{
+			name = "Thunderbird",
+			count_command = "notmuch count tag:unread",
+		},
 		"Mattermost",
 		"Signal",
 		"WhatsApp",
 		"Discord",
 	}
 
-	-- Normalize apps_to_track so every entry is a table { name, command }
+	-- Normalize apps_to_track so every entry is a table { name, command, count_command }
 	local function normalize(entry)
 		if type(entry) == "string" then
-			return { name = entry, command = nil }
+			return { name = entry, command = nil, count_command = nil }
 		end
 		return entry
 	end
@@ -111,8 +110,24 @@ local function setup_for_display(display_index)
 		return item
 	end
 
-	-- Built once at load time, reused on every update tick
+	-- Separate apps into those that use Dock badges vs. custom count commands
+	local dock_apps = {}
+	local custom_count_apps = {}
+	for _, entry in ipairs(apps_to_track) do
+		local e = normalize(entry)
+		if e.count_command then
+			table.insert(custom_count_apps, e)
+		else
+			table.insert(dock_apps, e)
+		end
+	end
+
+	-- Built once at load time, reused on every update tick (only for Dock-badge apps)
 	local function build_osascript_cmd(app_list)
+		if #app_list == 0 then
+			return nil
+		end
+
 		local quoted = {}
 		for _, entry in ipairs(app_list) do
 			local name = normalize(entry).name
@@ -152,7 +167,7 @@ local function setup_for_display(display_index)
 		return cmd
 	end
 
-	local OSASCRIPT_CMD = build_osascript_cmd(apps_to_track)
+	local OSASCRIPT_CMD = build_osascript_cmd(dock_apps)
 
 	-- Pre-create all items so the bracket can include them from the start.
 	for _, entry in ipairs(apps_to_track) do
@@ -203,8 +218,6 @@ local function setup_for_display(display_index)
 
 	-- ── Expand / collapse animation ──────────────────────────────────────────
 	local expanded = true
-	-- last_counts holds the most recent notification state so we can
-	-- correctly show/hide items when collapsing and re-expanding
 	local last_counts = {}
 
 	local function set_app_items_visible(visible)
@@ -221,66 +234,88 @@ local function setup_for_display(display_index)
 	end)
 	-- ─────────────────────────────────────────────────────────────────────────
 
-	-- Main update function
-	local function update_notifications()
-		sbar.exec(OSASCRIPT_CMD, function(result)
-			local app_counts = parse_app_counts(result or "")
-			last_counts = app_counts -- keep a copy for expand/collapse
+	-- Apply a resolved app_counts table to all items and update the total badge.
+	local function apply_counts(app_counts)
+		last_counts = app_counts
 
-			local total = 0
-			for _, count in pairs(app_counts) do
-				total = total + count
-			end
+		local total = 0
+		for _, count in pairs(app_counts) do
+			total = total + count
+		end
 
-			for _, entry in ipairs(apps_to_track) do
-				local app_name = normalize(entry).name
-				local item = get_or_create_item(entry)
-				local count = app_counts[app_name]
+		for _, entry in ipairs(apps_to_track) do
+			local app_name = normalize(entry).name
+			local item = get_or_create_item(entry)
+			local count = app_counts[app_name]
 
-				if count and count > 0 then
-					item:set({
-						-- Only draw if currently expanded
-						drawing = expanded,
-						icon = { color = colors.white },
-						label = { string = tostring(count), color = colors.red },
-					})
-				else
-					item:set({
-						icon = { color = colors.grey },
-						label = { string = "", color = colors.grey },
-					})
-				end
-			end
-
-			if total > 0 then
-				notifications:set({
-					drawing = true,
-					icon = { string = "|  ", color = colors.blue },
-					label = { string = tostring(total), color = colors.blue },
+			if count and count > 0 then
+				item:set({
+					drawing = expanded,
+					icon = { color = colors.white },
+					label = { string = tostring(count), color = colors.red },
 				})
 			else
-				notifications:set({
-					drawing = true,
-					icon = { string = "|  ", color = colors.grey },
-					label = { string = "0", color = colors.grey },
+				item:set({
+					icon = { color = colors.grey },
+					label = { string = "", color = colors.grey },
 				})
 			end
-		end)
+		end
+
+		if total > 0 then
+			notifications:set({
+				drawing = true,
+					icon = { string = "|  ", color = colors.blue },
+				label = { string = tostring(total), color = colors.blue },
+			})
+		else
+			notifications:set({
+				drawing = true,
+					icon = { string = "|  ", color = colors.grey },
+				label = { string = "0", color = colors.grey },
+			})
+		end
+	end
+
+	-- Main update function
+	local function update_notifications()
+		-- Start with a fresh counts table that will be populated by all sources.
+		local app_counts = {}
+		-- Track how many async calls are still pending before we can apply.
+		local pending = #custom_count_apps + (OSASCRIPT_CMD and 1 or 0)
+
+		local function maybe_apply()
+			pending = pending - 1
+			if pending == 0 then
+				apply_counts(app_counts)
+			end
+		end
+
+		-- Fire one shell command per app that has a custom count_command.
+		for _, entry in ipairs(custom_count_apps) do
+			local app_name = entry.name
+			sbar.exec(entry.count_command, function(result)
+				local count = tonumber((result or ""):match("%d+")) or 0
+				app_counts[app_name] = count
+				maybe_apply()
+			end)
+		end
+
+		-- Fire the single osascript call for all remaining Dock-badge apps.
+		if OSASCRIPT_CMD then
+			sbar.exec(OSASCRIPT_CMD, function(result)
+				local dock_counts = parse_app_counts(result or "")
+				for k, v in pairs(dock_counts) do
+					app_counts[k] = v
+				end
+				maybe_apply()
+			end)
+		end
 	end
 
 	-- Subscribe to periodic and forced updates
 	notifications:subscribe("routine", update_notifications)
 	notifications:subscribe("forced", update_notifications)
-
-	-- if position == "center" then
-	-- 	for _, entry in ipairs(apps_to_track) do
-	-- 		local name = normalize(entry).name
-	-- 		local safe_name = name:gsub("%s+", "_"):lower()
-	-- 		sbar.exec(
-	-- 			"sketchybar --reorder items.notifications." .. safe_name .. suffix .. " items.notifications" .. suffix
-	-- 		)
-	-- 	end
-	-- end
 
 	update_notifications()
 end

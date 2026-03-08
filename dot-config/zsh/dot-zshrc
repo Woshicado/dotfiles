@@ -91,7 +91,6 @@ plugins=(
   #history
   # copybuffer
   zsh-autosuggestions
-  # virtualenv
   fzf
   mise
 )
@@ -281,6 +280,7 @@ autoload -U te
 autoload -U tj
 autoload -U ts
 autoload -U lkey_nojq
+autoload -U nm
 
 ### HANDY KEYBINDS
 copy-command() {

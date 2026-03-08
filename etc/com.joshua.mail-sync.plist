@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.joshua.mbsync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/flock</string>
+        <string>-n</string>
+        <string>/tmp/mbsync.lock</string>
+        <string>/bin/bash</string>
+        <string>-lc</string>
+        <string>/opt/homebrew/bin/sops exec-env ~/secrets.env "/opt/homebrew/bin/mbsync -a && /opt/homebrew/bin/notmuch new"</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>600</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/mbsync.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/mbsync.err</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/Users/joshua/.local/share/mise/shims:</string>
+        <key>HOME</key>
+        <string>/Users/joshua</string>
+    </dict>
+</dict>
+</plist>

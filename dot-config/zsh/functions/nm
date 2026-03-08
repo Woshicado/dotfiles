@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+nm() {
+  NVIM_QUIT_ON_LAST=1 nvim -c "NmSearch ${(q)@}" -c "autocmd VimEnter * ++once bwipeout 1"
+}

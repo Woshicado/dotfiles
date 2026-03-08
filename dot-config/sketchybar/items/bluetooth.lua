@@ -20,11 +20,13 @@ local bluetooth = sbar.add("item", "bluetooth", {
 			style = "Regular",
 			size = 16.0,
 		},
-		padding_left = 8,
+		padding_left = 4,
+		padding_right = 6,
 	},
 	label = {
 		string = "",
-		padding_right = 8,
+		padding_right = 6,
+    padding_left = -2,
 	},
 	update_freq = 5,
 })
