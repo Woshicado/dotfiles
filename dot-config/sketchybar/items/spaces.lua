@@ -15,6 +15,7 @@ for i = 1, 10, 1 do
       padding_right = 8,
       color = colors.white,
       highlight_color = colors.red,
+      y_offset = -1,
     },
     label = {
       padding_right = 20,

@@ -146,6 +146,9 @@ alias mu='mise use'
 alias mup='mise upgrade'
 alias mr='mise run'
 
+alias nu='nm tag:unread'
+alias nt='nm "tag:todo OR tag:important"'
+
 if [[ ! "${OSTYPE}" == 'darwin'* ]]; then
   alias c='xclip -sel c -r'
 else

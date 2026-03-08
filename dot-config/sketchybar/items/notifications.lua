@@ -104,7 +104,7 @@ local function setup_for_display(display_index)
 		local safe_name = app_name:gsub("%s+", "_"):lower()
 		local base = "items.notifications." .. safe_name
 		local click_cmd = entry.command or ('open -a "' .. app_name .. '"')
-		local has_secondary = entry.count_command2 ~= nil
+		local has_secondary = entry.count_command2 ~= nil and position ~= "q"  -- somehow broken for q
 
 		local icon_item, primary, secondary
 

@@ -1,6 +1,7 @@
+---
 ## oama version 0.22.0 - 2025-08-29 0001.e419ef10
 ## This is a YAML configuration file, indentation matters.
-## Double ## indicates comments while single # default values.
+## Double ## indicates comments while single  # default values.
 ## Not all defaults are shown, for full list run `oama printenv`
 ## and look at the `services:` section.
 
@@ -13,7 +14,8 @@
 ## Choose exactly one.
 
 encryption:
-    tag: KEYRING
+  tag: "GPG"
+  contents: "814F87321CE2256885A15D446BC5336DA2B57261"
 
 # encryption:
 #   tag: GPG
@@ -26,8 +28,8 @@ encryption:
 ##
 services:
   google:
-    client_id: application-CLIENT-ID
-    client_secret: application-CLIENT-SECRET
+    client_id: "application-CLIENT-ID"
+    client_secret: "application-CLIENT-SECRET"
   ## Alternatively get them from a password manager using a shell command.
   ## If both variants are present then the _cmd versions get the priority.
   ## For example:
@@ -38,7 +40,7 @@ services:
   #  auth_scope: https://mail.google.com/
 
   microsoft:
-    client_id: 9e5f94bc-e8a4-4e73-b8be-63364c29d753
+    client_id: "9e5f94bc-e8a4-4e73-b8be-63364c29d753"
   ## client_secret is not needed for device code flow
   #  auth_endpoint: https://login.microsoftonline.com/common/oauth2/v2.0/devicecode
   ##
