@@ -22,7 +22,14 @@ local function setup_for_display(display_index)
 			count_command = "notmuch count tag:unread",
 			count_command2 = "notmuch count --output=threads tag:important OR tag:todo",
 		},
-		"Mattermost",
+		{
+			name = "Mattermost",
+			-- I do not want to hit the API millions of times, but after opening I still want it to respon
+			-- and remove the notification, that I opened it. So I just don't use the API, but the dot for
+			-- normal messages. Mention count should be fine to get in 5 min intervals though, so I keep that.
+			-- count_command = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .msg_count",
+			count_command2 = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .mention_count",
+		},
 		"Signal",
 		"WhatsApp",
 		"Discord",
