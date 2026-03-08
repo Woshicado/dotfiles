@@ -20,6 +20,7 @@ local function setup_for_display(display_index)
 		{
 			name = "Thunderbird",
 			count_command = "notmuch count tag:unread",
+			count_command2 = "notmuch count --output=threads tag:important OR tag:todo",
 		},
 		"Mattermost",
 		"Signal",
@@ -27,15 +28,18 @@ local function setup_for_display(display_index)
 		"Discord",
 	}
 
-	-- Normalize apps_to_track so every entry is a table { name, command, count_command }
+	-- Normalize apps_to_track so every entry is a table { name, command, count_command, count_command2 }
 	local function normalize(entry)
 		if type(entry) == "string" then
-			return { name = entry, command = nil, count_command = nil }
+			return { name = entry, command = nil, count_command = nil, count_command2 = nil }
 		end
 		return entry
 	end
 
 	-- Table to hold dynamically created per-app items
+	-- Each entry: { icon = <item>, primary = <item>, secondary = <item>|nil }
+	-- For apps without count_command2, icon and primary are merged into one item
+	-- and secondary is nil.
 	local app_items = {}
 
 	-- The summary badge (total count) shown on the right
@@ -43,7 +47,7 @@ local function setup_for_display(display_index)
 		display = display_index,
 		position = position,
 		icon = {
-			string = "| ",
+			string = "|  ",
 			font = "FiraCode Nerd Font:Bold:14.0",
 			color = colors.grey,
 			padding_left = -2,
@@ -70,7 +74,18 @@ local function setup_for_display(display_index)
 		return result
 	end
 
-	-- Return (or lazily create) a sketchybar item for a given app entry
+	-- Return (or lazily create) item handles for a given app entry.
+	--
+	-- For apps WITHOUT count_command2:
+	--   A single item holds both the icon and the primary count label.
+	--   { icon = item, primary = item, secondary = nil }
+	--
+	-- For apps WITH count_command2 we mirror the wifi_up/wifi_down pattern exactly:
+	--   1. icon-only item         — the app glyph, no label
+	--   2. primary label item     — width=0, y_offset=4  (red, top)
+	--   3. secondary label item   — normal width, y_offset=-4 (yellow, bottom)
+	--   Items 2 and 3 overlap item 1 horizontally because item 2 has width=0.
+	--   { icon = item1, primary = item2, secondary = item3 }
 	local function get_or_create_item(entry)
 		entry = normalize(entry)
 		local app_name = entry.name
@@ -80,45 +95,109 @@ local function setup_for_display(display_index)
 		end
 
 		local safe_name = app_name:gsub("%s+", "_"):lower()
-		local item_name = "items.notifications." .. safe_name
-
-		-- Use a custom command if provided, otherwise fall back to plain `open -a`
+		local base = "items.notifications." .. safe_name
 		local click_cmd = entry.command or ('open -a "' .. app_name .. '"')
+		local has_secondary = entry.count_command2 ~= nil
 
-		local item = sbar.add("item", item_name .. suffix, {
-			display = display_index,
-			position = position,
-			drawing = true,
-			icon = {
-				string = app_icons[app_name] or "?",
-				font = "sketchybar-app-font:Regular:16.0",
-				color = colors.white,
-				padding_left = 4,
-			},
-			label = {
-				string = "",
-				font = "FiraCode Nerd Font:Bold:10.0",
-				color = colors.red,
-				y_offset = 6,
-				padding_left = 0,
-				padding_right = 0,
-			},
-			click_script = click_cmd,
-		})
+		local icon_item, primary, secondary
 
-		app_items[app_name] = item
-		return item
+		if not has_secondary then
+			-- Simple single-item layout
+			icon_item = sbar.add("item", base .. suffix, {
+				display = display_index,
+				position = position,
+				drawing = true,
+				icon = {
+					string = app_icons[app_name] or "?",
+					font = "sketchybar-app-font:Regular:16.0",
+					color = colors.white,
+					padding_left = 4,
+				},
+				label = {
+					string = "",
+					font = "FiraCode Nerd Font:Bold:10.0",
+					color = colors.red,
+					y_offset = 4,
+					padding_left = 0,
+					padding_right = 0,
+				},
+				click_script = click_cmd,
+			})
+			primary = icon_item
+		else
+			-- Three-item stacked layout (mirrors wifi_up / wifi_down)
+			-- 1. Icon-only item — reserves the horizontal space and shows the glyph
+			icon_item = sbar.add("item", base .. ".icon" .. suffix, {
+				display = display_index,
+				position = position,
+				drawing = true,
+				icon = {
+					string = app_icons[app_name] or "?",
+					font = "sketchybar-app-font:Regular:16.0",
+					color = colors.white,
+					padding_left = 4,
+				},
+				label = { drawing = false },
+				click_script = click_cmd,
+			})
+
+			-- 2. Primary count label — width=0 so it overlaps the icon item
+			primary = sbar.add("item", base .. suffix, {
+				display = display_index,
+				position = position,
+				drawing = true,
+				width = 0,
+				padding_left = -5,
+				icon = { drawing = false },
+				label = {
+					string = "",
+					font = "FiraCode Nerd Font:Bold:10.0",
+					color = colors.red,
+					y_offset = 4,
+					padding_left = 0,
+					padding_right = 0,
+				},
+				click_script = click_cmd,
+			})
+
+			-- 3. Secondary count label — sits below the primary via y_offset=-4
+			secondary = sbar.add("item", base .. ".secondary" .. suffix, {
+				display = display_index,
+				position = position,
+				drawing = false,
+				padding_left = -5,
+				icon = { drawing = false },
+				label = {
+					string = "",
+					font = "FiraCode Nerd Font:Bold:10.0",
+					color = colors.yellow,
+					y_offset = -4,
+					padding_left = 0,
+					padding_right = 0,
+				},
+				click_script = click_cmd,
+			})
+		end
+
+		app_items[app_name] = { icon = icon_item, primary = primary, secondary = secondary }
+		return app_items[app_name]
 	end
 
-	-- Separate apps into those that use Dock badges vs. custom count commands
+	-- Separate apps into those that use Dock badges vs. custom count commands.
+	-- An app with count_command2 but no count_command still uses the Dock for
+	-- the primary count; it just also fires a second async call.
 	local dock_apps = {}
 	local custom_count_apps = {}
+	local secondary_count_apps = {}
 	for _, entry in ipairs(apps_to_track) do
 		local e = normalize(entry)
 		if e.count_command then
 			table.insert(custom_count_apps, e)
 		else
 			table.insert(dock_apps, e)
+		end
+		if e.count_command2 then
+			table.insert(secondary_count_apps, e)
 		end
 	end
 
@@ -177,20 +256,48 @@ local function setup_for_display(display_index)
 	sbar.delay(1, function()
 		local order_cmd = "sketchybar --reorder"
 
+		-- Returns item names in render order for an entry.
+		-- For the "q" (left/builtin) position items flow right-to-left, so we put
+		-- the zero-width label items BEFORE the icon item so they land on top of it.
+		-- For center/right positions the icon comes first as normal.
+		local function item_names_for(entry)
+			local name = normalize(entry).name
+			local safe_name = name:gsub("%s+", "_"):lower()
+			local base = "items.notifications." .. safe_name
+			local handles = app_items[name]
+			local names = {}
+			if handles and handles.secondary then
+				if position == "q" then
+					-- Right-to-left flow: labels first, then icon
+					table.insert(names, base .. suffix)
+					table.insert(names, base .. ".secondary" .. suffix)
+					table.insert(names, base .. ".icon" .. suffix)
+				else
+					-- Left-to-right flow: icon first, then labels
+					table.insert(names, base .. ".icon" .. suffix)
+					table.insert(names, base .. suffix)
+					table.insert(names, base .. ".secondary" .. suffix)
+				end
+			else
+				table.insert(names, base .. suffix)
+			end
+			return names
+		end
+
 		if position == "center" then
 			-- Reverse order for center position since sketchybar mirrors it
 			for i = #apps_to_track, 1, -1 do
-				local name = normalize(apps_to_track[i]).name
-				local safe_name = name:gsub("%s+", "_"):lower()
-				order_cmd = order_cmd .. " items.notifications." .. safe_name .. suffix
+				for _, n in ipairs(item_names_for(apps_to_track[i])) do
+					order_cmd = order_cmd .. " " .. n
+				end
 			end
 			order_cmd = order_cmd .. " " .. notifications.name
 		else
 			order_cmd = order_cmd .. " " .. notifications.name
 			for _, entry in ipairs(apps_to_track) do
-				local name = normalize(entry).name
-				local safe_name = name:gsub("%s+", "_"):lower()
-				order_cmd = order_cmd .. " items.notifications." .. safe_name .. suffix
+				for _, n in ipairs(item_names_for(entry)) do
+					order_cmd = order_cmd .. " " .. n
+				end
 			end
 		end
 
@@ -202,7 +309,21 @@ local function setup_for_display(display_index)
 	for _, entry in ipairs(apps_to_track) do
 		local name = normalize(entry).name
 		local safe_name = name:gsub("%s+", "_"):lower()
-		table.insert(bracket_members, "items.notifications." .. safe_name .. suffix)
+		local base = "items.notifications." .. safe_name
+		local handles = app_items[name]
+		if handles and handles.secondary then
+			if position == "q" then
+				table.insert(bracket_members, base .. suffix)
+				table.insert(bracket_members, base .. ".secondary" .. suffix)
+				table.insert(bracket_members, base .. ".icon" .. suffix)
+			else
+				table.insert(bracket_members, base .. ".icon" .. suffix)
+				table.insert(bracket_members, base .. suffix)
+				table.insert(bracket_members, base .. ".secondary" .. suffix)
+			end
+		else
+			table.insert(bracket_members, base .. suffix)
+		end
 	end
 
 	sbar.add("bracket", "items.notifications" .. suffix .. ".bracket", bracket_members, {
@@ -221,10 +342,18 @@ local function setup_for_display(display_index)
 	local last_counts = {}
 
 	local function set_app_items_visible(visible)
-		-- I could animate this but it seems laggy and I'd rather have it snappy instead
 		for _, entry in ipairs(apps_to_track) do
-			local item = get_or_create_item(entry)
-			item:set({ drawing = visible })
+			local handles = get_or_create_item(entry)
+			local app_name = normalize(entry).name
+			if handles.secondary then
+				-- Three-item layout: toggle icon and primary together
+				handles.icon:set({ drawing = visible })
+				handles.primary:set({ drawing = visible })
+				local sec_count = last_counts[app_name .. ":secondary"] or 0
+				handles.secondary:set({ drawing = visible and sec_count > 0 })
+			else
+				handles.primary:set({ drawing = visible })
+			end
 		end
 	end
 
@@ -234,44 +363,70 @@ local function setup_for_display(display_index)
 	end)
 	-- ─────────────────────────────────────────────────────────────────────────
 
-	-- Apply a resolved app_counts table to all items and update the total badge.
+	-- Apply a resolved counts table to all items and update the total badge.
+	-- Secondary counts are stored under the key "<AppName>:secondary".
 	local function apply_counts(app_counts)
 		last_counts = app_counts
 
 		local total = 0
-		for _, count in pairs(app_counts) do
-			total = total + count
+		for key, count in pairs(app_counts) do
+			-- Only sum primary counts (not ":secondary" keys) into the total badge
+			if not key:match(":secondary$") then
+				total = total + count
+			end
 		end
 
 		for _, entry in ipairs(apps_to_track) do
 			local app_name = normalize(entry).name
-			local item = get_or_create_item(entry)
-			local count = app_counts[app_name]
+			local handles = get_or_create_item(entry)
+			local count = app_counts[app_name] or 0
+			local sec_count = app_counts[app_name .. ":secondary"] or 0
 
-			if count and count > 0 then
-				item:set({
-					drawing = expanded,
-					icon = { color = colors.white },
-					label = { string = tostring(count), color = colors.red },
-				})
+			if handles.secondary then
+				-- Three-item layout: icon colour changes independently
+				if count > 0 then
+					handles.icon:set({ drawing = expanded, icon = { color = colors.white } })
+					handles.primary:set({ drawing = expanded, label = { string = tostring(count), color = colors.red } })
+				else
+					handles.icon:set({ icon = { color = colors.grey } })
+					handles.primary:set({ label = { string = "" } })
+				end
+
+				if sec_count > 0 then
+					handles.secondary:set({
+						drawing = expanded,
+						label = { string = tostring(sec_count), color = colors.yellow },
+					})
+				else
+					handles.secondary:set({ drawing = false, label = { string = "" } })
+				end
 			else
-				item:set({
-					icon = { color = colors.grey },
-					label = { string = "", color = colors.grey },
-				})
+				-- Simple single-item layout
+				if count > 0 then
+					handles.primary:set({
+						drawing = expanded,
+						icon = { color = colors.white },
+						label = { string = tostring(count), color = colors.red },
+					})
+				else
+					handles.primary:set({
+						icon = { color = colors.grey },
+						label = { string = "", color = colors.grey },
+					})
+				end
 			end
 		end
 
 		if total > 0 then
 			notifications:set({
 				drawing = true,
-					icon = { string = "|  ", color = colors.blue },
+				icon = { string = "|  ", color = colors.blue },
 				label = { string = tostring(total), color = colors.blue },
 			})
 		else
 			notifications:set({
 				drawing = true,
-					icon = { string = "|  ", color = colors.grey },
+				icon = { string = "|  ", color = colors.grey },
 				label = { string = "0", color = colors.grey },
 			})
 		end
@@ -279,10 +434,8 @@ local function setup_for_display(display_index)
 
 	-- Main update function
 	local function update_notifications()
-		-- Start with a fresh counts table that will be populated by all sources.
 		local app_counts = {}
-		-- Track how many async calls are still pending before we can apply.
-		local pending = #custom_count_apps + (OSASCRIPT_CMD and 1 or 0)
+		local pending = #custom_count_apps + #secondary_count_apps + (OSASCRIPT_CMD and 1 or 0)
 
 		local function maybe_apply()
 			pending = pending - 1
@@ -297,6 +450,16 @@ local function setup_for_display(display_index)
 			sbar.exec(entry.count_command, function(result)
 				local count = tonumber((result or ""):match("%d+")) or 0
 				app_counts[app_name] = count
+				maybe_apply()
+			end)
+		end
+
+		-- Fire secondary count commands (stored under "<AppName>:secondary").
+		for _, entry in ipairs(secondary_count_apps) do
+			local app_name = entry.name
+			sbar.exec(entry.count_command2, function(result)
+				local count = tonumber((result or ""):match("%d+")) or 0
+				app_counts[app_name .. ":secondary"] = count
 				maybe_apply()
 			end)
 		end
