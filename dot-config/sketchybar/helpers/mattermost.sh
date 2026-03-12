@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CACHE_FILE="/tmp/mattermost_unread.json"
-TTL=600 # seconds; I do not need real-time updates, so 10 minutes is fine
+TTL=1800 # seconds; I do not need real-time updates, so 10 minutes is fine
 
 if [ -f "$CACHE_FILE" ]; then
   AGE=$(($(date +%s) - $(date -r "$CACHE_FILE" +%s)))

@@ -13,8 +13,10 @@ local protonvpn = sbar.add("item", "protonvpn", {
 	position = "right",
 	icon = {
 		string = icon_off,
-		font = "sketchybar-app-font:Regular:16.0",
-		padding_left = 8,
+		font = "sketchybar-app-font:Regular:17.0",
+		padding_left = 9,
+    padding_right = 2,
+		y_offset = 1,
 	},
 	update_freq = 10,
 })

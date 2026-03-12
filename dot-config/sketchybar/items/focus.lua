@@ -18,6 +18,7 @@ local focus = sbar.add("item", "focus", {
 			size = 16.0,
 		},
 		padding_left = 8,
+		y_offset = 1,
 	},
 	update_freq = 10,
 })
@@ -68,7 +69,8 @@ local function update_focus()
 end
 
 focus:subscribe("mouse.clicked", function(env)
-	sbar.exec([[osascript -e '
+	sbar.exec(
+		[[osascript -e '
 		tell application "System Events"
 			tell process "ControlCenter"
 				click menu bar item 16 of menu bar 1
@@ -77,9 +79,11 @@ focus:subscribe("mouse.clicked", function(env)
         delay 0.1
         click menu bar item 16 of menu bar 1
 			end tell
-		end tell']], function()
-		sbar.delay(0.3, update_focus)
-	end)
+		end tell']],
+		function()
+			sbar.delay(0.3, update_focus)
+		end
+	)
 end)
 
 focus:subscribe("routine", update_focus)
