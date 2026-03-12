@@ -1,26 +1,13 @@
 #!/usr/bin/env bash
 
-### VERY FIRST THING: DECRYPT KEYS
-export $(sops --decrypt ~/dotfiles/secrets.env | xargs)
-
-# Path to your oh-my-zsh installation.
+### EXPORTS
+# All exports are in exports.zsh
 export XDG_CONFIG_HOME="$HOME/.config"
-export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
-export ZSHRC="$XDG_CONFIG_HOME/zsh/.zshrc"
-export OMPY="$XDG_CONFIG_HOME/oh-my-posh/.mytheme.omp.yaml"
-export BOOKMARKS="$XDG_CONFIG_HOME/zsh/.zsh_hashes"
-
-export WANDB_MODE='online'
-
-DISABLE_LS_COLORS='true'
-
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-export SN_USE_SESSION=yes
+source ${XDG_CONFIG_HOME}/zsh/exports.zsh
 
 ### Sort "*2.smth" before "*10.smth"
 setopt numericglobsort
+setopt extendedhistory
 
 # Because ZSH did not take into account custom prompt functions we need to disable async loading
 zstyle ':omz:alpha:lib:git' async-prompt no
@@ -29,198 +16,70 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
 ZSH_THEME='customized-bira'
-
-# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
-# - The first argument to the function ($1) is the base path to start traversal
-# - See the source code (completion.{bash,zsh}) for the details.
-_fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
-}
-
-# Use fd to generate the list for directory completion
-_fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude '.git' . "$1"
-}
-
-fzf-home-widget() {
-  local file
-  file=$(cd ~ && fd --type f --hidden --follow --exclude '.git' . | fzf)
-  [[ -n $file ]] && LBUFFER+="$HOME/$file"
-  zle redisplay
-}
-
-zle -N fzf-home-widget
-bindkey '^[t' fzf-home-widget # Alt-T
 
 # CASE_SENSITIVE='true'    # a == A ?
 HYPHEN_INSENSITIVE='true' # - == _ ?
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION='true'
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS='true'
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY='true'
-
-### HISTORY FILE
-export HISTFILE=$XDG_CONFIG_HOME/zsh/zsh_history
-HIST_STAMPS='yyyy-mm-dd'
-export HISTSIZE=10000000
-export SAVEHIST=$HISTSIZE
-setopt extendedhistory
-
-export FZF_BASE=/usr/bin/fzf
-export FZF_DEFAULT_OPTS='--height 40% --tmux center,60%'
 DISABLE_FZF_KEY_BINDINGS='false'
 
 ### PLUGINS
 plugins=(
-  # git # With tmux, we do not really need this
-  z # Easy fuzzy navigation
-  # vscode  # cmd shortcuts. E.g.: `vscd f1 f2` opens diff in code
+  z    # Easy fuzzy navigation
   sudo # Double escape sudo's last command
-  #dirhistory
-  #history
-  # copybuffer
   zsh-autosuggestions
   fzf
   mise
 )
 
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-source $ZSH/oh-my-zsh.sh
+source ${ZSH}/oh-my-zsh.sh
 
 ### User configuration
+[ -f ${XDG_CONFIG_HOME}/zsh/functions.zsh ] && source ${XDG_CONFIG_HOME}/zsh/functions.zsh
+[ -f ${XDG_CONFIG_HOME}/zsh/.zsh_aliases ] && source ${XDG_CONFIG_HOME}/zsh/.zsh_aliases
+[ -f ${XDG_CONFIG_HOME}/zsh/.zsh_hashes ] && source ${XDG_CONFIG_HOME}/zsh/.zsh_hashes
 
-### MACROS
-export MANPAGER='nvim +Man!'
-
-### GEMINI
-export GEMINI_SANDBOX=true
-
-### DEFAULT EDITOR
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-export VIMTEX_OUTPUT_DIRECTORY='out'
-
-### CUSTOM COMPOSE FILE
-export XCOMPOSEFILE='$XDG_CONFIG_HOME/XCompose'
-
-### PAGER (LESS) CONFIG
-export PAGER='less -r'
-export LESS='--mouse --wheel-lines 4'
-export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
-
-### ALIASES
-if [[ -f ${XDG_CONFIG_HOME}/zsh/.zsh_aliases ]]; then
-  source ${XDG_CONFIG_HOME}/zsh/.zsh_aliases
+### AUTOLOADS
+# Add custom functions path to fpath and autoload all functions within
+if [[ -d ${XDG_CONFIG_HOME}/zsh/functions ]]; then
+  FPATH="${XDG_CONFIG_HOME}/zsh/functions:${FPATH}"
+  for func_file in ${XDG_CONFIG_HOME}/zsh/functions/*; do
+    [ -f "${func_file}" ] && autoload -U ${func_file:t}
+  done
 fi
 
-# Load hash aliases
-if [[ -f ${XDG_CONFIG_HOME}/zsh/.zsh_hashes ]]; then
-  source ${XDG_CONFIG_HOME}/zsh/.zsh_hashes
-fi
-
-### AUTOLAODS
-# Autoload custom zsh functions
-fpath=($XDG_CONFIG_HOME/zsh/functions $fpath)
-autoload -U jview
-autoload -U _jview
+# Completion definitions
 compdef _jview jview
-
-autoload -U _toggl
-autoload -U check_git_dirty
-
-autoload -U mcd
-autoload -U mvln
-# Autoload deepl functions
-autoload -U dtj
-autoload -U dts
-autoload -U std
-autoload -U td
-autoload -U te
-autoload -U tj
-autoload -U ts
-autoload -U lkey_nojq
-autoload -U nm
+if [[ "$(basename -- "$current_script")" != "_toggl" ]]; then
+  compdef _toggl toggl
+fi
 
 ### HANDY KEYBINDS
-copy-command() {
-  echo -n $BUFFER | pbcopy
-  zle -M 'Copied to clipboard'
-}
-zle -N copy-command
-
 bindkey '^K' kill-line
 bindkey '^[^?' backward-kill-line
 bindkey '^W' backward-kill-word
 bindkey '^F' autosuggest-accept
-bindkey '^Xc' copy-command
 
-### TMUX custom function
-function tmuxsc() {
-  local session_name="$1"
-
-  if tmux has-session -t "$session_name" 2>/dev/null; then
-    # If the session exists, switch to it
-  else
-    # If the session doesn't exist, create it in detached mode and switch to it
-    tmux new-session -d -s "$session_name"
-  fi
-  tmux switch-client -t "$session_name"
-}
-
-### yazi
-# function y() {
-# 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-# 	yazi "$@" --cwd-file="$tmp"
-# 	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-# 		builtin cd -- "$cwd"
-# 	fi
-# 	rm -f -- "$tmp"
-# }
-
-# Detect source and translate to
-
-### LOCAL BINARY DIR
-export PATH="$HOME/.local/bin:$PATH"
-
-### GO BINARIES
-export PATH="$HOME/go/bin:$PATH"
-
-### Add homebrew to path, but APPEND
-export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar"
-export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew"
-export PATH="${PATH}:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin"
-export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:"
-export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}"
-
-### CUDA
-#export CUDA_HOME="/usr/local/cuda"
-#export PATH="${PATH}:${CUDA_HOME}/bin"
-#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${CUDA_HOME}/lib64:/usr/lib64"
-#export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${LD_LIBRARY_PATH}"
-
-eval "$(oh-my-posh init zsh --config "${HOME}/.config/oh-my-posh/.mytheme.omp.yaml")"
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  export PATH="${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
-fi
+eval "$(oh-my-posh init zsh --config "${XDG_CONFIG_HOME}/oh-my-posh/.mytheme.omp.yaml")"
 
 # Load custom LS colors
-source $XDG_CONFIG_HOME/zsh/lscolors.sh
+[ -f ${XDG_CONFIG_HOME}/zsh/lscolors.sh ] && source ${XDG_CONFIG_HOME}/zsh/lscolors.sh
+[ -f ${HOME}/.fzf.zsh ] && source ${HOME}/.fzf.zsh
 
-### CUSTOM ZSH PROMPT
+# eval is used to hide the Zsh-specific ${(%):-%x} syntax from shfmt
+eval 'current_script="${(%):-%x}"'
+
+###### THE FOLLOWING SHOULD BE AT THE END.
+eval "$(mise activate zsh)"
+
+### Apply all defined hooks, e.g., sourcing .source_me files.
+# load-local-conf
+
+################################################################################
+
+### [LEGACY] CUSTOM ZSH PROMPT
 
 # precmd_prompt () {
 #   # Regex to find visible character length of prompt string
@@ -258,59 +117,3 @@ source $XDG_CONFIG_HOME/zsh/lscolors.sh
 #   ### GIT IN MIDDLE? Should be possible, but idk if better
 # }
 #precmd_functions+=(precmd_prompt)
-
-### FOR JEKYLL/RUBY
-# chruby for ruby env
-# source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
-# source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-# Change away from system ruby
-# chruby ruby-3.3.5
-
-### FOR MUJOCO_PY
-#export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-#export CC="/opt/homebrew/opt/llvm/bin/clang"
-#export CXX="/opt/homebrew/opt/llvm/bin/clang++"
-#export CXX11="/opt/homebrew/opt/llvm/bin/clang++"
-#export CXX14="/opt/homebrew/opt/llvm/bin/clang++"
-#export CXX17="/opt/homebrew/opt/llvm/bin/clang++"
-#export CXX1X="/opt/homebrew/opt/llvm/bin/clang++"
-
-#export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-#export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-
-# export NVM_DIR="$HOME/.nvm"
-#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:$HOME/.cache/lm-studio/bin"
-export GOOGLE_CLOUD_PROJECT="see-far"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-#compdef toggl
-# eval is used to hide the Zsh-specific ${(%):-%x} syntax from shfmt
-eval 'current_script="${(%):-%x}"'
-
-if [[ "$(basename -- "$current_script")" != "_toggl" ]]; then
-  compdef _toggl toggl
-fi
-
-# Android Studio and SDK
-# export ANDROID_HOME=$HOME/Library/Android/sdk
-# export PATH=$PATH:$ANDROID_HOME/platform-tools
-# export PATH=$PATH:$ANDROID_HOME/tools
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  # Use GNU tools instead of BSD tools on macOS
-  export PATH="$HOME/.local/gnubin:$PATH"
-fi
-
-###### THE FOLLOWING SHOULD BE AT THE END.
-eval "$(mise activate zsh)"
-### Make sure homebrew is the first to be looked up
-#export PATH="/opt/homebrew/bin:$PATH"
-### Apply all defined hooks, e.g., sourcing .source_me files.
-# load-local-conf
