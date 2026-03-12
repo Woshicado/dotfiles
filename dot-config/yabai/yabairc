@@ -38,7 +38,7 @@ yabai -m rule --add app="^[Ee]nte [Aa]uth$" manage=off
 yabai -m rule --add app="^[fF]inder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add app="^[Aa]pp [Ss]tore$" manage=off
 yabai -m rule --add app="^mpv$" manage=off
-yabai -m rule --add app="^[Pp]ython$" manage=off
+yabai -m rule --add app="^[Pp]ython3?" manage=off
 yabai -m rule --add app="^[Mm]ac[Ww]hisper$" manage=off
 yabai -m rule --add app="^[Pp]roton [Vv][Pp][Nn]$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off

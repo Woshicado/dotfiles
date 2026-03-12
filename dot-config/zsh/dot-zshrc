@@ -120,141 +120,9 @@ export PAGER='less -r'
 export LESS='--mouse --wheel-lines 4'
 export LESSHISTFILE=$XDG_CONFIG_HOME/.lesshst
 
-### DOCKER
-#export DOCKER_DEFAULT_PLATFORM='linux/amd64'
-alias ssh_tb='ssh -L 16006:127.0.0.1:6006'
-alias ssh_mo='ssh -L 12718:127.0.0.1:2718'
-alias rt='trash'
-
-### HELPFUL ALIASES
-alias cwd=pwd
-alias dnfi='sudo dnf install'
-alias dnfu='sudo dnf update'
-alias dnfua='sudo dnf update --refresh'
-alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
-alias n='nvim'
-alias n.='nvim .'
-alias v='nvim'
-alias v.='nvim .'
-alias pdf='zathura'
-alias bt='btop'
-
-alias m='mise'
-alias mx='mise exec'
-alias mp='mise prepare'
-alias mu='mise use'
-alias mup='mise upgrade'
-alias mr='mise run'
-
-alias nu='nm tag:unread'
-alias nt='nm "tag:todo OR tag:important"'
-
-if [[ ! "${OSTYPE}" == 'darwin'* ]]; then
-  alias c='xclip -sel c -r'
-else
-  alias c='pbcopy'
-fi
-
-# Directory aliases
-alias ols='/bin/ls -l'
-alias ls='lsd'
-alias l='lsd -l'
-alias ll='lsd -la'
-alias la='lsd -lA'
-alias lt='lsd --tree'
-alias llt='lsd -a --tree'
-alias lat='lsd -la --tree'
-alias llat='lsd -la --tree'
-alias pwdy="echo $(pwd) | pbcopy" # Copy current directory to clipboard
-#alias cd='z'
-
-alias lg='lazygit'
-alias jless='jless --line-numbers --relative-line-numbers'
-alias jl='jless'
-
-# Obsidian
-export O_VAULT_DIR="$HOME/vaults/obsidian-notes"
-alias oo='cd $O_VAULT_DIR'
-alias or='nvim $O_VAULT_DIR/inbox/*.md'
-alias nvl="nvim --listen 127.0.0.1:2006"
-
-# Time tracking via toggl track python cli (https://github.com/AuHau/toggl-cli)
-alias tt='toggl start'
-alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
-alias ttws='toggl start -o Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
-alias tts='toggl start -o Service'
-alias ttm='toggl start -o Main'
-alias ttd='toggl start -o Side'
-alias ttt='toggl stop'
-alias ttl='toggl ls -f+id'
-alias ttr='toggl rm'
-
-# Copy directory over ssh
-alias rcp='rsync -saLPz --port 22 -e ssh '
-alias rcps='rsync -saLPz --port 22 --chmod=F600,D700 -e ssh '
-
-# Custom git aliases for submodules
-alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
-alias gsp='git push --recurse-submodules=on-demand'
-alias gs='git status'
-alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar%C(auto)  %D%n%s%n'"
-alias gd='git ddiff'
-
-# Custom jj aliases
-alias jjs='jj st'
-alias jja='jj abandon'
-alias jjbmm='jj bookmark move main --to @-'
-alias jjgp='jj git push'
-alias jjp='jj prev'
-alias jjn='jj next'
-alias jjc='jj new'
-alias jjl='jj log'
-alias jjd='jj describe'
-alias jjdf='jj diff'
-alias jjt='jj track'
-alias jju='jj undo'
-alias jjut='jj untrack'
-alias neogit="nvim +\"lua vim.defer_fn(function() require('neogit').open() end, 0)\""
-alias ng='neogit'
-alias dt='difft'
-
-# Always start ipython with current venv
-alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-alias univpn='sudo openconnect vpn.hiz-saarland.de --authgroup UdS -u s8jjmeye '
-alias nonzero_mean="grep -rnPo ' \"mean\": (?!0\.0\b,)[0-9]+(?:\.[0-9]+)?'"
-
-# Start obsidian (flatpak installation) manually to allow for gpg-signing
-if [[ ! "$OSTYPE" == 'darwin'* ]]; then
-  alias obsidian='/var/lib/flatpak/app/md.obsidian.Obsidian/current/active/files/obsidian'
-fi
-
-# suffix aliases
-alias -s md='bat'
-alias -s png='open'
-alias -s jpg='open'
-alias -s jpeg='open'
-alias -s pdf='open'
-alias -s mp4='open'
-alias -s mov='open'
-alias -s js="$EDITOR"
-alias -s ts="$EDITOR"
-alias -s yaml='jless --yaml'
-alias -s yml='jless --yaml'
-alias -s json='jless'
-alias -s jsonl='jless'
-
-# global aliases
-alias -g NE='2>/dev/null'     # Ignore stderr
-alias -g ND='>/dev/null'      # Ignore stdout
-alias -g NUL='>/dev/null 2>1' # Ignore both stdout and stderr
-alias -g L='| less'           # Pipe to less with raw control chars
-alias -g WC='| wc -w'         # word count
-alias -g WCL='| wc -l'        # word count
-
-if [[ ! "$OSTYPE" == 'darwin'* ]]; then
-  alias -g C='| xclip -sel c -r'
-else
-  alias -g C='| pbcopy'
+### ALIASES
+if [[ -f ${XDG_CONFIG_HOME}/zsh/.zsh_aliases ]]; then
+  source ${XDG_CONFIG_HOME}/zsh/.zsh_aliases
 fi
 
 # Load hash aliases
@@ -346,9 +214,6 @@ export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}"
 eval "$(oh-my-posh init zsh --config "${HOME}/.config/oh-my-posh/.mytheme.omp.yaml")"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  ### Tev wrapper for macos... Seems to try and execute x86 instead of arm64 otherwise...
-  alias tev="arch -arm64 /Applications/tev.app/Contents/MacOS/tev"
-  alias anki="/Applications/Anki.app/Contents/MacOS/launcher ; exit;"
   export PATH="${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
 fi
 
