@@ -38,6 +38,7 @@ return {
 			"tailwindcss",
 			"jdtls",
 			"pylsp",
+      "lua_ls",
 			-- "GitHub Copilot",
 		}
 
@@ -64,6 +65,17 @@ return {
 							"tw\\.\\w+\\(\\{([^}]*)",
 						},
 					},
+				},
+			},
+			lua_ls = {
+				Lua = {
+					runtime = { version = "LuaJIT" },
+					diagnostics = { globals = { "vim" } }, -- recognize `vim` global
+					workspace = {
+						library = vim.api.nvim_get_runtime_file("", true),
+						checkThirdParty = false,
+					},
+					telemetry = { enable = false },
 				},
 			},
 			ltex = {

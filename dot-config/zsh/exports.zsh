@@ -74,6 +74,8 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   # Use GNU tools instead of BSD tools on macOS
   export PATH="${HOME}/.local/gnubin:${PATH}"
   export PATH="${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
+
+  export OVPN_PROFILE="${HOME}/Library/Application Support/OpenVPN Connect/profiles/1728929973375.ovpn"
 fi
 
 ### COMMENTED OUT EXPORTS
