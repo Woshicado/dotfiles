@@ -24,11 +24,41 @@ uv = "latest"
 [prepare.npm]
 [prepare.go]
 
-[tasks]
-[tasks.edit]
-description = "Edit the projects configuration file"
-run = "$EDITOR pyproject.toml"
-
 [hooks]
 # cd = "script -q /dev/null lsd --color always --icon always | head -n 2"
 enter = "mise run info 2>/dev/null || true"
+
+[tasks]
+[tasks."init-latex-presentation"]
+description = "Scaffold a new LaTeX presentation from a GitHub template"
+# Use variables for flexibility
+run = """
+#!/usr/bin/env bash
+set -e
+
+REPO_URL="git@github.com:Woshicado/Latex-Templates.git"
+PROJECT_NAME=$1
+
+if [ -z "$PROJECT_NAME" ]; then
+  echo "Usage: mise run init-latex-presentation <project-name>"
+  exit 1
+fi
+
+# 1. Clone the template into the new directory
+git clone --depth=1 $REPO_URL $PROJECT_NAME
+cd $PROJECT_NAME
+
+# 2. Scrub the old git history
+rm -rf .git
+
+# 3. Initialize new git repo and create initial commit
+git init
+git add .
+git commit -m "Initial commit from template @ ${REPO_URL}"
+
+# 4. Optional: Create GitHub repo using GitHub CLI (gh)
+# If you have 'gh' installed, uncomment the next line:
+gh repo create $PROJECT_NAME --source=. --private --push
+
+echo "Project $PROJECT_NAME created successfully!"
+"""
