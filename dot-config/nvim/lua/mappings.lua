@@ -43,7 +43,7 @@ map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
-map({ "n", "t" }, "<A-i>", function()
+map({ "n", "t" }, "<M-i>", function()
   require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
 end, { desc = "terminal toggle floating term" })
 

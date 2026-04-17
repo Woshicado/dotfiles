@@ -47,5 +47,9 @@ ignore = [
 # "SIM115", # Use a context manager for opening files
   "TRY003", # Avoid specifying long messages outside the exception class
   "S101", # Avoid using assert; I think asserts are useful for optimization with '-O' flag in critical code
+  "N806", # Variable in function should be lowercase
 ]
 
+[tool.ruff.lint.flake8-builtins]
+# Solves your rich.print issue globally
+builtins-ignorelist = ["print"]

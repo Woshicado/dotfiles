@@ -31,7 +31,7 @@ yabai -m rule --add app="^[Rr]aycast$" manage=off
 yabai -m rule --add app="^[Kk]ee[Pp]ass[Xx][Cc]$" manage=off
 yabai -m rule --add app="^[Cc]reative [Cc]loud$" manage=off
 yabai -m rule --add app="^linearmouse$" manage=off
-yabai -m rule --add app="^[Ll]ogi [Oo]ptions*$" manage=off
+yabai -m rule --add app="^Logi Options" manage=off
 yabai -m rule --add app="^[Tt]oggl [Tt]rack$" manage=off
 yabai -m rule --add app="^[Pp]rint [Cc]enter$" manage=off
 yabai -m rule --add app="^[Ee]nte [Aa]uth$" manage=off
@@ -40,12 +40,14 @@ yabai -m rule --add app="^[Aa]pp [Ss]tore$" manage=off
 yabai -m rule --add app="^mpv$" manage=off
 yabai -m rule --add app="^[Pp]ython3?" manage=off
 yabai -m rule --add app="^[Mm]ac[Ww]hisper$" manage=off
+yabai -m rule --add app="^Leader Key$" manage=off
 yabai -m rule --add app="^[Pp]roton [Vv][Pp][Nn]$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Spotify$" manage=off
 yabai -m rule --add app="^[Ww]hats[Aa]pp$" manage=off
 yabai -m rule --add app="^[Ss]ignal$" manage=off
 yabai -m rule --add app="^[Zz]otero$" title="([Zz]ot[Ss]eek|[Pp]lugins [Mm]anager|[Zz]otero [Ss]ettings)" manage=off
+yabai -m rule --add app="^Thunderbird$" title="(Write:)" manage=off
 yabai -m rule --apply
 
 # yabai -m signal --add event=window_created action='

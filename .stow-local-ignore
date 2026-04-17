@@ -31,3 +31,4 @@ etc
 copy_changes.sh
 Brewfile
 .mise.toml
+install-all.sh

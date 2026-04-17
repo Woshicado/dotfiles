@@ -13,7 +13,7 @@ return {
 				python = { "ruff_fix", "ruff_format" },
 				yaml = { "yamlfix" },
 				json = { "jq" },
-				markdown = { "yamlfix", "prettierd" },
+				markdown = { "prettierd" },
 				tex = { "latexindent_m" },
 				toml = { "taplo" },
 				java = { "google-java-format" },

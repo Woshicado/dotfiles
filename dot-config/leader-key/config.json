@@ -1,0 +1,382 @@
+{
+  "actions": [
+    {
+      "actions": [
+        {
+          "key": "k",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'kitty'"
+        },
+        {
+          "key": "z",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Zen'"
+        },
+        {
+          "key": "c",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Claude'"
+        },
+        {
+          "key": "t",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Microsoft Teams'"
+        },
+        {
+          "key": "f",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Firefox'"
+        },
+        {
+          "key": "m",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Mattermost'"
+        },
+        {
+          "key": "o",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Obsidian'"
+        },
+        {
+          "key": "g",
+          "type": "application",
+          "value": "$HOME/Applications/Vivaldi Apps.localized/Gemini.app"
+        },
+        {
+          "key": "w",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'WhatsApp'"
+        },
+        {
+          "key": "s",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Signal'"
+        },
+        {
+          "actions": [
+            {
+              "key": "m",
+              "type": "command",
+              "value": "$HOME/.local/bin/toggle_app.sh 'Proton Mail'"
+            },
+            {
+              "key": "v",
+              "type": "command",
+              "value": "$HOME/.local/bin/toggle_app.sh 'ProtonVPN'"
+            },
+            {
+              "key": "d",
+              "type": "command",
+              "value": "$HOME/.local/bin/toggle_app.sh 'Proton Drive'"
+            }
+          ],
+          "key": "p",
+          "label": "Proton",
+          "type": "group"
+        },
+        {
+          "key": "r",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Skim'"
+        },
+        {
+          "key": "l",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Zotero'"
+        },
+        {
+          "key": "a",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Ente Auth'"
+        },
+        {
+          "key": "e",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'Thunderbird'"
+        },
+        {
+          "key": "d",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'DeepL'"
+        },
+        {
+          "key": "v",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'OpenVPN Connect'"
+        },
+        {
+          "key": "x",
+          "type": "command",
+          "value": "$HOME/.local/bin/toggle_app.sh 'KeePassXC'"
+        }
+      ],
+      "key": "o",
+      "label": "open",
+      "type": "group"
+    },
+    {
+      "actions": [
+        {
+          "key": "e",
+          "type": "url",
+          "value": "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+        },
+        {
+          "key": "p",
+          "type": "url",
+          "value": "raycast://confetti"
+        },
+        {
+          "key": "c",
+          "type": "url",
+          "value": "raycast://extensions/raycast/system/open-camera"
+        }
+      ],
+      "key": "r",
+      "label": "raycast",
+      "type": "group"
+    },
+    {
+      "actions": [
+        {
+          "key": "h",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m query --windows | /opt/homebrew/bin/jq -r '.[] | select(.\"is-floating\" == true) | .app' | xargs -I{} /usr/bin/osascript -e \"tell application \\\"System Events\\\" to set visible of process \\\"{}\\\" to false\""
+        },
+        {
+          "key": "y",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m space --layout \"$(/opt/homebrew/bin/yabai -m query --spaces --space | /opt/homebrew/bin/jq -r 'if .type == \"bsp\" then \"stack\" else \"bsp\" end')\""
+        },
+        {
+          "key": "b",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m space --balance"
+        },
+        {
+          "key": "m",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+        },
+        {
+          "key": "r",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m space --rotate 270"
+        },
+        {
+          "key": "w",
+          "type": "command",
+          "value": "/opt/homebrew/bin/yabai -m window --close"
+        },
+        {
+          "key": "R",
+          "type": "command",
+          "value": "killall yabai"
+        }
+      ],
+      "key": "y",
+      "label": "yabai",
+      "type": "group"
+    },
+    {
+      "actions": [
+        {
+          "actions": [
+            {
+              "key": "h",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --display west; /opt/homebrew/bin/yabai -m display --focus west 2>/dev/null || true"
+            },
+            {
+              "key": "l",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --display east; /opt/homebrew/bin/yabai -m display --focus east 2>/dev/null || true"
+            },
+            {
+              "key": "j",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --display south; /opt/homebrew/bin/yabai -m display --focus south 2>/dev/null || true"
+            },
+            {
+              "key": "k",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --display north; /opt/homebrew/bin/yabai -m display --focus north 2>/dev/null || true"
+            }
+          ],
+          "key": "d",
+          "label": "display",
+          "type": "group"
+        },
+        {
+          "actions": [
+            {
+              "key": "h",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --swap west 2>/dev/null || true"
+            },
+            {
+              "key": "l",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --swap east 2>/dev/null || true"
+            },
+            {
+              "key": "j",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --swap south 2>/dev/null || true"
+            },
+            {
+              "key": "k",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --swap north 2>/dev/null || true"
+            }
+          ],
+          "key": "m",
+          "label": "move",
+          "type": "group"
+        },
+        {
+          "actions": [
+            {
+              "actions": [
+                {
+                  "key": "h",
+                  "type": "command",
+                  "value": "/opt/homebrew/bin/yabai -m display --focus west 2>/dev/null || true"
+                },
+                {
+                  "key": "l",
+                  "type": "command",
+                  "value": "/opt/homebrew/bin/yabai -m display --focus east 2>/dev/null || true"
+                },
+                {
+                  "key": "j",
+                  "type": "command",
+                  "value": "/opt/homebrew/bin/yabai -m display --focus south 2>/dev/null || true"
+                },
+                {
+                  "key": "k",
+                  "type": "command",
+                  "value": "/opt/homebrew/bin/yabai -m display --focus north 2>/dev/null || true"
+                }
+              ],
+              "key": "d",
+              "label": "display",
+              "type": "group"
+            },
+            {
+              "key": "h",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --focus west 2>/dev/null || true"
+            },
+            {
+              "key": "l",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --focus east 2>/dev/null || true"
+            },
+            {
+              "key": "j",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --focus south 2>/dev/null || true"
+            },
+            {
+              "key": "k",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --focus north 2>/dev/null || true"
+            }
+          ],
+          "key": "f",
+          "label": "focus",
+          "type": "group"
+        },
+        {
+          "actions": [
+            {
+              "key": "h",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --resize left:-20:0 2>/dev/null || true"
+            },
+            {
+              "key": "l",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --resize right:20:0 2>/dev/null || true"
+            },
+            {
+              "key": "j",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --resize top:0:20 2>/dev/null || true"
+            },
+            {
+              "key": "k",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m window --resize bottom:0:-20 2>/dev/null || true"
+            }
+          ],
+          "key": "s",
+          "label": "size",
+          "type": "group"
+        },
+        {
+          "actions": [
+            {
+              "key": "1",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 1 2>/dev/null || true"
+            },
+            {
+              "key": "2",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 2 2>/dev/null || true"
+            },
+            {
+              "key": "3",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 3 2>/dev/null || true"
+            },
+            {
+              "key": "4",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 4 2>/dev/null || true"
+            },
+            {
+              "key": "5",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 5 2>/dev/null || true"
+            },
+            {
+              "key": "6",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 6 2>/dev/null || true"
+            },
+            {
+              "key": "7",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 7 2>/dev/null || true"
+            },
+            {
+              "key": "8",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 8 2>/dev/null || true"
+            },
+            {
+              "key": "9",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 9 2>/dev/null || true"
+            },
+            {
+              "key": "0",
+              "type": "command",
+              "value": "/opt/homebrew/bin/yabai -m space --focus 0 2>/dev/null || true"
+            }
+          ],
+          "key": "w",
+          "label": "workspace",
+          "type": "group"
+        }
+      ],
+      "key": "w",
+      "label": "window management",
+      "type": "group"
+    }
+  ],
+  "type": "group"
+}
