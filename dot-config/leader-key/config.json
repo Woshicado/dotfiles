@@ -376,6 +376,23 @@
       "key": "w",
       "label": "window management",
       "type": "group"
+    },
+    {
+      "actions": [
+        {
+          "key": "y",
+          "type": "command",
+          "value": "killall yabai"
+        },
+        {
+          "key": "s",
+          "type": "command",
+          "value": "killall sketchybar"
+        }
+      ],
+      "key": "k",
+      "label": "kill",
+      "type": "group"
     }
   ],
   "type": "group"

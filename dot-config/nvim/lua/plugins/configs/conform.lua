@@ -13,12 +13,12 @@ return {
 				python = { "ruff_fix", "ruff_format" },
 				yaml = { "yamlfix" },
 				json = { "jq" },
-				markdown = { "prettierd" },
+				markdown = { "injected", "prettierd" },
 				tex = { "latexindent_m" },
 				toml = { "taplo" },
 				java = { "google-java-format" },
 				xml = { "xmlformatter" },
-        sh = { "shfmt" },
+				sh = { "shfmt" },
 			},
 			opts = {
 				format = {
@@ -30,6 +30,7 @@ return {
 			formatters = {
 				yamlfix = {
 					env = {
+						YAMLFIX_EXPLICIT_START = "false",
 						YAMLFIX_WHITELINES = "1",
 						YAMLFIX_COMMENTS_WHITELINES = "1",
 						YAMLFIX_SECTION_WHITELINES = "1",

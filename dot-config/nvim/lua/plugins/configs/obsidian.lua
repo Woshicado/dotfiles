@@ -1,5 +1,5 @@
 return {
-	"epwalsh/obsidian.nvim",
+	"obsidian-nvim/obsidian.nvim",
 	version = "*",
 	lazy = true,
 	ft = "markdown",
@@ -7,6 +7,7 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	opts = {
+		frontmatter = { enabled = false },
 		ui = { enable = false },
 		workspaces = {
 			{
