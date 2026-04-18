@@ -44,12 +44,12 @@ end, {})
 map("n", "dd", function()
 	return utils.is_empty_line() and '"_dd' or "dd"
 end, { expr = true, desc = "delete blank lines to black hole register" })
-map("n", "S", function()
-	return utils.is_empty_line() and '"_S' or "S"
-end, { expr = true, desc = "delete blank lines to black hole register" })
-map("n", "s", function()
-	return utils.is_empty_line() and '"_s' or "s"
-end, { expr = true, desc = "delete blank lines to black hole register" })
+-- map("n", "S", function()
+-- 	return utils.is_empty_line() and '"_S' or "S"
+-- end, { expr = true, desc = "delete blank lines to black hole register" })
+-- map("n", "s", function()
+-- 	return utils.is_empty_line() and '"_s' or "s"
+-- end, { expr = true, desc = "delete blank lines to black hole register" })
 map("n", "C", function()
 	return utils.is_empty_line() and '"_C' or "C"
 end, { expr = true, desc = "delete blank lines to black hole register" })

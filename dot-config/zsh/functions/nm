@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
 nm() {
-  NVIM_QUIT_ON_LAST=1 nvim -c "NmSearch ${(q)@}" -c "autocmd VimEnter * ++once bwipeout 1"
+  NVIM_QUIT_ON_LAST=1 nvim \
+    --cmd "let g:auto_session_enabled = v:false" \
+    -c "NmSearch ${(q)@}" \
+    -c "autocmd VimEnter * ++once if bufexists(1) && bufnr('%') != 1 | silent! bwipeout 1 | endif"
 }
