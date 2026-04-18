@@ -1,6 +1,6 @@
 local map = vim.keymap.set
 
-vim.lsp.set_log_level("error")
+vim.lsp.log.set_level("error")
 
 return {
 	"neovim/nvim-lspconfig",
@@ -9,7 +9,7 @@ return {
 		-- EXAMPLE
 		local nvlsp = require("nvchad.configs.lspconfig")
 
-		function custom_on_attach(client, bufnr)
+		local function custom_on_attach(client, bufnr)
 			local function opts(desc)
 				return { buffer = bufnr, desc = "LSP " .. desc }
 			end
@@ -18,6 +18,7 @@ return {
 			map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
 			map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
 			map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
+			map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions", noremap = true })
 
 			if client.name == "ltex" then
 				require("ltex_extra").setup({
@@ -38,7 +39,7 @@ return {
 			"tailwindcss",
 			"jdtls",
 			"pylsp",
-      "lua_ls",
+			"lua_ls",
 			-- "GitHub Copilot",
 		}
 
@@ -49,8 +50,8 @@ return {
 		end
 
 		-- Make sure python venv is used
-		local venv = os.getenv("VIRTUAL_ENV")
-		local python_path = venv and venv .. "/bin/python" or "python3"
+    -- local venv = os.getenv("VIRTUAL_ENV")
+    -- local python_path = venv and venv .. "/bin/python" or "python3"
 
 		-- Custom Server Settings
 		local server_settings = {

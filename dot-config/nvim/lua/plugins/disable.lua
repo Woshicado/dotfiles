@@ -27,4 +27,8 @@ return {
 		"https://codeberg.org/FelipeLema/cmp-async-path.git",
 		enabled = false,
 	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		enabled = false,
+	},
 }

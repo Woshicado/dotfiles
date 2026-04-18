@@ -34,19 +34,21 @@ dofile(vim.g.base46_cache .. "statusline")
 require("nvchad.autocmds")
 require("options")
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.mail = {
-  install_info = {
-    -- specific to local path installation:
-    url = vim.fn.stdpath('config') .. "/custom/tree-sitter-mail",
-    files = { "src/parser.c" }, -- REQUIRED: tell nvim where the source is
-    -- optional entries:
-    branch = "main",
-    generate_requires_npm = false,
-    requires_generate_from_grammar = false,
-  },
-  filetype = "mail", -- if filetype is 'mail', this associates it automatically
-}
+-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+-- parser_config.mail = {
+--   install_info = {
+--     -- specific to local path installation:
+--     url = vim.fn.stdpath('config') .. "/custom/tree-sitter-mail",
+--     files = { "src/parser.c" }, -- REQUIRED: tell nvim where the source is
+--     -- optional entries:
+--     branch = "main",
+--     generate_requires_npm = false,
+--     requires_generate_from_grammar = false,
+--   },
+--   filetype = "mail", -- if filetype is 'mail', this associates it automatically
+-- }
+
+require('vim._core.ui2').enable()
 
 vim.api.nvim_set_hl(0, "Folded", { bg = "#2c2956", fg = "#888888" }) -- Folded text
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH

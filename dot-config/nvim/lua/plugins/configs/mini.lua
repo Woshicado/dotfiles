@@ -18,8 +18,8 @@ return {
 				inside = "i",
 
 				-- Next/last variants
-				around_next = "an",
-				inside_next = "in",
+				around_next = "",
+				inside_next = "",
 				around_last = "al",
 				inside_last = "il",
 
@@ -40,4 +40,3 @@ return {
 		})
 	end,
 }
-

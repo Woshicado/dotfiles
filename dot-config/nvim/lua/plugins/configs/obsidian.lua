@@ -23,6 +23,12 @@ return {
 			time_format = "%H:%M",
 		},
 	},
+	keys = {
+		{ "<leader>on", "...", desc = "Insert obsidian note template" },
+		{ "<leader>od", "<cmd>ObsidianToday<CR>", desc = "Open today's daily note" },
+		{ "<leader>os", function() require("fzf-lua").files({ cwd = "$O_VAULT_DIR" }) end, desc = "Find in obsidian" },
+		{ "<leader>oz", function() vim.cmd('FzfLua live_grep cwd="$O_VAULT_DIR"') end, desc = "Grep in obsidian" },
+	},
 	config = function(_, opts)
 		require("obsidian").setup(opts)
 		vim.keymap.set("n", "gd", function()

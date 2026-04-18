@@ -18,11 +18,8 @@ map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
 map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
-
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
--- map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
-map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
 
 if require("nvconfig").ui.tabufline.enabled then
@@ -35,7 +32,6 @@ if require("nvconfig").ui.tabufline.enabled then
   map("n", "<S-tab>", function()
     require("nvchad.tabufline").prev()
   end, { desc = "buffer goto prev" })
-
 end
 
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
@@ -73,35 +69,22 @@ map({ "i", "v", "n" }, "<Right>", "<Nop>")
 
 map("n", "<leader>v", "^vg_", { desc = "Select non-whitespace line", noremap = true })
 
--- map("i", "jk", "<ESC>")  -- Already mapped, I guess by nvchad
-
--- Save keybinds
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Ctrl-S
--- map({ "n", "i", "v" }, "<M-s>", "<cmd> w <cr>", { noremap = true, desc = "Save File" }) -- Save on Cmd-S
+-- Save keybind
 map("n", "<leader>w", "<cmd>w<cr>", { noremap = true, desc = "Save File" })
 
 -- Exit keybinds
--- map({ "n", "i", "v"}, "<C-q>", "<cmd>:q!<CR>", { desc = "Close window without saving", noremap=true })
 map("n", "<leader>qq", "<cmd>:q!<CR>", { desc = "Close window without saving", noremap = true })
 map({ "n", "i", "v" }, "<M-q>", "<cmd> :qa! <CR>", { desc = "Close session without saving", noremap = true })
 
 -- Misc Meta
 map({ "n", "v" }, "<leader><C-w>", "<cmd> :set wrap!<CR>", { desc = "Toggle word wrap", noremap = true }) -- Toogle word wrap
-map({ "n", "i", "v" }, "<M-e>", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree", noremap = true })
 map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>", { desc = "Toggle absolute/relative surrounding line numbers.", noremap = true })
 
 -- Buffer navigation
 map({ "n", "v" }, "<leader><Left>", "<cmd>bp!<CR>", { desc = "Switch to previous buffer", noremap = true })
 map({ "n", "v" }, "<leader><Right>", "<cmd>bn!<CR>", { desc = "Switch to next buffer", noremap = true })
--- map({ "n", "v"}, "<M-x>",           "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
--- map({ "n", "v"}, "<leader>x",       "<cmd>bwipeout<CR>", { desc = "Close current file", noremap=true })
 map({ "n", "v" }, "<C-S-o>", "<C-i>", { desc = "Forward", noremap = true })
 
--- Tmux integration
-map("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>", { desc = "window left", noremap = true })
-map("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>", { desc = "window right", noremap = true })
-map("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>", { desc = "window down", noremap = true })
-map("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>", { desc = "window up", noremap = true })
 map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap = true })
 
 map({ "n", "x" }, "<leader>sw", function()
@@ -114,14 +97,8 @@ map({ "n", "x" }, "<leader>sw", function()
 		vim.notify("virtualedit = all")
 	end
 end, { desc = "Toggle virtualedit=all" })
--- German umlauts
--- map({"i", "t"}, "<M-o>", "<C-S-k>o:", { desc = "ö" })
--- map({"i", "t"}, "<M-u>", "<C-S-k>u:", { desc = "ü" })
--- map({"i", "t"}, "<M-a>", "<C-S-k>a:", { desc = "ä" })
--- map({"i", "t"}, "<M-S-o>", "<C-S-k>O:", { desc = "ö" })
--- map({"i", "t"}, "<M-S-u>", "<C-S-k>U:", { desc = "ü" })
--- map({"i", "t"}, "<M-S-a>", "<C-S-k>A:", { desc = "ä" })
 
+-- German umlauts
 map({ "i", "t" }, "<M-o>", "ö", { desc = "ö" })
 map({ "i", "t" }, "<M-u>", "ü", { desc = "ü" })
 map({ "i", "t" }, "<M-a>", "ä", { desc = "ä" })
@@ -129,49 +106,6 @@ map({ "i", "t" }, "<M-S-o>", "Ö", { desc = "Ö" })
 map({ "i", "t" }, "<M-S-u>", "Ü", { desc = "Ü" })
 map({ "i", "t" }, "<M-S-a>", "Ä", { desc = "Ä" })
 
--- Oil go to parent directory
-map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
--- yanky.nvim
-map({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
-map({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
-map({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)")
-map({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
-map("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
-map("n", "<c-n>", "<Plug>(YankyNextEntry)")
-map("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
-map("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
-map("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
-map("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
-
--- This seems useless since I get fuzzy suggestions anyway, but w/e
-map({ "i" }, "<C-x><C-f>", function()
-	vim.cmd('FzfLua complete_file cmd="rg --files" winopts="{ preview = { hidden = true } }"')
-end, { silent = true, desc = "Fuzzy complete file" })
-
--- replace telescope with fzf
-map("n", "<leader>ff", "<cmd>FzfLua files<CR>", { noremap = true, desc = "Fuzzy find files" })
-map("n", "<leader>fa", "<cmd>FzfLua git_files<CR>", { noremap = true, desc = "Fuzzy find git files" })
-map("n", "<leader>fb", "<cmd>FzfLua buffers<CR>", { noremap = true, desc = "Fuzzy find buffers" })
-map("n", "<leader>fo", "<cmd>FzfLua oldfiles<CR>", { noremap = true, desc = "Fuzzy find recent files" })
-map("n", "<leader>fr", "<cmd>FzfLua resume<CR>", { noremap = true, desc = "Fuzzy find recent files" })
-map("n", "<leader>fw", "<cmd>FzfLua grep_cword<CR>", { noremap = true, desc = "Fuzzy find word in project" })
-map("n", "<leader>fc", "<cmd>FzfLua grep_cWORD<CR>", { noremap = true, desc = "Fuzzy find files" })
-map("n", "<leader>fg", "<cmd>FzfLua live_grep<CR>", { noremap = true, desc = "Fuzzy live grep in project" })
-map("n", "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", { noremap = true, desc = "Fuzzy live current buffer" })
-map("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { noremap = true, desc = "Fuzzy marks" })
-map("n", "<leader>fp", "<cmd>FzfLua paths<CR>", { noremap = true, desc = "Fuzzy complete path" })
-map("n", "<leader>fq", "<cmd>FzfLua grep_quickfix<CR>", { noremap = true, desc = "Fuzzy quickfix list" })
-map("n", "<leader>fl", "<cmd>FzfLua lgrep_loclist<CR>", { noremap = true, desc = "Fuzzy location list" })
-
--- Telescope git pickers
-map({ "n", "x" }, "<leader>gs", "<cmd>FzfLua git_stash<CR>", { noremap = true, desc = "Fuzzy git stashes" })
-map({ "n", "x" }, "<leader>gt", "<cmd>FzfLua git_status<CR>", { noremap = true, desc = "Fuzzy git status" })
-map({ "n", "x" }, "<leader>gc", "<cmd>FzfLua git_bcommits<CR>", { noremap = true, desc = "Fuzzy git buffer commits" })
-map({ "n", "x" }, "<leader>ga", "<cmd>FzfLua git_commits<CR>", { noremap = true, desc = "Fuzzy git commits" })
-map({ "n", "x" }, "<leader>gb", "<cmd>FzfLua git_branches<CR>", { noremap = true, desc = "Fuzzy git branches" })
-map({ "n", "x" }, "<leader>gl", "<cmd>FzfLua git_blame<CR>", { noremap = true, desc = "Fuzzy git blame" })
-map({ "n", "x" }, "<leader>gg", function() require("neogit").open() end, { noremap = true, desc = "Open git changes" })
 
 -- Terminal mappings
 map("t", "<c-\\><ESC>", "<C-\\><C-n>", { noremap = true, desc = "Defocus terminal" })
@@ -192,11 +126,8 @@ map("n", "]m", "]mzt", { noremap = true, desc = "Top screen ]m" })
 -- Cetner screen on navigation with { and }
 map("n", "{", "{zz", { desc = "Center screen on {" })
 map("n", "}", "}zz", { desc = "Center screen on }" })
--- Go to current context
-map("n", "[c", function() require("treesitter-context").go_to_context(vim.v.count1) end, { silent = true })
 
 ---- Text manipulation
-
 -- Swap lines
 map("n", "<A-Up>", ":m .-2<cr>==", { desc = "Move line up", noremap = true })
 map("n", "<A-k>", ":m .-2<cr>==", { desc = "Move line up", noremap = true })
@@ -222,7 +153,6 @@ map("v", "<M-/>", "<leader>/gv=gv", { desc = "Toggle comment", remap = true })
 map("i", "<M-/>", "<C-o><leader>/", { desc = "Toggle comment", remap = true })
 
 -- Code format
-map({ "n", "v" }, "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, { desc = "Format code", noremap = true })
 map("n", "<leader>cs", "<cmd>Shades<CR>", { desc = "Shadify", noremap = true })
 map("n", "<leader>ch", "<cmd>Huefy<CR>", { desc = "Shadify", noremap = true })
 
@@ -248,52 +178,7 @@ map("v", "<End>", [[col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_']], { e
 map("i", "<Home>", "<C-o><Home>", { noremap = true, desc = "Home key in insert mode" })
 map("i", "<End>", "<C-o><End>", { noremap = true, desc = "End key in insert mode" })
 
--- Debugging keybinds with dap and `<leader>d.`
-map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle breakpoint" })
-map("n", "<leader>dc", function() require("dap").continue() end, { desc = "Continue" })
-map("n", "<leader>dl", function() require("dap").run_last() end, { desc = "Run last" })
-
-map({ "n", "v" }, "<leader>de", function() require("dapui").eval() end, { desc = "Eval expression" })
-map("n", "<leader>dt", function() require("dapui").toggle() end, { desc = "DapUI close" })
-map("n", "<leader>dp", function() require("dap").toggle_breakpoint(vim.fn.input("Condition: "), nil, nil) end, { desc = "Toggle _conditional_ breakpoint" })
-
-map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions", noremap = true })
-map({ "n", "v" }, "<leader>fs", function() require("grug-far").open() end, { desc = "Grug far", noremap = true })
-
--- VSCode mappings
-map("n", "<F5>", function() require("dap").continue() end)
-map("n", "<F10>", function() require("dap").step_over() end)
-map("n", "<F11>", function() require("dap").step_into() end)
-map("n", "<F12>", function() require("dap").step_out() end)
-
-map({ "n", "v" }, "<Leader>dh", function() require("dap.ui.widgets").hover() end)
-map("n", "<Leader>dw", function() local widgets = require("dap.ui.widgets") widgets.centered_float(widgets.scopes) end)
-
--- Send selection to repl
-map("n", "<leader>dr", function() require("dap").repl.toggle() end, { desc = "Toggle repl" })
--- map("v", "<leader>ds", function() require('dap').repl.run() end, { desc = "Send selection to repl" })
-
 -- Step commands; To be able to repeat them with a simple <M-r> click we need a helper function and variable.
-local last_dap_step = nil
-local function repeat_last_step()
-	if last_dap_step then
-		last_dap_step()
-	else
-		print("No previous step action")
-	end
-end
-
-local function set_last_step(fn)
-	last_dap_step = fn
-	fn()
-end
-
-map("n", "<leader>dn", function() set_last_step(require("dap").step_over) end, { desc = "Step Over", noremap = true, silent = true })
-map("n", "<leader>di", function() set_last_step(require("dap").step_into) end, { desc = "Step Into", noremap = true, silent = true })
-map("n", "<leader>do", function() set_last_step(require("dap").step_out) end, { desc = "Step Out", noremap = true, silent = true })
-map("n", "<leader>du", function() set_last_step(require("dap").up) end, { desc = "Step Out", noremap = true, silent = true })
-map("n", "<leader>dd", function() set_last_step(require("dap").down) end, { desc = "Step Out", noremap = true, silent = true })
-map("n", "<M-r>", function() repeat_last_step() end, { desc = "Repeat Last Step", noremap = true, silent = true })
 
 -- quickfix keybinds
 -- Preferably use the default [q, ]q mappings etc.
@@ -311,32 +196,13 @@ map("n", "<leader>q}", ":cnewer<CR>", { noremap = true, silent = true })
 map("n", "[<S-q>", ":colder<CR>", { noremap = true, silent = true })
 map("n", "]<S-q>", ":cnewer<CR>", { noremap = true, silent = true })
 
--- timber logs
-map("n", "glt", function() require("timber.actions").insert_log({ templates = { before = "time_start", after = "time_end" }, position = "surround" }) end, { desc = "[G]o [L]og [T]ime" })
-
-map("n", "glh", function() require("timber.actions").insert_log({ template = "file", position = "below" }) end, { desc = "[G]o [L]og [H]ere: With location" })
-map("n", "glc", function() require("timber.actions").clear_log_statements({ global = false }) end, { desc = "[G]o [L]og [C]lean" })
-map("n", "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, { desc = "[G]o [L]og [P]retty print" })
-
--- Toggle twilight/zenmode
-map("n", "<leader>tw", "<cmd>Twilight<cr>", { desc = "Toggle Twilight", })
-map("n", "<leader>tz", "<cmd>ZenMode<cr>", { desc = "Toggle Twilight", })
-
 -- Toggle transparency on <leader>to
 map("n", "<leader>to", function() require("base46").toggle_transparency() end, { desc = "Toggle transparency" })
 
-map("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Next todo comment" })
-map("n", "[t", function() require("todo-comments").jump_prev() end, { desc = "Previous todo comment" })
-map("n", "]f", function() require("todo-comments").jump_next({ keywords = { "FIX", "HACK" } }) end, { desc = "Next error/warning todo comment" })
-map("n", "[f", function() require("todo-comments").jump_prev({ keywords = { "FIX", "HACK" } }) end, { desc = "Next error/warning todo comment" })
 
 -- Obsidian keybinds
 map("n", "<leader>oo", ":cd $O_VAULT_DIR<CR>", { desc = "Open Obsidian notes" })
-map("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>", { desc = "Insert obsidian default note template" })
-map("n", "<leader>od", ":ObsidianToday<cr>", { desc = "Open today's daily note" })
 map("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>", { desc = "Strip date from title" })
-map("n", "<leader>os", function() require("fzf-lua").files({ cwd = "$O_VAULT_DIR" }) end, { desc = "find file in obsidian notes" })
-map("n", "<leader>oz", function() vim.cmd('FzfLua live_grep cwd="$O_VAULT_DIR"') end, { desc = "grep in obsidian notes" })
 map("n", "<leader>ok", ":!mv '%:p' $O_VAULT_DIR/zettelkasten<cr>:bd<cr>", { desc = "Move file to zettelkasten" })
 map("n", "<leader>or", ":!rm '%:p'<cr>:bd<cr>", { desc = "Remove file" })
 
@@ -363,20 +229,18 @@ for i = 0, 9 do
 end
 vim.keymap.set('n', '<leader>-', '"-p', { desc = 'Paste from small delete register' })
 
-local ls = require("luasnip")
-
-vim.keymap.set({ "i", "s" }, "<C-a>", function() ls.jump(1) end, { silent = true })
-vim.keymap.set({ "i", "s" }, "<C-q>", function() ls.jump(-1) end, { silent = true })
-
 -- Move lines
 map('v', '<C-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 map('v', '<C-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 
--- notmuch
-map("n", "<leader>nm", "<CMD>Notmuch<CR>", { desc = "Open Notmuch email client" })
-map("n", "<leader>ni", "<CMD>Inbox<CR>", { desc = "Open Notmuch inbox" })
-map("n", "<leader>nt", "<CMD>NmSearch tag:inbox and date:today<CR>", { desc = "Open todays inbox" })
-map("n", "<leader>nd", "<CMD>NmSearch tag:todo<CR>", { desc = "Open ToDos" })
-map("n", "<leader>np", "<CMD>NmSearch tag:important<CR>", { desc = "Open important" })
-map("n", "<leader>nw", "<CMD>NmSearch tag:inbox and date:week<CR>", { desc = "Open this week's inbox" })
-map("n", "<leader>nc", "<CMD>ComposeMail<CR>", { desc = "Compose Mail using notmuch" })
+-- treesitter incremental selection
+vim.keymap.set("n", "<CR>", function()
+  -- Only hijack CR when not in quickfix
+  if vim.bo.buftype == "" then
+    vim.cmd("normal van")
+  else
+    vim.cmd("normal! \r")
+  end
+end)
+vim.keymap.set("v", "<CR>", "an", { desc = "Expand selection to parent node", remap = true })
+vim.keymap.set("v", "<BS>", "in", { desc = "Shrink selection to child node", remap = true })

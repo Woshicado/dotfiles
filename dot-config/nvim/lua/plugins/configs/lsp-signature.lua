@@ -1,6 +1,9 @@
 return {
 	"ray-x/lsp_signature.nvim",
-  lazy = false,
+	lazy = false,
+	keys = {
+		{ "<leader>sh", function() require("lsp_signature").toggle_float_win() end, desc = "Toggle signature help" },
+	},
 	config = function()
 		require("lsp_signature").setup({
 			bind = true,
@@ -13,4 +16,3 @@ return {
 		})
 	end,
 }
-

@@ -4,6 +4,37 @@ return {
 	cmd = { "FzfLua" },
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	opts = {},
+	keys = {
+		{
+			"<C-x><C-f>",
+			function() vim.cmd('FzfLua complete_file cmd="rg --files" winopts="{ preview = { hidden = true } }"') end,
+			mode = "i",
+			silent = true,
+			desc = "Fuzzy complete file",
+		},
+		{ "<leader>ff", "<cmd>FzfLua files<CR>", desc = "Fuzzy find files" },
+		{ "<leader>fa", "<cmd>FzfLua git_files<CR>", desc = "Fuzzy find git files" },
+		{ "<leader>fb", "<cmd>FzfLua buffers<CR>", desc = "Fuzzy find buffers" },
+		{ "<leader>fo", "<cmd>FzfLua oldfiles<CR>", desc = "Fuzzy find recent files" },
+		{ "<leader>fr", "<cmd>FzfLua resume<CR>", desc = "Fuzzy resume" },
+		{ "<leader>fw", "<cmd>FzfLua grep_cword<CR>", desc = "Fuzzy find word in project" },
+		{ "<leader>fc", "<cmd>FzfLua grep_cWORD<CR>", desc = "Fuzzy find WORD in project" },
+		{ "<leader>fg", "<cmd>FzfLua live_grep<CR>", desc = "Fuzzy live grep in project" },
+		{ "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", desc = "Fuzzy live current buffer" },
+		{ "<leader>fm", "<cmd>FzfLua marks<CR>", desc = "Fuzzy marks" },
+		{ "<leader>fp", "<cmd>FzfLua paths<CR>", desc = "Fuzzy complete path" },
+		{ "<leader>fq", "<cmd>FzfLua grep_quickfix<CR>", desc = "Fuzzy quickfix list" },
+		{ "<leader>fl", "<cmd>FzfLua lgrep_loclist<CR>", desc = "Fuzzy location list" },
+		{ "<leader>uh", "<cmd>FzfLua undotree<CR>", desc = "Show undotree" },
+		{ "<leader>uf", "<cmd>FzfLua undotree locate=false<CR>", desc = "Show undotree @location" },
+
+		{ "<leader>gs", "<cmd>FzfLua git_stash<CR>", mode = { "n", "x" }, desc = "Fuzzy git stashes" },
+		{ "<leader>gt", "<cmd>FzfLua git_status<CR>", mode = { "n", "x" }, desc = "Fuzzy git status" },
+		{ "<leader>gc", "<cmd>FzfLua git_bcommits<CR>", mode = { "n", "x" }, desc = "Fuzzy git buffer commits" },
+		{ "<leader>ga", "<cmd>FzfLua git_commits<CR>", mode = { "n", "x" }, desc = "Fuzzy git commits" },
+		{ "<leader>gb", "<cmd>FzfLua git_branches<CR>", mode = { "n", "x" }, desc = "Fuzzy git branches" },
+		{ "<leader>gl", "<cmd>FzfLua git_blame<CR>", mode = { "n", "x" }, desc = "Fuzzy git blame" },
+	},
 	config = function()
 		local actions = require("fzf-lua").actions
 
@@ -51,9 +82,9 @@ return {
 						["ctrl-x"] = { fn = actions.git_reset, reload = true },
 					},
 				},
-        diff = {
-          prompt = "GitDiff❯ ",
-        },
+				diff = {
+					prompt = "GitDiff❯ ",
+				},
 				blame = {
 					prompt = "Blame> ",
 					cmd = [[git blame --color-lines {file}]],

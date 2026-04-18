@@ -5,6 +5,10 @@ return {
 	-- install jsregexp (optional!).
 	build = "make install_jsregexp",
 	dependencies = {},
+  keys = {
+    { "<C-a>", function() require("luasnip").jump(1) end,  mode = { "i", "s" }, silent = true, desc = "LuaSnip jump next" },
+    { "<C-q>", function() require("luasnip").jump(-1) end, mode = { "i", "s" }, silent = true, desc = "LuaSnip jump prev" },
+  },
 	config = function()
 		local luasnip = require("luasnip")
 		luasnip.config.set_config({
