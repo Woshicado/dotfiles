@@ -2,7 +2,7 @@ return {
 	url = "https://codeberg.org/andyg/leap.nvim",
 	keys = {
 		{ "s", "<Plug>(leap-forward)", mode = { "n", "x", "o" }, desc = "Leap forward" },
-    { "<C-s>", "<Plug>(leap-backward)", mode = { "n", "x", "o" }, desc = "Leap from window" },
+		{ "<C-s>", "<Plug>(leap-backward)", mode = { "n", "x", "o" }, desc = "Leap from window" },
 	},
 	config = function()
 		require("leap").setup({})
@@ -60,48 +60,48 @@ return {
 			end,
 		})
 
-    -- do
-    -- 	local function leap_search(key, is_reverse)
-    -- 		local cmdline_mode = vim.fn.mode(true):match("^c")
-    -- 		if cmdline_mode then
-    -- 			-- Finish the search command.
-    -- 			vim.api.nvim_feedkeys(vim.keycode("<enter>"), "t", false)
-    -- 		end
-    -- 		if vim.fn.searchcount().total < 1 then
-    -- 			return
-    -- 		end
-    -- 		-- Activate again if `:nohlsearch` has been used (Normal/Visual mode).
-    -- 		vim.go.hlsearch = vim.go.hlsearch
-    -- 		-- Allow the search command to complete its chores before
-    -- 		-- invoking Leap (Command-line mode).
-    -- 		vim.schedule(function()
-    -- 			require("leap").leap({
-    -- 				pattern = vim.fn.getreg("/"),
-    -- 				-- If you always want to go forward/backward with the given key,
-    -- 				-- regardless of the previous search direction, just set this to
-    -- 				-- `is_reverse`.
-    -- 				backward = (is_reverse and vim.v.searchforward == 1)
-    -- 					or (not is_reverse and vim.v.searchforward == 0),
-    -- 				opts = require("leap.user").with_traversal_keys(key, "", {
-    -- 					-- Autojumping to the second match would be confusing without
-    -- 					-- 'incsearch'.
-    -- 					safe_labels = (cmdline_mode and not vim.o.incsearch) and ""
-    -- 						-- Keep n/N usable in any case.
-    -- 						or require("leap").opts.safe_labels:gsub("[nN]", ""),
-    -- 				}),
-    -- 			})
-    -- 			-- You might want to switch off the highlights after leaping.
-    -- 			-- vim.cmd('nohlsearch')
-    -- 		end)
-    -- 	end
-    --
-    -- 	vim.keymap.set({ "n", "x", "o", "c" }, "<c-s>", function()
-    -- 		leap_search("<c-s>", false)
-    -- 	end, { desc = "Leap to search matches" })
-    --
-    -- 	vim.keymap.set({ "n", "x", "o", "c" }, "<c-q>", function()
-    -- 		leap_search("<c-q>", true)
-    -- 	end, { desc = "Leap to search matches (reverse)" })
-    -- end
+		-- do
+		-- 	local function leap_search(key, is_reverse)
+		-- 		local cmdline_mode = vim.fn.mode(true):match("^c")
+		-- 		if cmdline_mode then
+		-- 			-- Finish the search command.
+		-- 			vim.api.nvim_feedkeys(vim.keycode("<enter>"), "t", false)
+		-- 		end
+		-- 		if vim.fn.searchcount().total < 1 then
+		-- 			return
+		-- 		end
+		-- 		-- Activate again if `:nohlsearch` has been used (Normal/Visual mode).
+		-- 		vim.go.hlsearch = vim.go.hlsearch
+		-- 		-- Allow the search command to complete its chores before
+		-- 		-- invoking Leap (Command-line mode).
+		-- 		vim.schedule(function()
+		-- 			require("leap").leap({
+		-- 				pattern = vim.fn.getreg("/"),
+		-- 				-- If you always want to go forward/backward with the given key,
+		-- 				-- regardless of the previous search direction, just set this to
+		-- 				-- `is_reverse`.
+		-- 				backward = (is_reverse and vim.v.searchforward == 1)
+		-- 					or (not is_reverse and vim.v.searchforward == 0),
+		-- 				opts = require("leap.user").with_traversal_keys(key, "", {
+		-- 					-- Autojumping to the second match would be confusing without
+		-- 					-- 'incsearch'.
+		-- 					safe_labels = (cmdline_mode and not vim.o.incsearch) and ""
+		-- 						-- Keep n/N usable in any case.
+		-- 						or require("leap").opts.safe_labels:gsub("[nN]", ""),
+		-- 				}),
+		-- 			})
+		-- 			-- You might want to switch off the highlights after leaping.
+		-- 			-- vim.cmd('nohlsearch')
+		-- 		end)
+		-- 	end
+		--
+		-- 	vim.keymap.set({ "n", "x", "o", "c" }, "<c-s>", function()
+		-- 		leap_search("<c-s>", false)
+		-- 	end, { desc = "Leap to search matches" })
+		--
+		-- 	vim.keymap.set({ "n", "x", "o", "c" }, "<c-q>", function()
+		-- 		leap_search("<c-q>", true)
+		-- 	end, { desc = "Leap to search matches (reverse)" })
+		-- end
 	end,
 }

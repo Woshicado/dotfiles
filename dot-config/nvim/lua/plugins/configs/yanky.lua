@@ -4,8 +4,8 @@ return {
 	keys = {
 		{ "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Yanky put after" },
 		{ "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Yanky put before" },
-		{ "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Yanky gput after" },
-		{ "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Yanky gput before" },
+		-- { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Yanky gput after" },
+		-- { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Yanky gput before" },
 		{ "<C-p>", "<Plug>(YankyPreviousEntry)", desc = "Yanky previous entry" },
 		{ "<C-n>", "<Plug>(YankyNextEntry)", desc = "Yanky next entry" },
 		{ "]p", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Yanky put indent after linewise" },
