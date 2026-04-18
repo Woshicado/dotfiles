@@ -1,8 +1,10 @@
 return {
 	"stevearc/conform.nvim",
-  keys = {
-    { "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, mode = { "n", "v" }, desc = "Format code" },
-  },
+	-- stylua: ignore start
+	keys = {
+		{ "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, mode = { "n", "v" }, desc = "Format code" },
+	},
+	-- stylua: ignore end
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {

@@ -23,15 +23,15 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
 
 if require("nvconfig").ui.tabufline.enabled then
-  map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
+	map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
 
-  map("n", "<tab>", function()
-    require("nvchad.tabufline").next()
-  end, { desc = "buffer goto next" })
+	map("n", "<tab>", function()
+		require("nvchad.tabufline").next()
+	end, { desc = "buffer goto next" })
 
-  map("n", "<S-tab>", function()
-    require("nvchad.tabufline").prev()
-  end, { desc = "buffer goto prev" })
+	map("n", "<S-tab>", function()
+		require("nvchad.tabufline").prev()
+	end, { desc = "buffer goto prev" })
 end
 
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
@@ -39,9 +39,9 @@ map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
-map({ "n", "t" }, "<M-i>", function()
-  require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
-end, { desc = "terminal toggle floating term" })
+-- stylua: ignore
+map({ "n", "t" }, "<M-i>", function() require("nvchad.term").toggle({ pos = "float", id = "floatTerm" }) end,
+	{ desc = "terminal toggle floating term" })
 
 -- delete unwanted nvchad mappings first
 -- Normal mode bindings to delete
@@ -52,9 +52,9 @@ local keys = {
 	"<leader>wr",
 	"<leader>ws",
 	"<leader>cm",
-  -- "<leader>th",
-  -- "<leader>h",
-  -- "<leader>v",
+	-- "<leader>th",
+	-- "<leader>h",
+	-- "<leader>v",
 }
 
 for _, key in ipairs(keys) do
@@ -78,14 +78,18 @@ map({ "n", "i", "v" }, "<M-q>", "<cmd> :qa! <CR>", { desc = "Close session witho
 
 -- Misc Meta
 map({ "n", "v" }, "<leader><C-w>", "<cmd> :set wrap!<CR>", { desc = "Toggle word wrap", noremap = true }) -- Toogle word wrap
-map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>", { desc = "Toggle absolute/relative surrounding line numbers.", noremap = true })
+-- stylua: ignore
+map({ "n", "v" }, "<leader>lr", "<cmd> :set invrelativenumber<CR>",
+	{ desc = "Toggle absolute/relative surrounding line numbers.", noremap = true })
 
 -- Buffer navigation
 map({ "n", "v" }, "<leader><Left>", "<cmd>bp!<CR>", { desc = "Switch to previous buffer", noremap = true })
 map({ "n", "v" }, "<leader><Right>", "<cmd>bn!<CR>", { desc = "Switch to next buffer", noremap = true })
 map({ "n", "v" }, "<C-S-o>", "<C-i>", { desc = "Forward", noremap = true })
 
-map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end, { desc = "Toggle signature help", noremap = true })
+-- stylua: ignore
+map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end,
+	{ desc = "Toggle signature help", noremap = true })
 
 map({ "n", "x" }, "<leader>sw", function()
 	local ve = vim.o.virtualedit -- returns a string, e.g. "", "all", "block,onemore"
@@ -105,7 +109,6 @@ map({ "i", "t" }, "<M-a>", "ä", { desc = "ä" })
 map({ "i", "t" }, "<M-S-o>", "Ö", { desc = "Ö" })
 map({ "i", "t" }, "<M-S-u>", "Ü", { desc = "Ü" })
 map({ "i", "t" }, "<M-S-a>", "Ä", { desc = "Ä" })
-
 
 -- Terminal mappings
 map("t", "<c-\\><ESC>", "<C-\\><C-n>", { noremap = true, desc = "Defocus terminal" })
@@ -172,13 +175,15 @@ map("i", "<C-f>", "<Plug>(copilot-accept-line)", { noremap = false })
 vim.g.copilot_no_tab_map = true
 
 -- Smart home/end keys; Cmd for home and end
-map("n", "<Home>", [[col('.') == matchend(getline('.'), '^\\s*')+1 ? '0' : '^']], { expr = true, noremap = true, desc = "Smart Home key" })
-map("n", "<End>", [[col('.') == match(getline('.'), '\s*$') ? '$' : 'g_']], { expr = true, noremap = true, desc = "Smart End key" })
-map("v", "<End>", [[col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_']], { expr = true, noremap = true, desc = "Smart End key in visual mode" })
+-- stylua: ignore start
+map( "n", "<Home>", [[col('.') == matchend(getline('.'), '^\\s*')+1 ? '0' : '^']],
+	{ expr = true, noremap = true, desc = "Smart Home key" })
+map( "n", "<End>", [[col('.') == match(getline('.'), '\s*$') ? '$' : 'g_']],
+	{ expr = true, noremap = true, desc = "Smart End key" })
+map( "v", "<End>", [[col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_']],
+	{ expr = true, noremap = true, desc = "Smart End key in visual mode" })
 map("i", "<Home>", "<C-o><Home>", { noremap = true, desc = "Home key in insert mode" })
 map("i", "<End>", "<C-o><End>", { noremap = true, desc = "End key in insert mode" })
-
--- Step commands; To be able to repeat them with a simple <M-r> click we need a helper function and variable.
 
 -- quickfix keybinds
 -- Preferably use the default [q, ]q mappings etc.
@@ -197,8 +202,8 @@ map("n", "[<S-q>", ":colder<CR>", { noremap = true, silent = true })
 map("n", "]<S-q>", ":cnewer<CR>", { noremap = true, silent = true })
 
 -- Toggle transparency on <leader>to
-map("n", "<leader>to", function() require("base46").toggle_transparency() end, { desc = "Toggle transparency" })
-
+map("n", "<leader>to", function() require("base46").toggle_transparency() end,
+	{ desc = "Toggle transparency" })
 
 -- Obsidian keybinds
 map("n", "<leader>oo", ":cd $O_VAULT_DIR<CR>", { desc = "Open Obsidian notes" })
@@ -207,10 +212,14 @@ map("n", "<leader>ok", ":!mv '%:p' $O_VAULT_DIR/zettelkasten<cr>:bd<cr>", { desc
 map("n", "<leader>or", ":!rm '%:p'<cr>:bd<cr>", { desc = "Remove file" })
 
 -- Yank buffer path/name/dir to clipboard
-map("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end, { desc = "Yank abs path (buffer)" })
-map("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%")) end, { desc = "Yank rel path (buffer)" })
-map("n", "<leader>yd", function() vim.fn.setreg("+", vim.fn.expand("%:p:h")) end, { desc = "Yank abs path (directory)" })
-map("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end, { desc = "Yank filename (buffer)" })
+map("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end,
+	{ desc = "Yank abs path (buffer)" })
+map("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%")) end,
+	{ desc = "Yank rel path (buffer)" })
+map("n", "<leader>yd", function() vim.fn.setreg("+", vim.fn.expand("%:p:h")) end,
+	{ desc = "Yank abs path (directory)" })
+map("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end,
+	{ desc = "Yank filename (buffer)" })
 
 -- open definition in split view
 local bufopts = { noremap = true, silent = true }
@@ -222,25 +231,26 @@ map("n", "gP", "`]v`[", { desc = "Visual pasted" })
 
 -- Paste from number registers conveniently
 for i = 0, 9 do
-  vim.keymap.set('n', '<leader>' .. i, '"' .. i .. 'p', { desc = 'Paste from register ' .. i })
-  -- yank into number registers; not sure whether that helpful yet since nvim cycles through them automatically...
-  vim.keymap.set('n', '<leader>y' .. i, '"' .. i .. 'y', { desc = 'Yank into register ' .. i })
-  vim.keymap.set('v', '<leader>y' .. i, '"' .. i .. 'y', { desc = 'Yank into register ' .. i })
+	vim.keymap.set("n", "<leader>" .. i, '"' .. i .. "p", { desc = "Paste from register " .. i })
+	-- yank into number registers; not sure whether that helpful yet since nvim cycles through them automatically...
+	vim.keymap.set("n", "<leader>y" .. i, '"' .. i .. "y", { desc = "Yank into register " .. i })
+	vim.keymap.set("v", "<leader>y" .. i, '"' .. i .. "y", { desc = "Yank into register " .. i })
 end
-vim.keymap.set('n', '<leader>-', '"-p', { desc = 'Paste from small delete register' })
+vim.keymap.set("n", "<leader>-", '"-p', { desc = "Paste from small delete register" })
 
 -- Move lines
-map('v', '<C-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-map('v', '<C-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+map("v", "<C-k>", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+map("v", "<C-j>", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 
 -- treesitter incremental selection
 vim.keymap.set("n", "<CR>", function()
-  -- Only hijack CR when not in quickfix
-  if vim.bo.buftype == "" then
-    vim.cmd("normal van")
-  else
-    vim.cmd("normal! \r")
-  end
+	-- Only hijack CR when not in quickfix
+	if vim.bo.buftype == "" then
+		vim.cmd("normal van")
+	else
+		vim.cmd("normal! \r")
+	end
 end)
 vim.keymap.set("v", "<CR>", "an", { desc = "Expand selection to parent node", remap = true })
 vim.keymap.set("v", "<BS>", "in", { desc = "Shrink selection to child node", remap = true })
+-- stylua: ignore end

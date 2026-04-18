@@ -7,6 +7,7 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	opts = {
+		legacy_commands = false,
 		frontmatter = { enabled = false },
 		ui = { enable = false },
 		workspaces = {
@@ -22,18 +23,25 @@ return {
 			date_format = "%Y-%m-%d",
 			time_format = "%H:%M",
 		},
+		checkbox = {
+			enabled = true,
+			create_new = false,
+			order = { " ", "~", "!", ">", "x" },
+		},
 	},
+	-- stylua: ignore start
 	keys = {
 		{ "<leader>on", "...", desc = "Insert obsidian note template" },
-		{ "<leader>od", "<cmd>ObsidianToday<CR>", desc = "Open today's daily note" },
+		{ "<leader>od", "<cmd>Obsidian today<CR>", desc = "Open today's daily note" },
 		{ "<leader>os", function() require("fzf-lua").files({ cwd = "$O_VAULT_DIR" }) end, desc = "Find in obsidian" },
 		{ "<leader>oz", function() vim.cmd('FzfLua live_grep cwd="$O_VAULT_DIR"') end, desc = "Grep in obsidian" },
 	},
+	-- stylua: ignore end
 	config = function(_, opts)
 		require("obsidian").setup(opts)
 		vim.keymap.set("n", "gd", function()
 			if require("obsidian").util.cursor_on_markdown_link() then
-				return "<cmd>ObsidianFollowLink<CR>"
+				return "<cmd>Obsidian follow_link<CR>"
 			else
 				return "gd"
 			end
