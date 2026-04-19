@@ -1,5 +1,4 @@
 return {
 	"chrisgrieser/nvim-puppeteer",
-	cmd = { 'Puppeteer' },
+	cmd = { "Puppeteer" },
 }
-

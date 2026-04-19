@@ -1,5 +1,6 @@
 vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -48,7 +49,7 @@ require("options")
 --   filetype = "mail", -- if filetype is 'mail', this associates it automatically
 -- }
 
-require('vim._core.ui2').enable()
+require("vim._core.ui2").enable()
 
 vim.api.nvim_set_hl(0, "Folded", { bg = "#2c2956", fg = "#888888" }) -- Folded text
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH

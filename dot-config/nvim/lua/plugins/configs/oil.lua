@@ -4,9 +4,9 @@ return {
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	-- cmd = { "Oil" },
 	lazy = false,
-  keys = {
-    { "-", "<cmd>Oil<cr>", desc = "Oil", mode = { "n" } },
-  },
+	keys = {
+		{ "-", "<cmd>Oil<cr>", desc = "Oil", mode = { "n" } },
+	},
 	config = function()
 		require("oil").setup({
 			use_default_keymaps = false,

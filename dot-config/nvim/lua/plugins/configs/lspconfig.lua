@@ -20,7 +20,7 @@ return {
 			map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
 			map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions", noremap = true })
 
-			if client.name == "ltex" then
+			if client.name == "ltex_plus" then
 				require("ltex_extra").setup({
 					load_langs = { "en-US", "de-DE" },
 					init_check = true,
@@ -34,7 +34,7 @@ return {
 			"cssls",
 			"ts_ls",
 			"clangd",
-			"ltex",
+			"ltex_plus",
 			"marksman",
 			"tailwindcss",
 			"jdtls",
@@ -79,8 +79,8 @@ return {
 					telemetry = { enable = false },
 				},
 			},
-			ltex = {
-				ltex = {
+			ltex_plus = {
+				ltex_plus = {
 					language = "en-US", -- default; change with '% LTeX: language=de-DE', or YAML frontmatter
 					logLevel = "warn",
 					dictionary = {

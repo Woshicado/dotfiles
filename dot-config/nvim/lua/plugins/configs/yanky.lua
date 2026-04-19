@@ -1,6 +1,7 @@
 return {
 	"gbprod/yanky.nvim",
 	event = "VeryLazy",
+	-- stylua: ignore start
 	keys = {
 		{ "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Yanky put after" },
 		{ "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Yanky put before" },
@@ -13,6 +14,7 @@ return {
 		{ "]P", "<Plug>(YankyPutIndentAfterLinewise)", desc = "Yanky put indent after linewise" },
 		{ "[P", "<Plug>(YankyPutIndentBeforeLinewise)", desc = "Yanky put indent before linewise" },
 	},
+	-- stylua: ignore end
 	config = function()
 		require("yanky").setup({
 			ring = {

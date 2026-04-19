@@ -28,6 +28,12 @@ return {
 			create_new = false,
 			order = { " ", "~", "!", ">", "x" },
 		},
+		footer = {
+			enabled = true,
+			format = "{{backlinks}} backlinks  {{properties}} properties  {{words}} words  {{chars}} chars",
+			hl_group = "Comment",
+			separator = string.rep("-", 80),
+		},
 	},
 	-- stylua: ignore start
 	keys = {

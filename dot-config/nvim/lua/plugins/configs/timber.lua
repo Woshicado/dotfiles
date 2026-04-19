@@ -2,12 +2,14 @@ return {
 	"Goose97/timber.nvim",
 	version = "*",
 	opts = {},
-  keys = {
-    { "glt", function() require("timber.actions").insert_log({ templates = { before = "time_start", after = "time_end" }, position = "surround" }) end, desc = "[G]o [L]og [T]ime" },
-    { "glh", function() require("timber.actions").insert_log({ template = "file", position = "below" }) end, desc = "[G]o [L]og [H]ere: With location" },
-    { "glc", function() require("timber.actions").clear_log_statements({ global = false }) end, desc = "[G]o [L]og [C]lean" },
-    { "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, desc = "[G]o [L]og [P]retty print" },
-  },
+	-- stylua: ignore start
+	keys = {
+		{ "glt", function() require("timber.actions").insert_log({ templates = { before = "time_start", after = "time_end" }, position = "surround" }) end, desc = "[G]o [L]og [T]ime" },
+		{ "glh", function() require("timber.actions").insert_log({ template = "file", position = "below" }) end, desc = "[G]o [L]og [H]ere: With location" },
+		{ "glc", function() require("timber.actions").clear_log_statements({ global = false }) end, desc = "[G]o [L]og [C]lean" },
+		{ "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, desc = "[G]o [L]og [P]retty print" },
+	},
+	-- stylua: ignore end
 	event = "VeryLazy",
 	config = function()
 		require("timber").setup({
@@ -53,4 +55,3 @@ return {
 		})
 	end,
 }
-

@@ -45,4 +45,3 @@ return {
 		telescope.load_extension("undo")
 	end,
 }
-

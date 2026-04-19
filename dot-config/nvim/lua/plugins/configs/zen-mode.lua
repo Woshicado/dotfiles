@@ -1,10 +1,10 @@
 return {
 	"folke/zen-mode.nvim",
 	cmd = { "ZenMode" },
-  dependencies = { "folke/twilight.nvim" },
-  keys = {
-    { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Zen mode toggle" },
-  },
+	dependencies = { "folke/twilight.nvim" },
+	keys = {
+		{ "<leader>tz", "<cmd>ZenMode<cr>", desc = "Zen mode toggle" },
+	},
 	opts = {
 		window = {
 			backdrop = 0.75, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
@@ -17,13 +17,13 @@ return {
 			-- by default, no options are changed for the Zen window
 			-- uncomment any of the options below, or add other vim.wo options you want to apply
 			options = {
-        signcolumn = "no", -- disable signcolumn
+				signcolumn = "no", -- disable signcolumn
 				-- number = false, -- disable number column
 				-- relativenumber = false, -- disable relative numbers
 				-- cursorline = false, -- disable cursorline
 				-- cursorcolumn = false, -- disable cursor column
-        foldcolumn = "0", -- disable fold column
-        list = false, -- disable whitespace characters
+				foldcolumn = "0", -- disable fold column
+				list = false, -- disable whitespace characters
 			},
 		},
 		plugins = {
@@ -36,7 +36,7 @@ return {
 				-- you may turn on/off statusline in zen mode by setting 'laststatus'
 				-- statusline will be shown only if 'laststatus' == 3
 				laststatus = 0, -- turn off the statusline in zen mode
-        scrolloff = 99,
+				scrolloff = 99,
 			},
 			twilight = { enabled = true }, -- enable to start Twilight when zen mode opens
 			gitsigns = { enabled = true }, -- disables git signs
