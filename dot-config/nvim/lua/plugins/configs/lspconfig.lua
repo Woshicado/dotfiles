@@ -50,8 +50,8 @@ return {
 		end
 
 		-- Make sure python venv is used
-    -- local venv = os.getenv("VIRTUAL_ENV")
-    -- local python_path = venv and venv .. "/bin/python" or "python3"
+		-- local venv = os.getenv("VIRTUAL_ENV")
+		-- local python_path = venv and venv .. "/bin/python" or "python3"
 
 		-- Custom Server Settings
 		local server_settings = {
@@ -80,7 +80,8 @@ return {
 				},
 			},
 			ltex_plus = {
-				ltex_plus = {
+				ltex = {
+					checkFrequency = "save",
 					language = "en-US", -- default; change with '% LTeX: language=de-DE', or YAML frontmatter
 					logLevel = "warn",
 					dictionary = {
@@ -98,6 +99,10 @@ return {
 							tabularx = "ignore",
 							algorithm = "ignore",
 							["algorithm*"] = "ignore",
+						},
+						commands = {
+							["\\texorpdfstring{}{}"] = "dummy",
+							["\\right."] = "ignore",
 						},
 					},
 					enabled = {

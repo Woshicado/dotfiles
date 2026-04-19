@@ -7,7 +7,9 @@ return {
 	keys = {
 		{
 			"<C-x><C-f>",
-			function() vim.cmd('FzfLua complete_file cmd="rg --files" winopts="{ preview = { hidden = true } }"') end,
+			function()
+				vim.cmd('FzfLua complete_file cmd="rg --files" winopts="{ preview = { hidden = true } }"')
+			end,
 			mode = "i",
 			silent = true,
 			desc = "Fuzzy complete file",
@@ -59,6 +61,13 @@ return {
 				actions = {},
 			},
 			git = {
+				-- commits = {
+				-- 	cmd = "git log --oneline --color --graph --date=short --format='%C(auto)%h%d %s %C(black)%C(bold)%cr'",
+				-- 	preview = "git -c diff.external=difft show --ext-diff {1}",
+				-- },
+				-- bcommits = {
+				-- 	preview = "git -c diff.external=difft show --ext-diff {1}",
+				-- },
 				files = {
 					prompt = "GitFiles❯ ",
 					formatter = "path.filename_first",
@@ -72,6 +81,7 @@ return {
 				},
 				status = {
 					prompt = "GitStatus❯ ",
+					-- preview = "GIT_EXTERNAL_DIFF=difft git diff --ext-diff {2}",
 					actions = {
 						-- actions inherit from 'actions.files' and merge
 						["ctrl-t"] = false,
@@ -111,5 +121,37 @@ return {
 				git_icons = false,
 			},
 		})
+
+		vim.keymap.set("n", "<leader>gS", function()
+			local file = vim.fn.expand("%:p") -- current file absolute path
+			require("fzf-lua").fzf_live(function(query)
+				local q = type(query) == "table" and query[1] or query
+				if not q or q == "" then
+					return "echo 'Type to search...'"
+				end
+				return "git log --oneline --color=always -S "
+					.. vim.fn.shellescape(q)
+					.. " -- "
+					.. vim.fn.shellescape(file)
+			end, {
+				prompt = "Pickaxe> ",
+				-- show the diff for this file only, and search for the match in the preview
+				preview = "if [ -z {q} ] || [ -z {1} ]; then echo 'Type to search (or no results)...'; else git show --color=always {1} -- "
+					.. vim.fn.shellescape(file)
+					.. " | rg --passthrough --smart-case --colors 'match:fg:blue' --colors 'match:style:bold' --color=always -C 5 {q}; fi",
+				actions = {
+					["default"] = function(selected)
+						local hash = selected[1]:match("^(%x+)")
+						if hash then
+							vim.cmd("Git show " .. hash)
+						end
+					end,
+				},
+				fzf_opts = {
+					["--no-sort"] = true,
+					["--ansi"] = true,
+				},
+			})
+		end, { desc = "Git pickaxe current file (live)" })
 	end,
 }
