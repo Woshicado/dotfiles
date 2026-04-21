@@ -1,5 +1,9 @@
 return {
 	{
+		"nvim-telescope/telescope.nvim",
+		enabled = false,
+	},
+	{
 		"hrsh7th/nvim-cmp",
 		enabled = false,
 	},

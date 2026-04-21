@@ -2,6 +2,7 @@ return {
 	"Goose97/timber.nvim",
 	version = "*",
 	opts = {},
+	pin = true,  -- broken for nvim v0.12. I got local changes right now. There also is a PR open
 	-- stylua: ignore start
 	keys = {
 		{ "glt", function() require("timber.actions").insert_log({ templates = { before = "time_start", after = "time_end" }, position = "surround" }) end, desc = "[G]o [L]og [T]ime" },
