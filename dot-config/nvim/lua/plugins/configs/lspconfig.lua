@@ -40,6 +40,7 @@ return {
 			"jdtls",
 			"pylsp",
 			"lua_ls",
+			"harper_ls",
 			-- "GitHub Copilot",
 		}
 
@@ -66,6 +67,38 @@ return {
 							"tw\\.\\w+\\(\\{([^}]*)",
 						},
 					},
+				},
+			},
+			harper_ls = {
+				["harper-ls"] = {
+					userDictPath = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
+					workspaceDictPath = "",
+					fileDictPath = "",
+					linters = {
+						SpellCheck = true,
+						SpelledNumbers = false,
+						AnA = true,
+						SentenceCapitalization = true,
+						UnclosedQuotes = true,
+						WrongQuotes = false,
+						LongSentences = true,
+						RepeatedWords = true,
+						Spaces = true,
+						Matcher = true,
+						CorrectNumberSuffix = true,
+					},
+					codeActions = {
+						ForceStable = false,
+					},
+					markdown = {
+						IgnoreLinkTitle = false,
+					},
+					diagnosticSeverity = "hint",
+					isolateEnglish = false,
+					dialect = "American",
+					maxFileLength = 120000,
+					ignoredLintsPath = "",
+					excludePatterns = {},
 				},
 			},
 			lua_ls = {
@@ -189,6 +222,11 @@ return {
 			}
 			vim.lsp.config(lsp, config)
 		end
+
+		vim.lsp.config["harper_ls"] = {
+			cmd = { "harper-ls", "--stdio" },
+			filetypes = { "markdown", "text", "tex", "typst", "gitcommit", "mail", "plaintext", "html" },
+		}
 
 		vim.lsp.enable(servers)
 

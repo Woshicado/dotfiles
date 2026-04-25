@@ -54,12 +54,13 @@ return {
 	},
 	-- stylua: ignore start
 	keys = {
-		{ "<leader>on", "<cmd>Obsidian template note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>", desc = "Insert obsidian note template" },
-		{ "<leader>od", "<cmd>Obsidian today<CR>", desc = "Open today's daily note" },
+		{ "<leader>on", "<cmd>Obsidian template note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>", desc = "Obsidian Note template" },
+		{ "<leader>od", "<cmd>Obsidian today<CR>", desc = "Obsidian Daily" },
+		{ "<leader>ot", "<cmd>Obsidian tags<CR>", desc = "Obsidian Tags" },
 		-- { "<leader>os", function() require("fzf-lua").files({ cwd = vim.env.O_VAULT_DIR }) end, desc = "Find in obsidian" },
 		-- { "<leader>oz", function() vim.cmd('FzfLua live_grep cwd=vim.env.O_VAULT_DIR') end, desc = "Grep in obsidian" },
-		{ "<leader>os", "<cmd>Obsidian quick_switch<cr>", desc = "Find in obsidian" },  -- NOTE: Testing. Same as above?
-		{ "<leader>oz", "<cmd>Obsidian search<cr>", desc = "Grep in obsidian" },  -- NOTE: Testing. Same as above?
+		{ "<leader>os", "<cmd>Obsidian quick_switch<cr>", desc = "Obsidian Search" },  -- NOTE: Testing. Same as above?
+		{ "<leader>oz", "<cmd>Obsidian search<cr>", desc = "Obsidian FuZzy" },  -- NOTE: Testing. Same as above?
 	},
 	-- stylua: ignore end
 	config = function(_, opts)

@@ -37,7 +37,7 @@ end
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
-map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
+-- map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 -- stylua: ignore
 map({ "n", "t" }, "<M-i>", function() require("nvchad.term").toggle({ pos = "float", id = "floatTerm" }) end,
@@ -212,14 +212,66 @@ map("n", "<leader>ok", ":!mv '%:p' $O_VAULT_DIR/zettelkasten<cr>:bd<cr>", { desc
 map("n", "<leader>or", ":!rm '%:p'<cr>:bd<cr>", { desc = "Remove file" })
 
 -- Yank buffer path/name/dir to clipboard
-map("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end,
-	{ desc = "Yank abs path (buffer)" })
-map("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%")) end,
-	{ desc = "Yank rel path (buffer)" })
-map("n", "<leader>yd", function() vim.fn.setreg("+", vim.fn.expand("%:p:h")) end,
-	{ desc = "Yank abs path (directory)" })
-map("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end,
-	{ desc = "Yank filename (buffer)" })
+local function yank_path(expr, desc, oil_fn)
+  return function()
+    local result
+    if vim.bo.filetype == "oil" then
+      result = oil_fn()
+    else
+      result = vim.fn.expand(expr)
+    end
+    if result and result ~= "" then
+      vim.fn.setreg("+", result)
+      vim.notify(desc .. ": " .. result)
+    else
+      vim.notify(desc .. ": nothing to yank", vim.log.levels.WARN)
+    end
+  end
+end
+
+local function oil_entry_path()
+  local oil = require("oil")
+  local entry = oil.get_cursor_entry()
+  if entry then
+    local dir = oil.get_current_dir()
+    return dir and (dir .. entry.name) or entry.name
+  end
+  return oil.get_current_dir()
+end
+
+map("n", "<leader>yp", yank_path("%:p", "Yanked abs. path", function()
+  return oil_entry_path()
+end), { desc = "Yank abs path (buffer)" })
+
+map("n", "<leader>yP", yank_path("%", "Yanked rel. path", function()
+  local abs = oil_entry_path()
+  if abs then
+    local cwd = vim.fn.getcwd() .. "/"
+    if abs:sub(1, #cwd) == cwd then
+      return abs:sub(#cwd + 1)
+    end
+  end
+  return abs
+end), { desc = "Yank rel path (buffer)" })
+
+map("n", "<leader>yd", yank_path("%:p:h", "Yanked abs. directory", function()
+  return (require("oil").get_current_dir() or ""):gsub("/$", "")
+end), { desc = "Yank abs path (directory)" })
+
+map("n", "<leader>yD", yank_path("%:h", "Yanked rel. directory", function()
+  local abs = (require("oil").get_current_dir() or ""):gsub("/$", "")
+  local cwd = vim.fn.getcwd()
+  if abs:sub(1, #cwd) == cwd then
+    local rel = abs:sub(#cwd + 2)
+    return rel ~= "" and rel or "."
+  end
+  return abs
+end), { desc = "Yank rel path (directory)" })
+
+map("n", "<leader>yn", yank_path("%:t", "Yanked file name", function()
+  local entry = require("oil").get_cursor_entry()
+  return entry and entry.name or nil
+end), { desc = "Yank filename (buffer)" })
 
 -- open definition in split view
 local bufopts = { noremap = true, silent = true }
