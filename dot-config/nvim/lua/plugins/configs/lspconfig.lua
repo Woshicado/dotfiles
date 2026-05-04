@@ -214,7 +214,7 @@ return {
 
 		-- Configure each server
 		for _, lsp in ipairs(servers) do
-			config = {
+			local config = {
 				on_attach = custom_on_attach,
 				on_init = nvlsp.on_init,
 				capabilities = nvlsp.capabilities,

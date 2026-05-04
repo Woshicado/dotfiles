@@ -1,3 +1,5 @@
+-- SEEMS TOO NOISY; too many errors/warnings for my use case
+
 return {
 	"dense-analysis/ale",
 	lazy = false,

@@ -9,7 +9,7 @@ alias cwd=pwd
 alias dnfi='sudo dnf install'
 alias dnfu='sudo dnf update'
 alias dnfua='sudo dnf update --refresh'
-alias brewua='brew update && brew upgrade && brew upgrade --cask && brew cleanup'
+alias brewua='brew update --verbose && brew upgrade && brew upgrade --cask && brew cleanup'
 alias n='nvim'
 alias n.='nvim .'
 alias v='nvim'
@@ -19,7 +19,7 @@ alias bt='btop'
 
 alias m='mise'
 alias mx='mise exec'
-alias mp='mise prepare'
+alias mp='mise deps'
 alias mu='mise use'
 alias mup='mise upgrade'
 alias mr='mise run'
@@ -59,15 +59,25 @@ alias or='nvim $O_VAULT_DIR/inbox/*.md'
 alias nvl="nvim --listen 127.0.0.1:2006"
 
 # Time tracking via toggl track python cli (https://github.com/AuHau/toggl-cli)
-alias tt='toggl start'
-alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
-alias ttws='toggl start -o Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
-alias tts='toggl start -o Service'
-alias ttm='toggl start -o Main'
-alias ttd='toggl start -o Side'
-alias ttt='toggl stop'
-alias ttl='toggl ls -f+id'
-alias ttr='toggl rm'
+# alias tt='toggl start'
+# alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
+# alias ttws='toggl start -o Service "Service Meeting (Gruppenseminar, CAKE, MOSI Weekly, ...)"'
+# alias tts='toggl start -o Service'
+# alias ttm='toggl start -o Main'
+# alias ttd='toggl start -o Side'
+# alias ttt='toggl stop'
+# alias ttl='toggl ls -f+id'
+# alias ttr='toggl rm'
+
+alias tt='timetagger'
+alias tts='timetagger stop'
+alias ttr='timetagger resume'
+alias ttw='timetagger app'
+alias ttl='timetagger status'
+# alias ttb='timetagger start'
+ttb() {  # function to quote all args
+  timetagger start "$*"
+}
 
 # Copy directory over ssh
 alias rcp='rsync -saLPz --port 22 -e ssh '

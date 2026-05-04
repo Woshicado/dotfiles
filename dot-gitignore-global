@@ -6,6 +6,7 @@ __pycache__
 .mypy_cache
 .git*
 .idea
+.ropeproject
 latest_commit.sha
 indent.log
 mise.local.toml

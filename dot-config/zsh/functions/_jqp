@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+_jqp() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments -C \
+    '--rows[Plot rows]:number:' \
+    '--cols[Plot cols]:number:' \
+    '1:jsonl_file:_files -g "*.jsonl"' \
+    '*:json_key:->keys'
+
+  case "$state" in
+    keys)
+      local json_file=""
+      for w in "${words[@]}"; do
+        if [[ -f "$w" ]]; then
+          json_file="$w"
+          break
+        fi
+      done
+
+      if [[ -f "$json_file" ]]; then
+        local -a json_keys
+        local IFS=$'\n'
+        json_keys=($(head -n 1000 "$json_file" | jq -r 'keys[]' 2>/dev/null | sort -u))
+        _describe 'keys' json_keys
+      else
+        _message "Enter a filename first to trigger key completion"
+      fi
+      ;;
+  esac
+}

@@ -54,6 +54,7 @@ fi
 
 # Completion definitions
 compdef _jview jview
+compdef _jqp jqp
 if [[ "$(basename -- "$current_script")" != "_toggl" ]]; then
   compdef _toggl toggl
 fi

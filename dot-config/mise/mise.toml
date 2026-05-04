@@ -15,15 +15,11 @@ go = "latest"
 "pipx:deepl" = "latest"
 "pipx:mypy" = "latest"
 "pipx:pynvim" = "latest"
+"pipx:timetagger_cli" = "latest"
 "pipx:togglcli" = "latest"
 python = "3"
 usage = "latest"
 uv = "latest"
-
-[prepare]
-[prepare.uv]
-[prepare.npm]
-[prepare.go]
 
 [hooks]
 # cd = "script -q /dev/null lsd --color always --icon always | head -n 2"

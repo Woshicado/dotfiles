@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+jqp() {
+  local file=""
+  local -a keys
+  local -a xan_flags
+  local rows=27
+  local cols=0.7
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --rows)
+        rows="$2"; shift 2 ;;
+      --cols)
+        cols="$2"; shift 2 ;;
+      -*)
+        xan_flags+=("$1"); shift ;;
+      *)
+        if [[ -z "$file" ]]; then
+          file="$1"
+        else
+          keys+=("$1")
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  if [[ -z "$file" ]]; then
+    echo "Usage: jqp [--rows N] [--cols N] filename key1 [key2 ...]" >&2
+    return 1
+  fi
+
+  if [[ ! -f "$file" ]]; then
+    echo "Error: File '$file' not found." >&2
+    return 1
+  fi
+
+  if [[ ${#keys[@]} -eq 0 ]]; then
+    echo "Error: You must provide at least one key." >&2
+    return 1
+  fi
+
+  # if [[ ${#xan_flags[@]} -eq 0 ]]; then
+  #   xan_flags=("-L")
+  # fi
+
+  local jq_parts=""
+  local select_parts=""
+  for key in "${keys[@]}"; do
+    [[ -n "$jq_parts" ]] && jq_parts+=", "
+    jq_parts+=".\"$key\""
+    [[ -n "$select_parts" ]] && select_parts+=" and "
+    select_parts+=".\"$key\" != null"
+  done
+
+  local header=""
+  for key in "${keys[@]}"; do
+    [[ -n "$header" ]] && header+=","
+    header+="$key"
+  done
+
+  { echo "$header"; jq -r "select($select_parts) | [$jq_parts] | @csv" "$file" } | xan plot "${xan_flags[@]}" "${keys[@]}" --rows "$rows" --cols "$cols"
+}
