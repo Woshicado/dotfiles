@@ -70,10 +70,11 @@
 	dlog = -c diff.external=difft log --ext-diff
 	dshow = -c diff.external=difft show --ext-diff
 	ddiff = -c diff.external=difft diff
-	dl = -c diff.external=difft log --ext-diff
-	ds = -c diff.external=difft show --ext-diff
-	dw = -c diff.external=difft show --ext-diff HEAD~1
-	dd = -c diff.external=difft diff
+  dwork = -c diff.external=difft show --ext-diff HEAD~1
+	dl = -c core.pager=cat -c diff.external=difft log --ext-diff
+	ds = -c core.pager=cat -c diff.external=difft show --ext-diff
+	dw = -c core.pager=cat -c diff.external=difft show --ext-diff HEAD~1
+	dd = -c core.pager=cat -c diff.external=difft diff
 
 [commit]
 	gpgsign = true

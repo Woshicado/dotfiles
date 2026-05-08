@@ -11,23 +11,23 @@ _jqp() {
     '*:json_key:->keys'
 
   case "$state" in
-    keys)
-      local json_file=""
-      for w in "${words[@]}"; do
-        if [[ -f "$w" ]]; then
-          json_file="$w"
-          break
-        fi
-      done
-
-      if [[ -f "$json_file" ]]; then
-        local -a json_keys
-        local IFS=$'\n'
-        json_keys=($(head -n 1000 "$json_file" | jq -r 'keys[]' 2>/dev/null | sort -u))
-        _describe 'keys' json_keys
-      else
-        _message "Enter a filename first to trigger key completion"
+  keys)
+    local json_file=""
+    for w in "${words[@]}"; do
+      if [[ -f "$w" ]]; then
+        json_file="$w"
+        break
       fi
-      ;;
+    done
+
+    if [[ -f "$json_file" ]]; then
+      local -a json_keys
+      local IFS=$'\n'
+      json_keys=($(head -n 1000 "$json_file" | jq -r 'keys[]' 2>/dev/null | sort -u))
+      _describe 'keys' json_keys
+    else
+      _message "Enter a filename first to trigger key completion"
+    fi
+    ;;
   esac
 }

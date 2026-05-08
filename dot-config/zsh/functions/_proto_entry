@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Generic protocol entry creator
+# Usage: _proto_entry <file> <default_title> [title...]
+_proto_entry() {
+  local file="$1"
+  local default_title="$2"
+  shift 2
+  local title="${*:-$default_title}"
+  local date=$(date +%Y-%m-%d)
+  local heading="## ${date}: ${title}"
+
+  # Build the new entry block (no trailing X — cursor placed via nvim)
+  local entry="\n${heading}\n\n### TODOs\n\n-\n\n### Protocol\n\n-"
+
+  # Find the line number of the first top-level heading
+  local h1_line=$(grep -n '^# ' "$file" | head -1 | cut -d: -f1)
+
+  if [[ -n "$h1_line" ]]; then
+    # Insert after the H1 line (+ blank line)
+    sed -i "${h1_line}a\\
+${entry}
+" "$file"
+    # Cursor target: the "- " after "### Protocol", which is h1_line + 10
+    local cursor_line=$(( h1_line + 10 ))
+  else
+    # No H1 found — prepend to file
+    printf '%s\n' "$entry" | cat - "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    local cursor_line=10
+  fi
+
+  # Open in neovim, cursor on the Protocol dash, at end of line
+  nvim "+call cursor(${cursor_line}, 3)" "$file"
+}
