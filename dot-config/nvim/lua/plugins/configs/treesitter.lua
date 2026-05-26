@@ -5,7 +5,7 @@ return {
 	lazy = false,
 	init = function()
 		vim.api.nvim_create_autocmd("FileType", {
-			callback = function()
+			callback = function(args)
 				-- Enable treesitter highlighting and disable regex syntax
 				pcall(vim.treesitter.start)
 				-- Enable treesitter-based indentation

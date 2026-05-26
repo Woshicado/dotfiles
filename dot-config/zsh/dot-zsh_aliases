@@ -90,6 +90,10 @@ alias gs='git status'
 alias gl="git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an %ar%C(auto)  %D%n%s%n'"
 alias gd='git ddiff'
 
+# marimo / npx
+alias claude-marimo='npx stdio-to-ws "npx @zed-industries/claude-code-acp" --port 3017'
+alias gemini-marimo='npx stdio-to-ws "npx @google/gemini-cli --experimental-acp" --port 3019'
+
 # Custom jj aliases
 alias jjs='jj st'
 alias jja='jj abandon'

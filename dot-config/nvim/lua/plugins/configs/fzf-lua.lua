@@ -24,18 +24,31 @@ return {
 		{ "<leader>fg", "<cmd>FzfLua live_grep<CR>", desc = "Fuzzy live grep in project" },
 		{ "<leader>fz", "<cmd>FzfLua lgrep_curbuf<CR>", desc = "Fuzzy live current buffer" },
 		{ "<leader>fm", "<cmd>FzfLua marks<CR>", desc = "Fuzzy marks" },
-		{ "<leader>fp", "<cmd>FzfLua paths<CR>", desc = "Fuzzy complete path" },
 		{ "<leader>fq", "<cmd>FzfLua grep_quickfix<CR>", desc = "Fuzzy quickfix list" },
 		{ "<leader>fl", "<cmd>FzfLua lgrep_loclist<CR>", desc = "Fuzzy location list" },
 		{ "<leader>uh", "<cmd>FzfLua undotree<CR>", desc = "Show undotree" },
 		{ "<leader>uf", "<cmd>FzfLua undotree locate=false<CR>", desc = "Show undotree @location" },
 
 		{ "<leader>gs", "<cmd>FzfLua git_stash<CR>", mode = { "n", "x" }, desc = "Fuzzy git stashes" },
-		{ "<leader>gt", "<cmd>FzfLua git_status<CR>", mode = { "n", "x" }, desc = "Fuzzy git status" },
+		-- { "<leader>gt", "<cmd>FzfLua git_status<CR>", mode = { "n", "x" }, desc = "Fuzzy git status" },
 		{ "<leader>gc", "<cmd>FzfLua git_bcommits<CR>", mode = { "n", "x" }, desc = "Fuzzy git buffer commits" },
 		{ "<leader>ga", "<cmd>FzfLua git_commits<CR>", mode = { "n", "x" }, desc = "Fuzzy git commits" },
 		{ "<leader>gb", "<cmd>FzfLua git_branches<CR>", mode = { "n", "x" }, desc = "Fuzzy git branches" },
 		{ "<leader>gl", "<cmd>FzfLua git_blame<CR>", mode = { "n", "x" }, desc = "Fuzzy git blame" },
+
+		-- Filetype filters
+		{ "<leader>ftp", "<cmd>FzfLua files fd_opts='--extension=py'<CR>", desc = "Find Python files" },
+		{ "<leader>fty", "<cmd>FzfLua files fd_opts='--extension=yaml'<CR>", desc = "Find YAML files" },
+		{ "<leader>ftl", "<cmd>FzfLua files fd_opts='--extension=lua'<CR>", desc = "Find Lua files" },
+		{ "<leader>ftc", function() require("fzf-lua").files({ fd_opts = "--extension=c --extension=cpp" }) end, desc = "Find C/C++ files" },
+		{ "<leader>fth", function() require("fzf-lua").files({ fd_opts = "--extension=h --extension=hpp" }) end, desc = "Find header files" },
+		{ "<leader>ftj", function() require("fzf-lua").files({ fd_opts = "--extension=json --extension=jsonl" }) end, desc = "Find json files" },
+		{ "<leader>gtp", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.py -e" }) end, desc = "Grep Python files" },
+		{ "<leader>gty", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.yaml -e" }) end, desc = "Grep YAML files" },
+		{ "<leader>gtl", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.lua -e" }) end, desc = "Grep Lua files" },
+		{ "<leader>gtc", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.c --glob=*.cpp -e" }) end, desc = "Grep C/C++ files" },
+		{ "<leader>gth", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.h --glob=*.hpp -e" }) end, desc = "Grep header files" },
+		{ "<leader>gtj", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.json --glob=*.jsonl -e" }) end, desc = "Grep JSON files" },
 	},
 	config = function()
 		local actions = require("fzf-lua").actions

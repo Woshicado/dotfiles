@@ -78,9 +78,11 @@ blocks:
         template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
           \ end }}{{ end }}"
         properties:
-          fetch_status: false
+          fetch_status: true
           cache_duration: 10
           ignore_working_copy: false
+          fetch_ahead_counter: true
+          "ahead_icon": "⇡"
     newline: true
   - type: "prompt"
     alignment: "right"

@@ -64,6 +64,16 @@ bindkey '^K' kill-line
 bindkey '^[^?' backward-kill-line
 bindkey '^W' backward-kill-word
 bindkey '^F' autosuggest-accept
+bindkey -r '^L'
+
+clear-screen-widget() {
+  zle kill-whole-line
+  zle -R
+  clear
+  zle reset-prompt
+}
+zle -N clear-screen-widget
+bindkey '^Y' clear-screen-widget
 
 eval "$(oh-my-posh init zsh --config "${XDG_CONFIG_HOME}/oh-my-posh/.mytheme.omp.yaml")"
 
