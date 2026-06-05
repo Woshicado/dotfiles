@@ -161,6 +161,23 @@ require("bqf").setup({
 	},
 })
 
+vim.api.nvim_create_user_command("MacOSQuicklook", function()
+	local oil = require("oil")
+	local entry = oil.get_cursor_entry()
+	if entry then
+		local full_path = oil.get_current_dir() .. entry.name
+		vim.fn.jobstart({ "qlmanage", "-p", full_path }, { detach = true })
+		vim.defer_fn(function()
+			vim.fn.system(
+				"osascript -e 'tell application \"System Events\" to tell process \"qlmanage\"' -e 'set frontmost to true' -e 'end tell'"
+			)
+		end, 300) -- Delay in milliseconds
+	else
+		print("Can only do quicklook in Oil")
+	end
+end, {})
+
+
 --[[ I decided against using this because it will destroy collaborating.
      On top of that, there are config diffs between formatters and lsp's/linters. ]]
 -- Overwrite tab behavior to my preferences... This might break formatting for shared workspaces

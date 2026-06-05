@@ -6,7 +6,6 @@ Abolish {despa,sepe}rat{e,es,ed,ing,ely,ion,ions,or} {despe,sepa}rat{}
 Abolish {,un}nec{ce,ces,e}sar{y,ily} {}nec{es}sar{}
 Abolish as{,s}is{,s}t{,ing,ance,ant,ed} {,}{,}assist{}
 Abolish ad{,d}res{,ing,ed,es,or,ors} {,}address{}
-Abolish {po,a,rea}s{,s}es{,s}{,es,er,ion,ed,ing,ment,ments} {}{,}{,}ssess{}
 Abolish c{a,e}l{e,a}nd{a,e}r{,s} {,}{,}{,}calendar{}
 
 "simple ones

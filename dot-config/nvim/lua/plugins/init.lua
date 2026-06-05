@@ -33,6 +33,7 @@ return {
 	require("plugins.configs.lspconfig"),
 	-- require("plugins.configs.ltex-extra"),
 	require("plugins.configs.oil"),
+	require("plugins.configs.oil-git"),
 	require("plugins.configs.leap"),
 	require("plugins.configs.repeat"),
 	require("plugins.configs.speeddating"),

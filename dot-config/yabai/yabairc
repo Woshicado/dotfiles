@@ -64,12 +64,13 @@ yabai -m config external_bar all:$(sketchybar --query bar | jq .height):0
 #95e6cb
 #ed8274
 borders \
+  style=round \
   background_color=0x302c2e34 \
-  active_color=0xff95e6cb \
+  active_color="glow(0xAARRGGBB)" \
   inactive_color=0xcced8274 \
-  hdpi=off \
+  hidpi=off \
   width=8.0 \
-  blur_radius=25 &
+  ax_focus=on
 
 # Padding so the border is visible
 yabai -m config top_padding 12

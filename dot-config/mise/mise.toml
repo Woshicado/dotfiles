@@ -19,6 +19,7 @@ go = "latest"
 "pipx:timetagger_cli" = "latest"
 "pipx:togglcli" = "latest"
 python = "3"
+rclone = "latest"
 usage = "latest"
 uv = "latest"
 
