@@ -16,6 +16,7 @@ return {
 	require("plugins.configs.abolish"),
 	require("plugins.configs.todo-comments"),
 	require("plugins.configs.dooing"),
+	require("plugins.configs.preview-markdown"),
 	require("plugins.configs.render-markdown"),
 	require("plugins.configs.obsidian"),
 	require("plugins.configs.obsidian-bridge"),

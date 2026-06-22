@@ -59,6 +59,13 @@ yabai -m rule --apply
 # Sketchybar padding
 yabai -m config external_bar all:$(sketchybar --query bar | jq .height):0
 
+# Padding so the border is visible
+yabai -m config top_padding 12
+yabai -m config bottom_padding 12
+yabai -m config left_padding 12
+yabai -m config right_padding 12
+yabai -m config window_gap 12
+
 ### https://github.com/FelixKratz/JankyBorders
 #2c2e34
 #95e6cb
@@ -66,15 +73,8 @@ yabai -m config external_bar all:$(sketchybar --query bar | jq .height):0
 borders \
   style=round \
   background_color=0x302c2e34 \
-  active_color="glow(0xAARRGGBB)" \
+  active_color="glow(0xff95e6cb)" \
   inactive_color=0xcced8274 \
   hidpi=off \
   width=8.0 \
   ax_focus=on
-
-# Padding so the border is visible
-yabai -m config top_padding 12
-yabai -m config bottom_padding 12
-yabai -m config left_padding 12
-yabai -m config right_padding 12
-yabai -m config window_gap 12
