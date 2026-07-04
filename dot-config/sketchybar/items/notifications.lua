@@ -3,45 +3,126 @@ local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 local display = require("helpers.display")
 
+-- Apps to track. Identical for every display, so this and the derived query
+-- buckets below live at module scope and the queries run ONCE per tick — the
+-- results are fanned out to each display's badge (see the shared updater at the
+-- bottom). Previously every display polled the Dock/notmuch/mattermost itself,
+-- multiplying the (expensive) osascript Dock scrape by the monitor count.
+local apps_to_track = {
+	{
+		name = "Microsoft Teams",
+		command = "open 'msteams://chats'",
+	},
+	{
+		name = "Thunderbird",
+		count_command = "notmuch count tag:unread",
+		count_command2 = "notmuch count --output=threads tag:important OR tag:todo",
+	},
+	{
+		name = "Mattermost",
+		-- I do not want to hit the API millions of times, but after opening I still want it to respon
+		-- and remove the notification, that I opened it. So I just don't use the API, but the dot for
+		-- normal messages. Mention count should be fine to get in 5 min intervals though, so I keep that.
+		-- count_command = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .msg_count",
+		count_command2 = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .mention_count",
+	},
+	"Signal",
+	"WhatsApp",
+	"Discord",
+}
+
+-- Normalize apps_to_track so every entry is a table { name, command, count_command, count_command2 }
+local function normalize(entry)
+	if type(entry) == "string" then
+		return { name = entry, command = nil, count_command = nil, count_command2 = nil }
+	end
+	return entry
+end
+
+-- Parse "AppName:count\n..." into a table { AppName = count, ... }
+local function parse_app_counts(raw)
+	local result = {}
+	for line in raw:gmatch("[^\n]+") do
+		local app, count = line:match("^(.+):(%d+)$")
+		if app and count then
+			result[app] = tonumber(count)
+		end
+	end
+	return result
+end
+
+-- Built once at load time, reused on every update tick (only for Dock-badge apps)
+local function build_osascript_cmd(app_list)
+	if #app_list == 0 then
+		return nil
+	end
+
+	local quoted = {}
+	for _, entry in ipairs(app_list) do
+		local name = normalize(entry).name
+		table.insert(quoted, '"' .. name .. '"')
+	end
+
+	local lines = {
+		"set appList to {" .. table.concat(quoted, ", ") .. "}",
+		'set output to ""',
+		'tell application "System Events"',
+		'tell process "Dock"',
+		"repeat with appName in appList",
+		"try",
+		'set unreadLabel to value of attribute "AXStatusLabel" of UI element appName of list 1',
+		"if unreadLabel is not missing value then",
+		'if unreadLabel is not "" then',
+		"try",
+		"set countVal to unreadLabel as integer",
+		"on error",
+		"set countVal to 1",
+		"end try",
+		'set output to output & appName & ":" & countVal & linefeed',
+		"end if",
+		"end if",
+		"on error",
+		"end try",
+		"end repeat",
+		"end tell",
+		"end tell",
+		"return output",
+	}
+
+	local cmd = "osascript"
+	for _, line in ipairs(lines) do
+		cmd = cmd .. " -e '" .. line .. "'"
+	end
+	return cmd
+end
+
+-- Separate apps into those that use Dock badges vs. custom count commands.
+-- An app with count_command2 but no count_command still uses the Dock for
+-- the primary count; it just also fires a second async call.
+local dock_apps = {}
+local custom_count_apps = {}
+local secondary_count_apps = {}
+for _, entry in ipairs(apps_to_track) do
+	local e = normalize(entry)
+	if e.count_command then
+		table.insert(custom_count_apps, e)
+	else
+		table.insert(dock_apps, e)
+	end
+	if e.count_command2 then
+		table.insert(secondary_count_apps, e)
+	end
+end
+
+local OSASCRIPT_CMD = build_osascript_cmd(dock_apps)
+
+-- Each display registers a function here that applies a resolved counts table to
+-- its own items; the shared updater calls all of them with a single query result.
+local appliers = {}
+
 local function setup_for_display(display_index)
 	local position = display.is_builtin(display_index) and "q" or "center"
 	local suffix = tostring(display_index)
-
-	sbar.add("item", "items.notifications" .. suffix, {
-		display = display_index,
-		position = position,
-	})
-
-	local apps_to_track = {
-		{
-			name = "Microsoft Teams",
-			command = "open 'msteams://chats'",
-		},
-		{
-			name = "Thunderbird",
-			count_command = "notmuch count tag:unread",
-			count_command2 = "notmuch count --output=threads tag:important OR tag:todo",
-		},
-		{
-			name = "Mattermost",
-			-- I do not want to hit the API millions of times, but after opening I still want it to respon
-			-- and remove the notification, that I opened it. So I just don't use the API, but the dot for
-			-- normal messages. Mention count should be fine to get in 5 min intervals though, so I keep that.
-			-- count_command = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .msg_count",
-			count_command2 = os.getenv("HOME") .. "/.config/sketchybar/helpers/mattermost.sh" .. " | jq .mention_count",
-		},
-		"Signal",
-		"WhatsApp",
-		"Discord",
-	}
-
-	-- Normalize apps_to_track so every entry is a table { name, command, count_command, count_command2 }
-	local function normalize(entry)
-		if type(entry) == "string" then
-			return { name = entry, command = nil, count_command = nil, count_command2 = nil }
-		end
-		return entry
-	end
 
 	-- Table to hold dynamically created per-app items
 	-- Each entry: { icon = <item>, primary = <item>, secondary = <item>|nil }
@@ -49,12 +130,13 @@ local function setup_for_display(display_index)
 	-- and secondary is nil.
 	local app_items = {}
 
-	-- The summary badge (total count) shown on the right
+	-- The summary badge (total count). Updated centrally by the shared updater,
+	-- so it carries no update_freq of its own.
 	local notifications = sbar.add("item", "items.notifications" .. suffix, {
 		display = display_index,
 		position = position,
 		icon = {
-			string = "|  ",
+			string = "|  ",
 			font = "FiraCode Nerd Font:Bold:14.0",
 			color = colors.grey,
 			padding_left = -2,
@@ -65,21 +147,8 @@ local function setup_for_display(display_index)
 			color = colors.grey,
 		},
 		padding_right = 10,
-		update_freq = 5,
 		drawing = true,
 	})
-
-	-- Parse "AppName:count\n..." into a table { AppName = count, ... }
-	local function parse_app_counts(raw)
-		local result = {}
-		for line in raw:gmatch("[^\n]+") do
-			local app, count = line:match("^(.+):(%d+)$")
-			if app and count then
-				result[app] = tonumber(count)
-			end
-		end
-		return result
-	end
 
 	-- Return (or lazily create) item handles for a given app entry.
 	--
@@ -189,71 +258,6 @@ local function setup_for_display(display_index)
 		app_items[app_name] = { icon = icon_item, primary = primary, secondary = secondary }
 		return app_items[app_name]
 	end
-
-	-- Separate apps into those that use Dock badges vs. custom count commands.
-	-- An app with count_command2 but no count_command still uses the Dock for
-	-- the primary count; it just also fires a second async call.
-	local dock_apps = {}
-	local custom_count_apps = {}
-	local secondary_count_apps = {}
-	for _, entry in ipairs(apps_to_track) do
-		local e = normalize(entry)
-		if e.count_command then
-			table.insert(custom_count_apps, e)
-		else
-			table.insert(dock_apps, e)
-		end
-		if e.count_command2 then
-			table.insert(secondary_count_apps, e)
-		end
-	end
-
-	-- Built once at load time, reused on every update tick (only for Dock-badge apps)
-	local function build_osascript_cmd(app_list)
-		if #app_list == 0 then
-			return nil
-		end
-
-		local quoted = {}
-		for _, entry in ipairs(app_list) do
-			local name = normalize(entry).name
-			table.insert(quoted, '"' .. name .. '"')
-		end
-
-		local lines = {
-			"set appList to {" .. table.concat(quoted, ", ") .. "}",
-			'set output to ""',
-			'tell application "System Events"',
-			'tell process "Dock"',
-			"repeat with appName in appList",
-			"try",
-			'set unreadLabel to value of attribute "AXStatusLabel" of UI element appName of list 1',
-			"if unreadLabel is not missing value then",
-			'if unreadLabel is not "" then',
-			"try",
-			"set countVal to unreadLabel as integer",
-			"on error",
-			"set countVal to 1",
-			"end try",
-			'set output to output & appName & ":" & countVal & linefeed',
-			"end if",
-			"end if",
-			"on error",
-			"end try",
-			"end repeat",
-			"end tell",
-			"end tell",
-			"return output",
-		}
-
-		local cmd = "osascript"
-		for _, line in ipairs(lines) do
-			cmd = cmd .. " -e '" .. line .. "'"
-		end
-		return cmd
-	end
-
-	local OSASCRIPT_CMD = build_osascript_cmd(dock_apps)
 
 	-- Pre-create all items so the bracket can include them from the start.
 	for _, entry in ipairs(apps_to_track) do
@@ -427,27 +431,57 @@ local function setup_for_display(display_index)
 		if total > 0 then
 			notifications:set({
 				drawing = true,
-				icon = { string = "|  ", color = colors.blue },
+				icon = { string = "|  ", color = colors.blue },
 				label = { string = tostring(total), color = colors.blue },
 			})
 		else
 			notifications:set({
 				drawing = true,
-				icon = { string = "|  ", color = colors.grey },
+				icon = { string = "|  ", color = colors.grey },
 				label = { string = "0", color = colors.grey },
 			})
 		end
 	end
 
-	-- Main update function
-	local function update_notifications()
+	table.insert(appliers, apply_counts)
+end
+
+for i = 1, display.count do
+	if not display.is_narrow(i, 1800) then
+		setup_for_display(i)
+	end
+end
+
+-- Shared updater: run the expensive queries ONCE and fan the results out to
+-- every display's badge. A single hidden driver item owns the timer (30s instead
+-- of the old per-display 5s), so the Dock osascript scrape runs once per tick
+-- total rather than once per monitor.
+if #appliers > 0 then
+	local driver = sbar.add("item", "items.notifications.driver", {
+		drawing = false,
+		updates = "on",
+		update_freq = 30,
+	})
+
+	local function shared_update()
 		local app_counts = {}
 		local pending = #custom_count_apps + #secondary_count_apps + (OSASCRIPT_CMD and 1 or 0)
+
+		local function fan_out()
+			for _, apply in ipairs(appliers) do
+				apply(app_counts)
+			end
+		end
+
+		if pending == 0 then
+			fan_out()
+			return
+		end
 
 		local function maybe_apply()
 			pending = pending - 1
 			if pending == 0 then
-				apply_counts(app_counts)
+				fan_out()
 			end
 		end
 
@@ -483,15 +517,8 @@ local function setup_for_display(display_index)
 		end
 	end
 
-	-- Subscribe to periodic and forced updates
-	notifications:subscribe("routine", update_notifications)
-	notifications:subscribe("forced", update_notifications)
+	driver:subscribe("routine", shared_update)
+	driver:subscribe("forced", shared_update)
 
-	update_notifications()
-end
-
-for i = 1, display.count do
-	if not display.is_narrow(i, 1800) then
-		setup_for_display(i)
-	end
+	shared_update()
 end

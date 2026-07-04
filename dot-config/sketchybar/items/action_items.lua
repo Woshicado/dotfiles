@@ -25,7 +25,8 @@ local amphetamine = sbar.add("item", "amphetamine", {
     padding_left = 0,
     padding_right = 0,
 	},
-	update_freq = 10, -- Poll every 10s as a fallback
+	-- Fallback poll; clicking toggles + refreshes immediately, so 30s is plenty.
+	update_freq = 30,
 })
 
 local function update_amphetamine()
@@ -121,22 +122,27 @@ local focus = sbar.add("item", "focus", {
     padding_right = 0,
 		y_offset = 1,
 	},
-	update_freq = 10,
+	update_freq = 30,
 })
 
--- Use moonphase/do-not-disturb AppleScript API
+-- Read the Do-Not-Disturb assertions file directly in Lua (it is JSON/text) and
+-- count active assertion records, instead of spawning sh + plutil + grep.
+local DND_ASSERTIONS = os.getenv("HOME") .. "/Library/DoNotDisturb/DB/Assertions.json"
 local function update_focus()
-	sbar.exec(
-		"/bin/sh -c 'plutil -p ~/Library/DoNotDisturb/DB/Assertions.json 2>/dev/null | grep -c storeAssertionRecords'",
-		function(result)
-			local count = tonumber(result:match("%d+")) or 0
-			if count > 0 then
-				focus:set({ icon = { string = icon_focus_on, color = active_color_focus } })
-			else
-				focus:set({ icon = { string = icon_focus_off, color = colors.grey } })
-			end
+	local count = 0
+	local f = io.open(DND_ASSERTIONS, "r")
+	if f then
+		local data = f:read("*a")
+		f:close()
+		for _ in data:gmatch("storeAssertionRecords") do
+			count = count + 1
 		end
-	)
+	end
+	if count > 0 then
+		focus:set({ icon = { string = icon_focus_on, color = active_color_focus } })
+	else
+		focus:set({ icon = { string = icon_focus_off, color = colors.grey } })
+	end
 end
 
 focus:subscribe("mouse.clicked", function(env)
@@ -175,12 +181,15 @@ local protonvpn = sbar.add("item", "protonvpn", {
     padding_right = 0,
 		y_offset = 1,
 	},
-	update_freq = 10,
+	update_freq = 30,
 })
 
 local function get_vpn_status(callback)
-	sbar.exec("scutil --nc status ProtonVPN 2>/dev/null | head -1", function(result)
-		local status = result:gsub("\n", ""):gsub("%s+", "")
+	sbar.exec("scutil --nc status ProtonVPN 2>/dev/null", function(result)
+		-- First line holds the status word ("Connected"/"Disconnected"/…); take it
+		-- in Lua instead of piping through `head`.
+		local first = (result or ""):match("[^\r\n]+") or ""
+		local status = first:gsub("%s+", "")
 		-- scutil returns "Connected", "Disconnected", "Connecting", etc.
 		if status == "Connected" then
 			callback("on")

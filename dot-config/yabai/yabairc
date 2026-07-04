@@ -2,6 +2,17 @@
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
 
+# Freeze + clean-restart sketchybar on display topology changes so it does not
+# thrash through the macOS reconfiguration burst (which hangs the whole UI).
+# Labels keep these idempotent across reloads; display_changed is intentionally
+# excluded (it fires on mere focus changes between monitors).
+# See ~/.config/sketchybar/helpers/display_guard.sh
+for __ev in display_added display_removed display_moved display_resized; do
+	yabai -m signal --add event="$__ev" label="sketchybar_display_guard_$__ev" \
+		action="$HOME/.config/sketchybar/helpers/display_guard.sh"
+done
+unset __ev
+
 yabai -m config layout bsp
 yabai -m config focus_follows_mouse autoraise
 
@@ -50,6 +61,8 @@ yabai -m rule --add app="^[Zz]otero$" title="([Zz]ot[Ss]eek|[Pp]lugins [Mm]anage
 yabai -m rule --add app="^Thunderbird$" title="(Write:)" manage=off
 yabai -m rule --add app="^Zen$" title="^Extension:" manage=off
 yabai -m rule --add app="^qemu-system-aarch64$" manage=off
+yabai -m rule --add app="^Riot Client$" manage=off
+yabai -m rule --add app="^League [Oo]f Legends$" manage=off
 yabai -m rule --apply
 
 # yabai -m signal --add event=window_created action='

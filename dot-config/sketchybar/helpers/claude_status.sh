@@ -69,8 +69,14 @@ case "$STATUS" in
 esac
 
 # Garbage-collect state files from sessions that died without a SessionEnd
-# (e.g. a crash or kill -9). Anything untouched for a day is stale.
-find "$STATE_DIR" -type f -mtime +1 -delete 2>/dev/null || true
+# (e.g. a crash or kill -9). Anything untouched for a day is stale. This hook can
+# fire many times per second during active tool use, so sweep at most once an
+# hour instead of scanning the directory on every invocation.
+GC_STAMP="$STATE_DIR/.last_gc"
+if [ ! -f "$GC_STAMP" ] || [ "$(( $(date +%s) - $(date -r "$GC_STAMP" +%s) ))" -ge 3600 ]; then
+  find "$STATE_DIR" -type f -mtime +1 -delete 2>/dev/null || true
+  touch "$GC_STAMP" 2>/dev/null || true
+fi
 
 # Tell the badge to re-read state. Non-fatal if the bar is not running.
 if command -v sketchybar >/dev/null 2>&1; then

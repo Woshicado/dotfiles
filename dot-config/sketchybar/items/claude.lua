@@ -47,12 +47,14 @@ local claude = sbar.add("item", "items.claude", {
   },
 })
 
--- Read every per-session state file and tally the statuses.
-local function aggregate()
-  local waiting, done, working = 0, 0, 0
-  local p = io.popen("/bin/cat " .. STATE_DIR .. "/* 2>/dev/null")
-  if p then
-    for line in p:lines() do
+-- Read every per-session state file, tally the statuses, and update the badge.
+-- Done asynchronously via sbar.exec (rather than a blocking io.popen) so the
+-- bar's event loop is never stalled, even when claude_status events arrive fast.
+local function render()
+  sbar.exec("/bin/cat " .. STATE_DIR .. "/* 2>/dev/null", function(result)
+    local text = type(result) == "string" and result or ""
+    local waiting, done, working = 0, 0, 0
+    for line in text:gmatch("[^\r\n]+") do
       if line == "waiting" then
         waiting = waiting + 1
       elseif line == "done" then
@@ -61,43 +63,37 @@ local function aggregate()
         working = working + 1
       end
     end
-    p:close()
-  end
-  return waiting, done, working
-end
+    local total = waiting + done + working
 
-local function render()
-  local waiting, done, working = aggregate()
-  local total = waiting + done + working
+    if total == 0 then
+      claude:set({ drawing = false })
+      return
+    end
 
-  if total == 0 then
-    claude:set({ drawing = false })
-    return
-  end
+    -- Priority: red (needs input) > grey (still working) > green (all done).
+    -- Grey wins over green so green only shows once every agent has finished.
+    local color, attention
+    if waiting > 0 then
+      color = colors.red
+      attention = waiting
+    elseif working > 0 then
+      color = colors.grey
+      attention = 0
+    else
+      color = colors.green
+      attention = done
+    end
 
-  -- Priority: red (needs input) > grey (still working) > green (all done).
-  -- Grey wins over green so green only shows once every agent has finished.
-  local color, attention
-  if waiting > 0 then
-    color = colors.red
-    attention = waiting
-  elseif working > 0 then
-    color = colors.grey
-    attention = 0
-  else
-    color = colors.green
-    attention = done
-  end
+    -- Only show a count when more than one instance wants attention, to keep the
+    -- badge minimal in the common single-agent case.
+    local label = (attention > 1) and tostring(attention) or ""
 
-  -- Only show a count when more than one instance wants attention, to keep the
-  -- badge minimal in the common single-agent case.
-  local label = (attention > 1) and tostring(attention) or ""
-
-  claude:set({
-    drawing = true,
-    icon = { color = color },
-    label = { string = label, drawing = label ~= "" },
-  })
+    claude:set({
+      drawing = true,
+      icon = { color = color },
+      label = { string = label, drawing = label ~= "" },
+    })
+  end)
 end
 
 claude:subscribe("claude_status", render)

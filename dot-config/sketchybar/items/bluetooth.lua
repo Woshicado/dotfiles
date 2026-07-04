@@ -28,7 +28,8 @@ local bluetooth = sbar.add("item", "bluetooth", {
 		padding_right = 6,
     padding_left = -2,
 	},
-	update_freq = 5,
+	-- Bluetooth power/connection state changes rarely; poll infrequently.
+	update_freq = 60,
 })
 
 local function update_bluetooth()

@@ -12,11 +12,11 @@ if [ -f "$CACHE_FILE" ]; then
 fi
 
 RESPONSE=$(
-  sops exec-env ~/secrets.env 'curl -H "Authorization: Bearer ${MM_TOKEN}" ${MM_URL}/api/v4/users/${MM_USER_ID}/teams/${MM_TEAM_ID}/unread'
+  sops exec-env ~/secrets.env 'curl -s --max-time 5 -H "Authorization: Bearer ${MM_TOKEN}" ${MM_URL}/api/v4/users/${MM_USER_ID}/teams/${MM_TEAM_ID}/unread'
 )
 
 if [ "$RESPONSE" = "401" ]; then
-  MM_TOKEN=$(curl -s -D - \
+  MM_TOKEN=$(curl -s --max-time 5 -D - \
     -X POST ${MM_URL}/api/v4/users/login \
     -H "Content-Type: application/json" \
     -d '{"login_id":"${MM_USER_NAME}","password":"{MM_PASSWORD}"}' \
@@ -36,7 +36,7 @@ if [ "$RESPONSE" = "401" ]; then
     mv secrets.env.tmp ${HOME}/dotfiles/secrets.env
 
   RESPONSE=$(
-    sops exec-env ~/secrets.env 'curl -H "Authorization: Bearer ${MM_TOKEN}" ${MM_URL}/api/v4/users/${MM_USER_ID}/teams/${MM_TEAM_ID}/unread'
+    sops exec-env ~/secrets.env 'curl -s --max-time 5 -H "Authorization: Bearer ${MM_TOKEN}" ${MM_URL}/api/v4/users/${MM_USER_ID}/teams/${MM_TEAM_ID}/unread'
   )
 fi
 
