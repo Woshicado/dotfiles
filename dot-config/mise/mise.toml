@@ -3,30 +3,27 @@ jobs = 4
 env_file = ".env"
 python.uv_venv_auto = "source"
 experimental = true
+minimum_release_age = "3d"
 
 [env]
 
 [tools]
-"cargo:tree-sitter-cli" = "latest"
 "github:alexzielenski/mousecape" = "latest"
 "github:pdobsan/oama" = "latest"
 go = "latest"
-"pipx:academic" = "latest"
 "pipx:claude-swap" = "latest"
 "pipx:code-review-graph" = "latest"
 "pipx:deepl" = "latest"
 "pipx:mypy" = "latest"
 "pipx:pynvim" = "latest"
 "pipx:timetagger_cli" = "latest"
-"pipx:togglcli" = "latest"
-python = "3"
-rclone = "latest"
 usage = "latest"
 uv = "latest"
 
 [hooks]
 # cd = "script -q /dev/null lsd --color always --icon always | head -n 2"
-enter = "mise run info 2>/dev/null || true"
+# enter hook removed: `mise run info` spawned a nested mise process (~250ms) on
+# every shell start and every cd. Run `mise run info` (alias `mise i`) manually.
 
 [tasks]
 [tasks."init-latex-presentation"]

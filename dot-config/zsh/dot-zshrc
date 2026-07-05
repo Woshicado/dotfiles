@@ -24,13 +24,16 @@ HYPHEN_INSENSITIVE='true' # - == _ ?
 
 DISABLE_FZF_KEY_BINDINGS='false'
 
+# Skip compinit's per-startup security audit of the fpath dirs (compaudit, ~100ms every launch).
+ZSH_DISABLE_COMPFIX='true'
+
 ### PLUGINS
 plugins=(
   z    # Easy fuzzy navigation
   sudo # Double escape sudo's last command
   zsh-autosuggestions
   fzf
-  mise
+  mise  # activates mise hooks
 )
 
 if command -v brew &>/dev/null; then
@@ -84,8 +87,8 @@ eval "$(oh-my-posh init zsh --config "${XDG_CONFIG_HOME}/oh-my-posh/.mytheme.omp
 # eval is used to hide the Zsh-specific ${(%):-%x} syntax from shfmt
 eval 'current_script="${(%):-%x}"'
 
-###### THE FOLLOWING SHOULD BE AT THE END.
-eval "$(mise activate zsh)"
+# NOTE: mise is activated once, by the `mise` oh-my-zsh plugin (see plugins array).
+# A second `eval "$(mise activate zsh)"` used to live here and doubled _mise_hook
 
 ### Apply all defined hooks, e.g., sourcing .source_me files.
 # load-local-conf

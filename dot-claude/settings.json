@@ -1,10 +1,9 @@
 {
-  "model": "opus",
   "attribution": {
     "commit": "",
-    "pr": "",
-    "sessionUrl": false
+    "pr": ""
   },
+  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -97,8 +96,11 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "pyright-lsp@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
+  "tui": "default",
+  "skipWorkflowUsageWarning": true,
   "theme": "dark"
 }

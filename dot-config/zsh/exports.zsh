@@ -4,7 +4,22 @@
 # This file is sourced from ~/.zshrc.
 
 ### VERY FIRST THING: DECRYPT KEYS
-export $(sops --decrypt ~/dotfiles/secrets.env | xargs)
+# Decrypt once, then cache the secrets in the tmux server's global env so future
+# panes inherit them for free.
+# Refresh after editing secrets.env with: `tmux setenv -gu SECRETS_LOADED`
+if [[ -z ${SECRETS_LOADED:-} ]]; then
+  _sops_plain="$(sops --decrypt ~/dotfiles/secrets.env)"
+  export $(print -r -- "$_sops_plain" | xargs)
+  export SECRETS_LOADED=1
+  if [[ -n ${TMUX:-} ]] && (( $+commands[tmux] )); then
+    print -r -- "$_sops_plain" | while IFS= read -r _l; do
+      [[ -z $_l || $_l == '#'* ]] && continue
+      tmux setenv -g "${_l%%=*}" "${_l#*=}"
+    done
+    tmux setenv -g SECRETS_LOADED 1
+  fi
+  unset _sops_plain _l
+fi
 
 ### PATHS
 # Zsh/Oh-My-Zsh Paths
