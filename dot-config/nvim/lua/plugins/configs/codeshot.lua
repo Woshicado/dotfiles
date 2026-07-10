@@ -9,12 +9,15 @@ return {
 	config = function()
 		require("codeshot").setup({
 			copy = "%c",
-			silent = true,
+			silent = false,
 			window_controls = false,
 			shadow = false,
 			shadow_image = false,
 			show_line_numbers = true,
 			tab_width = 4,
+			use_current_theme = false,
+			theme = "TwoDark",
+			fonts = "Menlo=14",
 			background = "#323232",
 			radius = 30,
 			author = "",

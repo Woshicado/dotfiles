@@ -15,7 +15,9 @@ return {
 	require("plugins.configs.treesitter-context"),
 	require("plugins.configs.abolish"),
 	require("plugins.configs.todo-comments"),
-	require("plugins.configs.dooing"),
+	-- require("plugins.configs.dooing"),  -- retired in favour of obsidian-todo
+	require("plugins.configs.obsidian-todo"),
+	require("plugins.configs.obsidian-shop"),
 	require("plugins.configs.preview-markdown"),
 	require("plugins.configs.render-markdown"),
 	require("plugins.configs.obsidian"),
@@ -67,7 +69,7 @@ return {
 	require("plugins.configs.which-key"),
 	require("plugins.configs.luasnip"),
 	require("plugins.configs.eunuch"),
-	require("plugins.configs.matchup"),
+	-- require("plugins.configs.matchup"),
 	-- require("plugins.configs.noice"),  -- I really don't like the 'bloat' of this... Always trying, never satisfied
 	-- require("plugins.configs.autolist"),  -- breaks <tab> on empty line, as well as deleting lines producing an extra I
 	require("plugins.configs.gitsigns"),
