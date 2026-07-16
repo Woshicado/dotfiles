@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+pdfxobj() {
+  [[ -f "$1" && -n "$2" ]] || { print -u2 "usage: pdfxobj <file.pdf> <page>"; return 1 }
+  uv run --with pikepdf python - "$1" "$2" <<'PY'
+import sys, pikepdf
+pdf = pikepdf.open(sys.argv[1])
+p = pdf.pages[int(sys.argv[2]) - 1]
+rows = []
+for name, obj in p.get("/Resources", {}).get("/XObject", {}).items():
+    try:
+        rows.append((len(obj.read_raw_bytes()), str(name), str(obj.get("/Subtype"))))
+    except Exception:
+        rows.append((0, str(name), "?"))
+for size, name, sub in sorted(rows, reverse=True):
+    print(f"{size/1024:10.1f} KB  {name:12} {sub}")
+PY
+}

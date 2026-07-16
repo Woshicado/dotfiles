@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+
+pdfpaths() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdfpaths <file.pdf>"; return 1 }
+  uv run --with pikepdf python - "$1" <<'PY' | sort -rn | awk '{printf "%10d ops  page %s\n", $1, $2}'
+import sys, re, pikepdf
+pdf = pikepdf.open(sys.argv[1])
+OPS = re.compile(rb"(?m)^\s*(m|l|c|v|y|re)\s*$|\b(m|l|c|v|y|re)\s")
+def stream_of(obj):
+    try:
+        return obj.read_bytes()
+    except Exception:
+        return b""
+for i, p in enumerate(pdf.pages, 1):
+    data = stream_of(p.Contents) if "/Contents" in p else b""
+    for _, obj in p.get("/Resources", {}).get("/XObject", {}).items():
+        if obj.get("/Subtype") == "/Form":
+            data += stream_of(obj)
+    print(len(OPS.findall(data)), i)
+PY
+}

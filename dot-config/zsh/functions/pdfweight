@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+pdfweight() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdfweight <file.pdf>"; return 1 }
+  uv run --with pikepdf python - "$1" <<'PY' | sort -rn | awk '{printf "%10.1f KB  page %s\n", $1/1024, $2}'
+import sys, pikepdf
+pdf = pikepdf.open(sys.argv[1])
+for i, p in enumerate(pdf.pages, 1):
+    total = len(p.Contents.read_bytes()) if "/Contents" in p else 0
+    for _, obj in p.get("/Resources", {}).get("/XObject", {}).items():
+        try:
+            total += len(obj.read_raw_bytes())
+        except Exception:
+            pass
+    print(total, i)
+PY
+}
