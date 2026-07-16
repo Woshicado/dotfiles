@@ -154,6 +154,17 @@ blocks:
   - type: "prompt"
     alignment: "left"
     segments:
+      # vi-mode indicator (fed by $POSH_VI_MODE; see _omp_enable_vimode in .zshrc)
+      - type: "text"
+        style: "plain"
+        properties:
+          cache_duration: 0
+        template: "{{ if eq .Env.POSH_VI_MODE \"vicmd\" }} \U000F0776 {{ else if eq .Env.POSH_VI_MODE\
+          \ \"visual\" }} \U000F0FCA {{ else if eq .Env.POSH_VI_MODE \"viopp\" }} \U000F0308 {{ else }} \U000F03EB {{ end }}"
+        foreground_templates:
+          - "{{ if eq .Env.POSH_VI_MODE \"vicmd\" }}yellow{{ end }}"
+          - "{{ if eq .Env.POSH_VI_MODE \"visual\" }}magenta{{ end }}"
+          - "cyan"
       - properties:
           always_enabled: true
           cache_duration: 0

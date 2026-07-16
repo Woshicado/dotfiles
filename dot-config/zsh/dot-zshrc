@@ -5,40 +5,133 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 source ${XDG_CONFIG_HOME}/zsh/exports.zsh
 
-### Sort "*2.smth" before "*10.smth"
+### SHELL OPTIONS
 setopt numericglobsort
 setopt extendedhistory
+setopt interactivecomments            # allow inline `# comments` on the command line
+setopt auto_cd                        # `foo` == `cd foo` when foo is a directory
+setopt auto_pushd pushd_ignore_dups pushdminus  # cd maintains a dir stack (cd -<Tab>)
+setopt multios long_list_jobs
+# Completion behaviour (ex oh-my-zsh lib/completion.zsh)
+setopt auto_menu complete_in_word always_to_end
+unsetopt menu_complete flowcontrol
+WORDCHARS=''                          # '/', '-', '.' etc. are word breaks (affects ^W, alt-⌫)
+# History behaviour (ex oh-my-zsh lib/history.zsh); HISTFILE/SIZE/SAVEHIST live in exports.zsh
+setopt hist_expire_dups_first hist_ignore_dups hist_ignore_space hist_verify share_history
+alias history='fc -li'                # `history` with ISO timestamps (ex HIST_STAMPS='yyyy-mm-dd')
 
-# Because ZSH did not take into account custom prompt functions we need to disable async loading
-zstyle ':omz:alpha:lib:git' async-prompt no
+### COMPLETION STYLES
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+zstyle ':completion:*' special-dirs true        # offer ./ and ../ as completions
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/compcache"
+# Hyphen-insensitive matching, '-' == '_' (ex HYPHEN_INSENSITIVE='true')
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
 
-ZSH_THEME='customized-bira'
+### KEYMAP
+bindkey -v            # vi keymap; the active mode (insert/normal/visual) is shown in the prompt
+export KEYTIMEOUT=20  # units of 10ms — snappier Esc -> normal-mode switch (default 40 = 400ms)
 
-# CASE_SENSITIVE='true'    # a == A ?
-HYPHEN_INSENSITIVE='true' # - == _ ?
-
-DISABLE_FZF_KEY_BINDINGS='false'
-
-# Skip compinit's per-startup security audit of the fpath dirs (compaudit, ~100ms every launch).
-ZSH_DISABLE_COMPFIX='true'
-
-### PLUGINS
-plugins=(
-  sudo # Double escape sudo's last command
-  zsh-autosuggestions
-  fzf
-  mise  # activates mise hooks
-)
-
-if command -v brew &>/dev/null; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+### COMPLETION INIT (replaces oh-my-zsh's compinit call)
+# fpath must include brew + our own completion dirs *before* compinit runs.
+if (( $+commands[brew] )); then
+  BREW_PREFIX="${commands[brew]:h:h}"   # /opt/homebrew (no subprocess, unlike `brew --prefix`)
+  FPATH="${BREW_PREFIX}/share/zsh/site-functions:${FPATH}"
 fi
-source ${ZSH}/oh-my-zsh.sh
+FPATH="${XDG_CONFIG_HOME}/zsh/functions:${FPATH}"
+
+zmodload -i zsh/complist
+autoload -Uz compinit bashcompinit
+() {
+  local dump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+  mkdir -p "${dump:h}"
+  # Rebuild the dump at most once per 24h. `-C` also skips the security audit
+  # (parity with the old ZSH_DISABLE_COMPFIX='true'); `-u` does so on the rebuild path.
+  local -a fresh=( "$dump"(Nmh-24) )
+  if (( ${#fresh} )); then
+    compinit -C -d "$dump"
+  else
+    compinit -u -d "$dump"
+    { zcompile -R -- "$dump" } &!   # compile in the background for the next launch
+  fi
+}
+bashcompinit
+
+### PLUGINS (sourced directly — no framework)
+# zsh-autosuggestions (brew)
+if [[ -r "${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+# mise activation (ex `mise` plugin)
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+# fzf keybindings + completion (ex `fzf` plugin; supersedes the old ~/.fzf.zsh source)
+(( $+commands[fzf] )) && source <(fzf --zsh)
+
+### LINE-EDITOR KEYS (ex oh-my-zsh lib/key-bindings.zsh)
+# Put the terminal in application mode while editing so $terminfo keys are valid.
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+  autoload -Uz add-zle-hook-widget
+  function _zle_app_mode_start { echoti smkx }
+  function _zle_app_mode_stop  { echoti rmkx }
+  add-zle-hook-widget -Uz line-init _zle_app_mode_start
+  add-zle-hook-widget -Uz line-finish _zle_app_mode_stop
+fi
+# Prefix-aware history search: type a few chars, then Up/Down
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+[[ -n ${terminfo[kcuu1]} ]] && bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+[[ -n ${terminfo[kcud1]} ]] && bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+# Same prefix-aware search on Ctrl-P/Ctrl-N (insert) and k/j (normal mode)
+bindkey -M viins '^P' up-line-or-beginning-search
+bindkey -M viins '^N' down-line-or-beginning-search
+bindkey -M vicmd 'k' up-line-or-beginning-search
+bindkey -M vicmd 'j' down-line-or-beginning-search
+# Home / End / Delete / PageUp / PageDown / Shift-Tab
+[[ -n ${terminfo[khome]} ]] && bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n ${terminfo[kend]}  ]] && bindkey "${terminfo[kend]}"  end-of-line
+[[ -n ${terminfo[kdch1]} ]] && bindkey "${terminfo[kdch1]}" delete-char
+[[ -n ${terminfo[kpp]}   ]] && bindkey "${terminfo[kpp]}"   up-line-or-history
+[[ -n ${terminfo[knp]}   ]] && bindkey "${terminfo[knp]}"   down-line-or-history
+[[ -n ${terminfo[kcbt]}  ]] && bindkey "${terminfo[kcbt]}"  reverse-menu-complete
+bindkey '^?'      backward-delete-char
+bindkey '^[[3~'   delete-char
+bindkey '^[[1;5C' forward-word          # Ctrl-Right
+bindkey '^[[1;5D' backward-word         # Ctrl-Left
+bindkey '^[[3;5~' kill-word             # Ctrl-Delete
+bindkey ' ' magic-space                 # Space expands !-history
+autoload -Uz edit-command-line; zle -N edit-command-line
+bindkey '^X^E' edit-command-line        # edit the current line in $EDITOR
+
+# Esc-Esc: toggle a `sudo ` prefix on the line (ex `sudo` plugin)
+sudo-command-line() {
+  [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"   # empty line -> reuse last command
+  if [[ $BUFFER == sudo\ * ]]; then
+    LBUFFER="${LBUFFER#sudo }"
+  else
+    LBUFFER="sudo $LBUFFER"
+  fi
+}
+zle -N sudo-command-line
+bindkey '\e\e' sudo-command-line
+
+### DIRECTORY ALIASES (ex oh-my-zsh lib/directories.zsh)
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -- -='cd -'
+for i in {1..9}; do alias "$i"="cd -$i"; done; unset i
+alias md='mkdir -p'
+alias rd='rmdir'
+d() { [[ -n $1 ]] && dirs "$@" || dirs -v | head -n 10 }
+# Colored grep (ex oh-my-zsh lib/grep.zsh); GREP_OPTIONS is deprecated, so alias instead
+alias grep='grep --color=auto'
 
 ### User configuration
 [ -f ${XDG_CONFIG_HOME}/zsh/functions.zsh ] && source ${XDG_CONFIG_HOME}/zsh/functions.zsh
@@ -57,9 +150,8 @@ if (( $+commands[zoxide] )); then
 fi
 
 ### AUTOLOADS
-# Add custom functions path to fpath and autoload all functions within
+# Autoload all custom functions (fpath already includes this dir, set above).
 if [[ -d ${XDG_CONFIG_HOME}/zsh/functions ]]; then
-  FPATH="${XDG_CONFIG_HOME}/zsh/functions:${FPATH}"
   for func_file in ${XDG_CONFIG_HOME}/zsh/functions/*; do
     [ -f "${func_file}" ] && autoload -U ${func_file:t}
   done
@@ -77,6 +169,8 @@ bindkey '^K' kill-line
 bindkey '^[^?' backward-kill-line
 bindkey '^W' backward-kill-word
 bindkey '^F' autosuggest-accept
+bindkey -M viins '^[f' forward-word     # accept ONE word of the autosuggestion (Alt-F; partial-accept)
+bindkey -M viins '^U' kill-whole-line   # delete the whole line (default vi ^U only kills back to insert start)
 bindkey -r '^L'
 
 clear-screen-widget() {
@@ -90,18 +184,45 @@ bindkey '^Y' clear-screen-widget
 
 eval "$(oh-my-posh init zsh --config "${XDG_CONFIG_HOME}/oh-my-posh/.mytheme.omp.yaml")"
 
+# Show the active vi mode in the prompt: oh-my-posh exports $POSH_VI_MODE on every
+# keymap change; the theme's text segment (last left block) renders it.
+# vi-mode indicator. zsh keeps KEYMAP=vicmd in VISUAL mode and only sets
+# $REGION_ACTIVE (and does not fire zle-keymap-select), so oh-my-posh's own
+# $KEYMAP-based hook can't see visual. Track the mode on every line redraw and
+# re-render via oh-my-posh only when it actually changes.
+autoload -Uz add-zle-hook-widget
+export POSH_VI_MODE=viins
+function _omp_track_vimode {
+  local mode
+  if (( REGION_ACTIVE )); then
+    mode=visual
+  else
+    case $KEYMAP in
+      vicmd) mode=vicmd ;;
+      viopp) mode=viopp ;;
+      *)     mode=viins ;;
+    esac
+  fi
+  [[ $mode == $POSH_VI_MODE ]] && return
+  export POSH_VI_MODE=$mode
+  eval "$(_omp_get_prompt primary --eval)"
+  zle && zle .reset-prompt
+}
+add-zle-hook-widget -Uz line-pre-redraw _omp_track_vimode
+# Each new prompt starts in insert mode: reset before the next prompt is rendered
+# so a stale indicator never lingers after you press Enter from normal/visual.
+function _omp_vimode_reset { POSH_VI_MODE=viins }
+add-zle-hook-widget -Uz line-finish _omp_vimode_reset
+
 # Load custom LS colors
 [ -f ${XDG_CONFIG_HOME}/zsh/lscolors.sh ] && source ${XDG_CONFIG_HOME}/zsh/lscolors.sh
-[ -f ${HOME}/.fzf.zsh ] && source ${HOME}/.fzf.zsh
 
 # eval is used to hide the Zsh-specific ${(%):-%x} syntax from shfmt
 eval 'current_script="${(%):-%x}"'
 
-# NOTE: mise is activated once, by the `mise` oh-my-zsh plugin (see plugins array).
-# A second `eval "$(mise activate zsh)"` used to live here and doubled _mise_hook
+# NOTE: mise is activated once, in the PLUGINS section above (`mise activate zsh`).
 
-### Apply all defined hooks, e.g., sourcing .source_me files.
-# load-local-conf
+unset BREW_PREFIX
 
 ################################################################################
 
