@@ -25,6 +25,18 @@ zle -N fzf-home-widget
 bindkey '^[t' fzf-home-widget # Alt-T
 
 
+# Insert a frecent directory (from zoxide) at the cursor, as an argument.
+# Uses zoxide's own fzf picker, so it respects _ZO_FZF_OPTS.
+zoxide-dir-widget() {
+  local dir
+  dir=$(zoxide query --interactive) || return  # prints selection, does not cd
+  [[ -n $dir ]] && LBUFFER+="${(q)dir} "        # (q): shell-quote for safety
+  zle redisplay
+}
+zle -N zoxide-dir-widget
+bindkey '^Xd' zoxide-dir-widget # Ctrl-X d
+
+
 copy-command() {
   echo -n $BUFFER | pbcopy
   zle -M 'Copied to clipboard'

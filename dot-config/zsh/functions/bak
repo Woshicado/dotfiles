@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+
+# Timestamped backup copy of file(s) or dir(s), preserving attributes.
+# Prints each backup path created. Usage: bak <path>...
+#   bak config.toml         -> config.toml.20260715-142530.bak
+bak() {
+  emulate -L zsh
+  (( $# )) || { print -u2 'Usage: bak <file|dir>...'; return 1; }
+
+  local ts src dest rc=0
+  ts=$(date +%Y%m%d-%H%M%S)
+  for src in "$@"; do
+    if [[ ! -e "$src" ]]; then
+      print -u2 "bak: not found: $src"; rc=1; continue
+    fi
+    dest="${src%/}.${ts}.bak"
+    if cp -a -- "$src" "$dest"; then
+      print -r -- "$dest"
+    else
+      rc=1
+    fi
+  done
+  return $rc
+}

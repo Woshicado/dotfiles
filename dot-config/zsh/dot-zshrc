@@ -29,7 +29,6 @@ ZSH_DISABLE_COMPFIX='true'
 
 ### PLUGINS
 plugins=(
-  z    # Easy fuzzy navigation
   sudo # Double escape sudo's last command
   zsh-autosuggestions
   fzf
@@ -45,6 +44,17 @@ source ${ZSH}/oh-my-zsh.sh
 [ -f ${XDG_CONFIG_HOME}/zsh/functions.zsh ] && source ${XDG_CONFIG_HOME}/zsh/functions.zsh
 [ -f ${XDG_CONFIG_HOME}/zsh/.zsh_aliases ] && source ${XDG_CONFIG_HOME}/zsh/.zsh_aliases
 [ -f ${XDG_CONFIG_HOME}/zsh/.zsh_hashes ] && source ${XDG_CONFIG_HOME}/zsh/.zsh_hashes
+
+### zoxide
+if (( $+commands[zoxide] )); then
+  _zoxide_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zoxide-init.zsh"
+  if [[ ! -s $_zoxide_cache || $commands[zoxide] -nt $_zoxide_cache ]]; then
+    mkdir -p "${_zoxide_cache:h}"
+    zoxide init zsh >| "$_zoxide_cache"
+  fi
+  source "$_zoxide_cache"
+  unset _zoxide_cache
+fi
 
 ### AUTOLOADS
 # Add custom functions path to fpath and autoload all functions within

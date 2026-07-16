@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+
+# Overlay one metric across N runs on a single line plot.
+# Complements `jqp` (many keys, one file) — this is one key, many files.
+#
+# Usage: runcmp [--x XKEY] [--rows N] <key> <run1.jsonl> [run2.jsonl ...]
+#   --x    x-axis key (default: time/total_timesteps)
+#   --rows plot height passed to xan (default: 27)
+# Run labels are the shortest path suffix that keeps them unique.
+runcmp() {
+  emulate -L zsh
+  local key="" xkey="time/total_timesteps" rows=27
+  local -a files
+
+  while (( $# )); do
+    case "$1" in
+      --x)    xkey="$2"; shift 2 ;;
+      --rows) rows="$2"; shift 2 ;;
+      -h|--help)
+        print "Usage: runcmp [--x XKEY] [--rows N] <key> <run1.jsonl> [run2.jsonl ...]"
+        return 0 ;;
+      *)
+        if [[ -z "$key" ]]; then key="$1"; else files+=("$1"); fi
+        shift ;;
+    esac
+  done
+
+  if [[ -z "$key" ]] || (( ${#files} == 0 )); then
+    print -u2 "runcmp: need a key and at least one run file" >&2
+    return 1
+  fi
+
+  # Longest common path prefix (at / boundaries) -> short, unique run labels.
+  local prefix="${files[1]:h}" f
+  for f in "${files[@]}"; do
+    while [[ "$f/" != "$prefix/"* ]]; do
+      [[ "$prefix" == */* ]] || { prefix=""; break; }
+      prefix="${prefix:h}"
+    done
+  done
+
+  {
+    print -r -- "run,$xkey,$key"
+    for f in "${files[@]}"; do
+      local label="${f#$prefix}"
+      label="${label#/}"; label="${label%.jsonl}"; label="${label%/progress}"
+      jq -r --arg r "$label" --arg x "$xkey" --arg y "$key" \
+        'select(.[$x]!=null and .[$y]!=null) | [$r, .[$x], .[$y]] | @csv' "$f"
+    done
+  } | xan plot -L "$xkey" "$key" -c run --rows "$rows"
+}

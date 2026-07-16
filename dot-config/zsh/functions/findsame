@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+findsame() {
+  zmodload -F zsh/stat b:zstat 2>/dev/null
+  local ref="$1" dir="$2" name="$3"
+  local refhash
+  local -a refsize fsize
+  # Hash only files whose size matches the reference first — cheap prefilter.
+  zstat -A refsize +size -- "$ref"
+  refhash=$(md5sum "$ref" | awk '{print $1}')
+  find "$dir" -type f -name "$name" -print0 | while IFS= read -r -d '' f; do
+    zstat -A fsize +size -- "$f" 2>/dev/null || continue
+    (( fsize[1] == refsize[1] )) || continue
+    [[ "$(md5sum "$f" | awk '{print $1}')" == "$refhash" ]] && print -r -- "${f:A}"
+  done
+}

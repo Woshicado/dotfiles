@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+
+# Filter a jsonl file by a jq boolean condition, re-emitting compact jsonl.
+# Companion to `jview` (which projects + prettifies): jfilter keeps the stream
+# shape so it composes into pipelines, e.g.
+#   jfilter run.jsonl '.["rollout/success_rate"] > 0.8' | jqp - loss
+# Pass '-' as the file to read stdin.
+jfilter() {
+  emulate -L zsh
+  local file="$1" cond="$2"
+
+  if [[ -z "$file" || -z "$cond" || "$file" == -h || "$file" == --help ]]; then
+    print -u2 'Usage: jfilter <file.jsonl|-> <jq-condition>'
+    print -u2 "Example: jfilter progress.jsonl '.[\"rollout/success_rate\"] > 0.8'"
+    return 1
+  fi
+
+  if [[ "$file" == - ]]; then
+    jq -c "select($cond)"
+  else
+    [[ -f "$file" ]] || { print -u2 "jfilter: file not found: $file"; return 1; }
+    jq -c "select($cond)" "$file"
+  fi
+}
