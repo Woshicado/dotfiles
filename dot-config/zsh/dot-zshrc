@@ -62,10 +62,17 @@ autoload -Uz compinit bashcompinit
 bashcompinit
 
 ### PLUGINS (sourced directly — no framework)
-# zsh-autosuggestions (brew)
-if [[ -r "${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-  source "${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
+# zsh-autosuggestions (brew on macOS; /usr/share on apt/dnf). First readable wins.
+() {
+  local f
+  for f in \
+    "${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" \
+    /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  do
+    [[ -r $f ]] && { source "$f"; break; }
+  done
+}
 # mise activation (ex `mise` plugin)
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
 # fzf keybindings + completion (ex `fzf` plugin; supersedes the old ~/.fzf.zsh source)
