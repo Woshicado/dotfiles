@@ -14,7 +14,7 @@ lkey_nojq() {
     set -- "time/total_timesteps"
   fi
 
-  find . -name "$filename" -exec sh -c '
+  find -L . -name "$filename" -exec sh -c '
     file="$1"; shift
     out="$file"
     for key in "$@"; do
