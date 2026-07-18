@@ -1,0 +1,6 @@
+# dnf-only package names (Fedora/RHEL). See linux-common.txt for the format.
+# These have different names than their apt equivalents in linux-apt.txt.
+
+ImageMagick
+perl-Image-ExifTool
+@development-tools

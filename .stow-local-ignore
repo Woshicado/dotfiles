@@ -29,6 +29,6 @@ zsh_history
 
 etc
 copy_changes.sh
-Brewfile
 .mise.toml
-install-all.sh
+install-.*\.sh    # install-all.sh (mac/linux installers live under packages/)
+^/packages        # package lists + platform installers read by install-all.sh

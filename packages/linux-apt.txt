@@ -1,0 +1,6 @@
+# apt-only package names (Debian/Ubuntu). See linux-common.txt for the format.
+# These have different names than their dnf equivalents in linux-dnf.txt.
+
+imagemagick
+libimage-exiftool-perl
+build-essential

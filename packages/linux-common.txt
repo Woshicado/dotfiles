@@ -1,0 +1,34 @@
+# Linux packages installed on both apt and dnf (same name on each).
+# One package per line. Blank lines and #-comments are ignored.
+# A name missing on one distro/release is skipped, not fatal.
+
+zsh
+git
+git-lfs
+tmux
+neovim
+stow
+curl
+wget
+unzip
+
+fzf
+zoxide
+ripgrep
+bat
+fd-find
+
+jq
+htop
+btop
+tree
+rsync
+w3m
+
+zsh-autosuggestions
+glow
+difftastic
+git-delta
+hexyl
+pandoc
+yt-dlp

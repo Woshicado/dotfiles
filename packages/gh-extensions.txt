@@ -1,0 +1,4 @@
+# gh CLI extensions (cross-platform), installed by install-all.sh.
+# One `owner/repo` per line. Blank lines and #-comments are ignored.
+
+yusukebe/gh-markdown-preview
