@@ -6,6 +6,22 @@ return {
 	lazy = false,
 	keys = {
 		{ "-", "<cmd>Oil<cr>", desc = "Oil", mode = { "n" } },
+		{
+			"g-",
+			function()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local fname = vim.api.nvim_buf_get_name(bufnr)
+				local dir = fname ~= "" and vim.fn.fnamemodify(fname, ":p:h") or nil
+				require("oil").open(dir)
+				vim.schedule(function()
+					if vim.api.nvim_buf_is_valid(bufnr) then
+						pcall(vim.cmd, "Bdelete " .. bufnr)
+					end
+				end)
+			end,
+			desc = "Oil in file's dir, close buffer",
+			mode = { "n" },
+		},
 	},
 	config = function()
 		require("oil").setup({

@@ -392,6 +392,8 @@ cask "quicklook-video"
 cask "raycast"
 # Tool that provides consistent, highly configurable symbols for apps
 cask "sf-symbols"
+# Better screenshot tool
+cask "shottr"
 # Instant messaging application focusing on security
 cask "signal"
 # PDF reader and note-taking application

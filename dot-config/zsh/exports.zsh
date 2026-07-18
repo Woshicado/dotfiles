@@ -89,6 +89,13 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   # Use GNU tools instead of BSD tools on macOS
   export PATH="${HOME}/.local/gnubin:${PATH}"
   export PATH="${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
+  # Prefer homebrew's man pages, as `man tar` for instance would otherwise open the bsd man page
+  for d in $(brew --prefix)/opt/*/libexec/gnuman; do MANPATH="$d:$MANPATH"; done
+  export MANPATH
+
+  # Ignore .DS_Store when compressing
+  export COPYFILE_DISABLE=1  # bsd tar
+  export TAR_OPTIONS="--exclude=.DS_Store"  # gnu tar
 
   export OVPN_PROFILE="${HOME}/Library/Application Support/OpenVPN Connect/profiles/1728929973375.ovpn"
 fi

@@ -31,11 +31,16 @@ local memory = sbar.add("graph", "memory", 42, {
 })
 
 local function memory_update()
-	-- `memory_pressure` alone is fast; parse its "free percentage" line in Lua
-	-- instead of piping through grep + awk (3 procs -> 1) so a 5s cadence is cheap.
 	sbar.exec("memory_pressure", function(result)
-		local free = tonumber((result or ""):match("free percentage:%s*(%d+)")) or 0
-		local used = 100 - free
+		result = result or ""
+		local total = tonumber(result:match("%((%d+) pages"))
+		local active = tonumber(result:match("Pages active:%s*(%d+)"))
+		local wired = tonumber(result:match("Pages wired down:%s*(%d+)"))
+		local compressor = tonumber(result:match("Pages used by compressor:%s*(%d+)"))
+		local used = 0
+		if total and total > 0 and active and wired and compressor then
+			used = (active + wired + compressor) / total * 100
+		end
 		-- Higher usage is more alarming: red past 75%, orange past 50%.
 		local color = (used > 75 and 0xffff4444) or (used > 50 and 0xffffa500) or nil
 		memory:push({ used / 100. })
@@ -54,8 +59,8 @@ sbar.add("bracket", "items.ram.bracket", { memory.name }, {
 })
 
 sbar.add("item", "items.ram.padding", {
-  position = "right",
-  width = settings.group_paddings
+	position = "right",
+	width = settings.group_paddings,
 })
 
 memory_update()
