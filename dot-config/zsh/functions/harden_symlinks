@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+harden_symlinks() {
+  emulate -L zsh
+  local root="${1:-.}"
+  local link tgt
+
+  find "$root" -type l -print0 | while IFS= read -r -d '' link; do
+    # Resolve the symlink target to an absolute path
+    tgt="$(readlink -f "$link" 2>/dev/null)" || tgt=""
+    if [[ -z "$tgt" ]]; then
+      local dir base raw
+      dir="$(cd "$(dirname "$link")" && pwd)"
+      raw="$(readlink "$link")"
+      case "$raw" in
+        /*) tgt="$raw" ;;
+        *)  tgt="$(cd "$dir" && cd "$(dirname "$raw")" && pwd)/$(basename "$raw")" ;;
+      esac
+    fi
+
+    if [[ ! -e "$tgt" ]]; then
+      print -u2 "skip (broken): $link -> $tgt"
+      continue
+    fi
+
+    rm "$link" || { print -u2 "failed rm: $link"; continue; }
+    if cp -R "$tgt" "$link"; then
+      print "hardened: $link"
+    else
+      print -u2 "failed cp: $tgt -> $link"
+    fi
+  done
+}

@@ -48,6 +48,7 @@ return {
 		{ "<leader>gtl", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.lua -e" }) end, desc = "Grep Lua files" },
 		{ "<leader>gtc", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.c --glob=*.cpp -e" }) end, desc = "Grep C/C++ files" },
 		{ "<leader>gth", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.h --glob=*.hpp -e" }) end, desc = "Grep header files" },
+	  { "<leader>fd",  function() require("fzf-lua").fzf_exec("fd --type d --hidden --exclude .git", { prompt = "Dirs> ", actions = { ["default"] = function(selected) require("oil").open(selected[1]) end}}) end},
 		{ "<leader>gtj", function() require("fzf-lua").live_grep({ rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --glob=*.json --glob=*.jsonl -e" }) end, desc = "Grep JSON files" },
 	},
 	config = function()
