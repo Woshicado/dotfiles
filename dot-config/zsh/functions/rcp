@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+rcp() {
+  local use_ignore=1 use_chmod=0
+  local args=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -N|--no-ignore) use_ignore=0; shift ;;
+      -c|--chmod)     use_chmod=1;  shift ;;
+      *) args+=("$1"); shift ;;
+    esac
+  done
+
+  local extra=()
+  (( use_chmod )) && extra+=(--chmod=F600,D700)
+  if (( use_ignore )); then
+    [[ -f "$HOME/.rsyncignore" ]] && extra+=(--exclude-from="$HOME/.rsyncignore")
+    extra+=(--filter=':- .rsyncignore')
+  fi
+
+  rsync -saLPz --port 22 "${extra[@]}" -e ssh "${args[@]}"
+}

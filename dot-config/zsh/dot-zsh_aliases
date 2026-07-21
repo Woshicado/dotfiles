@@ -80,8 +80,9 @@ ttb() {  # function to quote all args
 }
 
 # Copy directory over ssh
-alias rcp='rsync -saLPz --port 22 -e ssh '
-alias rcps='rsync -saLPz --port 22 --chmod=F600,D700 -e ssh '
+# alias rcp='rsync -saLPz --port 22 -e ssh '
+# alias rcps='rsync -saLPz --port 22 --chmod=F600,D700 -e ssh '
+alias rcps='rcp -c'
 
 # Custom git aliases for submodules
 alias gsua='git submodule update --remote --recursive && git add . && git commit -m "Update Submodules to latest remote version" -e'
