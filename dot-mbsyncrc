@@ -108,6 +108,45 @@ Expunge Both
 SyncState *
 
 # ===========================
+# ACCOUNT 4: joshua.meyer@woshicado.eu (Proton via Bridge)
+# ===========================
+
+# 1. The Remote Account (IMAP)
+# Requires Proton Mail Bridge running locally. The pinned cert is per Bridge
+# installation — regenerate it on a new machine / after reinstalling Bridge:
+#   openssl s_client -connect 127.0.0.1:1143 -starttls imap </dev/null \
+#     2>/dev/null | openssl x509 -outform PEM > ~/.config/protonmail/bridge-cert.pem
+IMAPAccount proton
+Host 127.0.0.1
+Port 1143
+User joshua.meyer@woshicado.eu
+PassCmd "security find-generic-password -a 'joshua.meyer@woshicado.eu' -s 'proton-bridge' -w"
+TLSType STARTTLS
+CertificateFile ~/.config/protonmail/bridge-cert.pem
+
+# 2. The Remote Connection
+# Bridge does not announce its hierarchy delimiter; declare it.
+IMAPStore proton-remote
+Account proton
+PathDelimiter /
+
+# 3. The Local Storage (Maildir)
+MaildirStore proton-local
+Path ~/mail/proton/
+# The trailing slash is important!
+Inbox ~/mail/proton/inbox
+SubFolders Verbatim
+
+# 4. Sync only the "Reviews" folder.
+# Bridge exposes custom folders under "Folders/".
+Channel proton-reviews
+Far :proton-remote:"Folders/Reviews"
+Near :proton-local:reviews
+Create Both
+Expunge Both
+SyncState *
+
+# ===========================
 # GROUPS
 # ===========================
 # This allows 'mbsync all' to sync both
@@ -115,3 +154,4 @@ Group all
 Channel student-inbox
 Channel dfki-inbox
 Channel cs-inbox
+Channel proton-reviews

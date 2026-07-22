@@ -36,5 +36,23 @@ passwordeval    "oama access jome04@dfki.de"
 from_full_name  Joshua Meyer
 set_from_header on
 
+# Proton Account (via Proton Mail Bridge; Bridge must be running locally).
+# Bridge shows the SMTP user + a per-installation password in its settings —
+# store that password:  security add-generic-password -a '<you>@proton.me' -s 'proton-bridge' -w
+# The Bridge cert is self-signed, so the global tls_trust_file must be
+# overridden: either pin the exported Bridge cert (preferred) or, since the
+# connection never leaves 127.0.0.1, disable the check.
+account         proton
+host            127.0.0.1
+port            1025
+tls_starttls    on
+tls_certcheck   off
+#tls_trust_file  ~/.config/protonmail/bridge-v3/cert.pem  # instead of certcheck off
+from            joshua.meyer@woshicado.eu
+user            joshua.meyer@woshicado.eu
+passwordeval    "security find-generic-password -a 'joshua.meyer@woshicado.eu' -s 'proton-bridge' -w"
+from_full_name  Joshua Meyer
+set_from_header on
+
 # Set a default account
 account default : cs

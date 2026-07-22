@@ -30,6 +30,9 @@ else
   echo "!! stow not found — skipping symlink deploy (install it, then run: stow --no-folding --dotfiles -R .)"
 fi
 
+chmod +x ./dot-claude/review-bot/install.sh
+./dot-claude/review-bot/install.sh
+
 # Global CLI tools / language runtimes declared in ~/.config/mise
 # (stowed just above). Safe no-op if there is nothing to install.
 if command -v mise >/dev/null 2>&1; then

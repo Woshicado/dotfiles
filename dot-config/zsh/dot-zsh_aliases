@@ -58,6 +58,9 @@ alias oo='cd $O_VAULT_DIR'
 alias or='nvim $O_VAULT_DIR/inbox/*.md'
 alias nvl="nvim --listen 127.0.0.1:2006"
 
+# tmux
+alias tsb='tmux show-buffer'
+
 # Time tracking via toggl track python cli (https://github.com/AuHau/toggl-cli)
 # alias tt='toggl start'
 # alias ttw='toggl start "Uncategorized Meeting (Daily, NEXD Weekly, ...)"'
