@@ -1,0 +1,51 @@
+---
+# Kanagawa "wave" palette for lsd.
+#
+# Not read directly: theme-switch points colors.yaml at this file (or at
+# colors-light.yaml) and config.yaml has color.theme "custom".
+
+user: "#E6C384" # carpYellow
+group: "#C8C093" # oldWhite
+
+permission:
+  read: "#98BB6C" # springGreen
+  write: "#E6C384" # carpYellow
+  exec: "#C34043" # autumnRed
+  exec-sticky: "#957FB8" # oniViolet
+  no-access: "#54546D" # sumiInk6
+  octal: "#7AA89F" # waveAqua2
+  acl: "#7FB4CA" # springBlue
+  context: "#7E9CD8" # crystalBlue
+
+date:
+  hour-old: "#7FB4CA" # springBlue
+  day-old: "#6A9589" # waveAqua1
+  older: "#54546D" # sumiInk6
+
+size:
+  none: "#54546D" # sumiInk6
+  small: "#98BB6C" # springGreen
+  medium: "#E6C384" # carpYellow
+  large: "#FFA066" # surimiOrange
+
+inode:
+  valid: "#957FB8" # oniViolet
+  invalid: "#54546D" # sumiInk6
+
+links:
+  valid: "#957FB8" # oniViolet
+  invalid: "#54546D" # sumiInk6
+
+tree-edge: "#54546D" # sumiInk6
+
+git-status:
+  default: "#C8C093" # oldWhite
+  unmodified: "#54546D" # sumiInk6
+  ignored: "#54546D" # sumiInk6
+  new-in-index: "#98BB6C" # springGreen
+  new-in-workdir: "#76946A" # autumnGreen
+  typechange: "#DCA561" # autumnYellow
+  deleted: "#C34043" # autumnRed
+  renamed: "#7AA89F" # waveAqua2
+  modified: "#DCA561" # autumnYellow
+  conflicted: "#FF5D62" # peachRed

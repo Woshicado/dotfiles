@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+#
+# Single point of truth for switching the light/dark theme across tools.
+#
+#   theme-switch              print the current theme
+#   theme-switch dark|light   switch to that theme
+#   theme-switch toggle       flip it
+#   theme-switch tmux-options seed tmux's @ukiyo-* options (called from tmux.conf)
+#
+# Neovim drives this from lua/theme.lua (see <leader>tt), but it is equally
+# usable straight from a shell. The chosen theme is recorded in
+# $XDG_STATE_HOME/theme so new shells and tools can read it.
+#
+# What it propagates to:
+#   kitty  via `kitten @ set-colors` (needs allow_remote_control + listen_on)
+#   lsd    by pointing ~/.config/lsd/colors.yaml at the matching palette
+#   tmux   via @ukiyo-theme + re-running tmux-ukiyo's entry point
+#
+# Neovim is not touched here: it owns 'background' itself, and picks up outside
+# changes through the terminal's OSC 2031 notifications.
+
+set -euo pipefail
+
+#[[ GUI launchers (Leader Key, Raycast, launchd, Automator) start processes with a
+#   minimal PATH -- /usr/bin:/bin:/usr/sbin:/sbin -- so kitten, tmux and lsd would all
+#   be "not found" and the switch would quietly do nothing but write the state file. ]]
+PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+export PATH
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}"
+state_file="$state_dir/theme"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+kitty_dir="$config_dir/kitty"
+lsd_dir="$config_dir/lsd"
+
+die() {
+	printf 'theme-switch: %s\n' "$1" >&2
+	exit 1
+}
+
+current_theme() {
+	if [[ -r $state_file ]]; then
+		read -r theme <"$state_file" || theme=""
+		case $theme in
+		dark | light)
+			printf '%s\n' "$theme"
+			return
+			;;
+		esac
+	fi
+	# No state yet: fall back to the macOS appearance, which is also what kitty's
+	# *-theme.auto.conf symlinks follow.
+	if [[ $(defaults read -g AppleInterfaceStyle 2>/dev/null || true) == Dark ]]; then
+		printf 'dark\n'
+	else
+		printf 'light\n'
+	fi
+}
+
+kitty_conf_for() {
+	case $1 in
+	dark) printf '%s/kanagawa.conf\n' "$kitty_dir" ;;
+	light) printf '%s/kanagawa-light.conf\n' "$kitty_dir" ;;
+	esac
+}
+
+apply_kitty() {
+	local theme=$1 conf
+	conf=$(kitty_conf_for "$theme")
+	[[ -r $conf ]] || {
+		printf 'theme-switch: no kitty theme file at %s\n' "$conf" >&2
+		return 1
+	}
+	command -v kitten >/dev/null 2>&1 || {
+		printf 'theme-switch: kitten not on PATH; kitty colours unchanged\n' >&2
+		return 1
+	}
+
+	local -a targets=()
+	# KITTY_LISTEN_ON is inherited, and goes stale whenever kitty restarts while a
+	# longer-lived process keeps the old environment -- a tmux server outliving a
+	# kitty restart is the common case. So only trust it if the socket is there.
+	if [[ -n ${KITTY_LISTEN_ON:-} && -S ${KITTY_LISTEN_ON#unix:} ]]; then
+		targets+=("$KITTY_LISTEN_ON")
+	else
+		# `listen_on unix:/tmp/kitty` yields one socket per instance; fan out to all,
+		# which also covers being invoked from outside kitty entirely.
+		local sock
+		for sock in /tmp/kitty-*; do
+			[[ -S $sock ]] && targets+=("unix:$sock")
+		done
+	fi
+
+	if [[ ${#targets[@]} -eq 0 ]]; then
+		printf 'theme-switch: no reachable kitty socket; kitty colours unchanged\n' >&2
+		return 1
+	fi
+
+	# --all: every OS window; --configured: also update the defaults that newly
+	# spawned windows inherit, otherwise only existing windows change.
+	local target rc=0
+	for target in "${targets[@]}"; do
+		if ! kitten @ --to "$target" set-colors --all --configured "$conf" >/dev/null 2>&1; then
+			printf 'theme-switch: set-colors failed for %s\n' "$target" >&2
+			rc=1
+		fi
+	done
+	return $rc
+}
+
+#[[ tmux-ukiyo's own kanagawa variants do not match Neovim: wave puts the status bar
+#   on sumi_ink_4 rather than Neovim's sumi_ink_3 background, and lotus is outright
+#   broken -- it sets both `text` and `bg_pane` to lotus_white_3 (#f2ecbc), so its
+#   status text is the same colour as its background. @ukiyo-color-* overrides are
+#   global rather than per-variant, so the whole semantic palette is written here on
+#   every switch. This is the single place the tmux colours are defined.
+#
+#   bg-bar and bg-pane are both Neovim's Normal background on purpose. ukiyo ships
+#   two background tones and picked the one that stands out from the editor in each
+#   variant (lighter in wave, darker in lotus); collapsing them onto Normal's bg
+#   makes the status line disappear into the buffer, leaving `selection` and the
+#   accent colours to carry all the structure. ]]
+tmux_set_options() {
+	local theme=$1 variant
+	case $theme in
+	dark)
+		variant="kanagawa/wave"
+		set -- \
+			text "#DCD7BA" bg-bar "#1F1F28" bg-pane "#1F1F28" \
+			highlight "#7E9CD8" selection "#2D4F67" info "#7FB4CA" \
+			accent "#7E9CD8" notice "#FFA066" error "#C34043" \
+			muted "#727169" alert "#E6C384"
+		;;
+	light)
+		variant="kanagawa/lotus"
+		set -- \
+			text "#545464" bg-bar "#f2ecbc" bg-pane "#f2ecbc" \
+			highlight "#4d699b" selection "#c9cbd1" info "#4e8ca2" \
+			accent "#4d699b" notice "#cc6d00" error "#c84053" \
+			muted "#8a8980" alert "#77713f"
+		;;
+	esac
+
+	tmux set-option -g @ukiyo-theme "$variant" >/dev/null 2>&1 || return 1
+	while [[ $# -gt 0 ]]; do
+		tmux set-option -g "@ukiyo-color-$1" "$2" >/dev/null 2>&1 || return 1
+		shift 2
+	done
+}
+
+#[[ ukiyo derives pane borders from its own palette: inactive from bg_bar, active from
+#   highlight. Since bg_bar is deliberately Neovim's background, the inactive border
+#   ends up the same colour as the background and disappears. Set both explicitly --
+#   a calm but visible inactive border, and a clearly brighter active one. Must run
+#   *after* ukiyo.tmux, which rewrites these on every render. ]]
+tmux_border_styles() {
+	local inactive active
+	case $1 in
+	dark)
+		inactive="#54546D" # sumiInk6, ~25 lightness off the background
+		active="#7E9CD8"   # crystalBlue, ~52 off
+		;;
+	light)
+		inactive="#a09cac" # lotusViolet1, ~28 off
+		active="#4d699b"   # lotusBlue4, ~53 off
+		;;
+	esac
+
+	tmux set-option -g pane-border-style "fg=$inactive" >/dev/null 2>&1 || return 1
+	tmux set-option -g pane-active-border-style "fg=$active" >/dev/null 2>&1 || return 1
+}
+
+apply_tmux() {
+	local theme=$1 entry
+
+	command -v tmux >/dev/null 2>&1 || return 0
+	# No server running means nothing to retheme; tmux.conf re-applies from the state
+	# file on the next start, so this is not a failure.
+	tmux list-sessions >/dev/null 2>&1 || return 0
+
+	tmux_set_options "$theme" || return 1
+
+	# Setting options alone changes nothing until the plugin re-renders the status
+	# line, hence re-running its entry point.
+	entry="$config_dir/tmux/plugins/tmux-ukiyo/ukiyo.tmux"
+	if [[ ! -x $entry ]]; then
+		printf 'theme-switch: %s missing; run tpm install\n' "$entry" >&2
+		return 1
+	fi
+	tmux run-shell "$entry" >/dev/null 2>&1 || return 1
+	tmux_border_styles "$theme" || return 1
+}
+
+#[[ Claude Code renders with its own palette, so a dark theme on a light background
+#   leaves its inline code and dim text unreadable. Only the value on the existing
+#   "theme" line is rewritten, leaving the rest of the file (and its formatting)
+#   alone. Note ~/.claude/settings.json is a stowed symlink into the dotfiles repo,
+#   so switching shows up as a one-line diff there. ]]
+apply_claude() {
+	local theme=$1 file="$HOME/.claude/settings.json" tmp
+	[[ -f $file ]] || return 0
+	grep -q '"theme"' "$file" 2>/dev/null || return 0
+
+	tmp=$(mktemp) || return 1
+	if ! sed -E "s/(\"theme\"[[:space:]]*:[[:space:]]*\")[^\"]*(\")/\1${theme}\2/" "$file" >"$tmp"; then
+		rm -f "$tmp"
+		return 1
+	fi
+	# Never leave a broken settings file behind.
+	if command -v python3 >/dev/null 2>&1 &&
+		! python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$tmp" 2>/dev/null; then
+		rm -f "$tmp"
+		printf 'theme-switch: refusing to write invalid JSON to %s\n' "$file" >&2
+		return 1
+	fi
+	# Write *through* the symlink; `mv` would replace it with a regular file.
+	cat "$tmp" >"$file" && rm -f "$tmp"
+}
+
+apply_lsd() {
+	local theme=$1
+	[[ -r "$lsd_dir/colors-$theme.yaml" ]] || return 0
+	# Relative target so the link keeps working regardless of how $HOME is reached.
+	ln -sfn "colors-$theme.yaml" "$lsd_dir/colors.yaml"
+}
+
+set_theme() {
+	local theme=$1 rc=0
+	mkdir -p "$state_dir"
+	printf '%s\n' "$theme" >"$state_file"
+	# Record state and switch lsd even if kitty is unreachable, but still report a
+	# non-zero exit so callers (Neovim) can surface the warning.
+	apply_lsd "$theme" || rc=1
+	apply_kitty "$theme" || rc=1
+	apply_tmux "$theme" || rc=1
+	apply_claude "$theme" || rc=1
+	return $rc
+}
+
+case "${1:-}" in
+"")
+	current_theme
+	;;
+dark | light)
+	set_theme "$1"
+	;;
+toggle)
+	if [[ $(current_theme) == dark ]]; then set_theme light; else set_theme dark; fi
+	;;
+tmux-options)
+	# Used from tmux.conf before tpm loads the plugin: seeds @ukiyo-theme and the
+	# colour overrides for the persisted theme, without re-rendering anything.
+	tmux_set_options "$(current_theme)"
+	;;
+tmux-borders)
+	# Used from tmux.conf *after* tpm, since ukiyo overwrites the border styles.
+	tmux_border_styles "$(current_theme)"
+	;;
+-h | --help | help)
+	sed -n '3,20p' "$0" | sed 's/^# \{0,1\}//'
+	;;
+*)
+	die "unknown argument '$1' (expected dark, light, toggle, or nothing)"
+	;;
+esac

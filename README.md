@@ -30,7 +30,7 @@ To only deploy the symlinks without touching packages, run
 ## Programs to install
 
 - zsh
-- nvim + NvChad
+- nvim
 - lsd
 - dutree
 - (git-)delta

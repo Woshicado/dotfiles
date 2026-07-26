@@ -3,20 +3,15 @@ return {
 	lazy = false,
 	config = function()
 		require("modes").setup({
-			colors = {
-				bg = "", -- Optional bg param, defaults to Normal hl group
-				copy = "#aa760a",
-				delete = "#c75c6a",
-				change = "#c75c6a", -- Optional param, defaults to delete
-				format = "#c79585",
-        insert = "#23605b",
-				replace = "#4095af",
-        select = "#c75c6a", -- Optional param, defaults to visual
-        visual = "#9745be",
-			},
+			--[[ Deliberately empty. With no colours given, modes.nvim reads the background of
+			     the ModesCopy / ModesDelete / ModesFormat / ModesInsert / ModesReplace /
+			     ModesVisual highlight groups, and blends them against Normal. Those groups are
+			     defined from the palette in plugins/configs/kanagawa.lua. ]]
+			colors = {},
 
-			-- Set opacity for cursorline and number background
-			line_opacity = 0.50,
+			--[[ Opacity for cursorline and number background. 0.50 pushed the accent to a
+			     mid-tone that swallowed the text on it  ]]
+			line_opacity = 0.20,
 
 			-- Enable cursor highlights
 			set_cursor = false,

@@ -169,9 +169,6 @@ return {
 
 		require("mini.icons").tweak_lsp_kind()
 		require("blink.cmp").setup(opts)
-
-		-- Set highlight color that isn't really set by blink.cmp
-		vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", { fg = "#61afef", bg = "NONE", bold = true })
 	end,
 
 	-- use a release tag to download pre-built binaries

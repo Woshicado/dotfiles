@@ -1,4 +1,3 @@
-vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
@@ -18,22 +17,14 @@ vim.g.python3_host_prog = os.getenv("HOME") .. "/.local/pipx/venvs/pynvim/bin/py
 
 -- load plugins
 require("lazy").setup({
-	{
-		"NvChad/NvChad",
-		lazy = false,
-		branch = "v2.5",
-		import = "nvchad.plugins",
-	},
-
 	{ import = "plugins" },
 }, lazy_config)
 
--- load theme
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
-
-require("nvchad.autocmds")
 require("options")
+require("autocmds")
+require("commands")
+require("quickfix")
+require("theme").setup()
 
 -- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 -- parser_config.mail = {
@@ -51,7 +42,6 @@ require("options")
 
 require("vim._core.ui2").enable()
 
-vim.api.nvim_set_hl(0, "Folded", { bg = "#2c2956", fg = "#888888" }) -- Folded text
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 
 vim.schedule(function()

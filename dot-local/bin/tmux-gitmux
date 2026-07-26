@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# gitmux wrapper for tmux-ukiyo's status line.
+
+set -uo pipefail
+
+command -v gitmux >/dev/null 2>&1 || exit 0
+
+path=$(tmux display-message -p '#{pane_current_path}' 2>/dev/null || true)
+[[ -n $path ]] || exit 0
+
+# Print nothing rather than leaking an error into the status bar.
+out=$(gitmux -cfg "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/gitmux.conf" "$path" 2>/dev/null) || exit 0
+printf '%s' "$out"

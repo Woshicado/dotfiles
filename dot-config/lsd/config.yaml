@@ -31,7 +31,11 @@ color:
   # When "classic" is set, this is set to "no-color".
   # Possible values: default, custom
   # When "custom" is set, lsd will look in the config directory for `colors.yaml`.
-  theme: "default"
+  # `colors.yaml` is a symlink managed by `theme-switch`, pointing at
+  # colors-dark.yaml or colors-light.yaml. lsd only ever reads colors.yaml from
+  # its own config dir -- it honours neither XDG_CONFIG_HOME nor the directory of
+  # --config-file -- which is why the file has to be swapped in place.
+  theme: "custom"
 
 # == Date ==
 # This specifies the date format for the date column. The freeform format

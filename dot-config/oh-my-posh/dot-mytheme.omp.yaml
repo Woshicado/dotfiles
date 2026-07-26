@@ -74,7 +74,7 @@ blocks:
         style: "plain"
       - type: "jujutsu"
         style: "powerline"
-        foreground: "#fad07b"
+        foreground: "#957FB8"
         template: "{{ if .ChangeID }}| @{{.ChangeID}}{{if .Working.Changed}}  {{ .Working.String }}{{\
           \ end }}{{ end }}"
         properties:

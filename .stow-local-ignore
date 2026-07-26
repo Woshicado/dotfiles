@@ -32,3 +32,6 @@ copy_changes.sh
 .mise.toml
 install-.*\.sh    # install-all.sh (mac/linux installers live under packages/)
 ^/packages        # package lists + platform installers read by install-all.sh
+
+# runtime symlink managed by theme-switch, not by stow
+^/dot-config/lsd/colors\.yaml$

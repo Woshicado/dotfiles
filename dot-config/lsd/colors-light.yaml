@@ -1,0 +1,54 @@
+---
+# Kanagawa "lotus" palette for lsd.
+#
+# Not read directly: theme-switch points colors.yaml at this file (or at
+# colors-dark.yaml) and config.yaml has color.theme "custom".
+#
+# lsd's built-in default theme assumes a dark background -- its date column in
+# particular is a bright green that is unreadable on lotus's beige.
+
+user: "#77713f" # lotusYellow
+group: "#43436c" # lotusInk2
+
+permission:
+  read: "#6f894e" # lotusGreen
+  write: "#836f4a" # lotusYellow2
+  exec: "#c84053" # lotusRed
+  exec-sticky: "#624c83" # lotusViolet4
+  no-access: "#a09cac" # lotusViolet1
+  octal: "#597b75" # lotusAqua
+  acl: "#4e8ca2" # lotusTeal1
+  context: "#4d699b" # lotusBlue4
+
+date:
+  hour-old: "#4e8ca2" # lotusTeal1
+  day-old: "#5e857a" # lotusAqua2
+  older: "#8a8980" # lotusGray3
+
+size:
+  none: "#a09cac" # lotusViolet1
+  small: "#6f894e" # lotusGreen
+  medium: "#836f4a" # lotusYellow2
+  large: "#cc6d00" # lotusOrange
+
+inode:
+  valid: "#624c83" # lotusViolet4
+  invalid: "#a09cac" # lotusViolet1
+
+links:
+  valid: "#624c83" # lotusViolet4
+  invalid: "#a09cac" # lotusViolet1
+
+tree-edge: "#a09cac" # lotusViolet1
+
+git-status:
+  default: "#43436c" # lotusInk2
+  unmodified: "#a09cac" # lotusViolet1
+  ignored: "#a09cac" # lotusViolet1
+  new-in-index: "#6f894e" # lotusGreen
+  new-in-workdir: "#6e915f" # lotusGreen2
+  typechange: "#de9800" # lotusYellow3
+  deleted: "#c84053" # lotusRed
+  renamed: "#597b75" # lotusAqua
+  modified: "#de9800" # lotusYellow3
+  conflicted: "#d7474b" # lotusRed2

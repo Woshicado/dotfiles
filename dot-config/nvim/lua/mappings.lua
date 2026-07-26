@@ -1,10 +1,7 @@
--- require("nvchad.mappings")
 require("complicated_mappings")
 
-local del = vim.keymap.del
 local map = vim.keymap.set
 
--- NvChad mappings, copied over to not have to use all of them
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "move end of line" })
 map("i", "<C-h>", "<Left>", { desc = "move left" })
@@ -18,17 +15,9 @@ map("x", "<C-c>", '"+ygv', { desc = "general copy selection" })
 
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
 
-if require("nvconfig").ui.tabufline.enabled then
-	map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
-
-	map("n", "<tab>", function()
-		require("nvchad.tabufline").next()
-	end, { desc = "buffer goto next" })
-
-	map("n", "<S-tab>", function()
-		require("nvchad.tabufline").prev()
-	end, { desc = "buffer goto prev" })
-end
+map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
+map("n", "<tab>", "<cmd>bnext<CR>", { desc = "buffer goto next" })
+map("n", "<S-tab>", "<cmd>bprevious<CR>", { desc = "buffer goto prev" })
 
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
@@ -36,27 +25,8 @@ map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 -- map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 -- stylua: ignore
-map({ "n", "t" }, "<M-i>", function() require("nvchad.term").toggle({ pos = "float", id = "floatTerm" }) end,
+map({ "n", "t" }, "<M-i>", function() require("floatterm").toggle() end,
 	{ desc = "terminal toggle floating term" })
-
--- delete unwanted nvchad mappings first
--- Normal mode bindings to delete
-local keys = {
-	"<leader>w",
-	"<leader>wa",
-	"<leader>wl",
-	"<leader>wr",
-	"<leader>ws",
-	"<leader>cm",
-	-- "<leader>th",
-	-- "<leader>h",
-	-- "<leader>v",
-}
-
-for _, key in ipairs(keys) do
-	pcall(del, "n", key)
-end
-pcall(del, "i", "jj")
 
 map({ "i", "v", "n" }, "<Up>", "<Nop>")
 map({ "i", "v", "n" }, "<Down>", "<Nop>")
@@ -84,8 +54,8 @@ map({ "n", "v" }, "<leader><Right>", "<cmd>bn!<CR>", { desc = "Switch to next bu
 map({ "n", "v" }, "<C-S-o>", "<C-i>", { desc = "Forward", noremap = true })
 
 -- stylua: ignore
-map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end,
-	{ desc = "Toggle signature help", noremap = true })
+-- map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end,
+-- 	{ desc = "Toggle signature help", noremap = true })
 
 map({ "n", "x" }, "<leader>sw", function()
 	local ve = vim.o.virtualedit -- returns a string, e.g. "", "all", "block,onemore"
@@ -197,9 +167,20 @@ map("n", "<leader>q}", ":cnewer<CR>", { noremap = true, silent = true })
 map("n", "[<S-q>", ":colder<CR>", { noremap = true, silent = true })
 map("n", "]<S-q>", ":cnewer<CR>", { noremap = true, silent = true })
 
--- Toggle transparency on <leader>to
-map("n", "<leader>to", function() require("base46").toggle_transparency() end,
-	{ desc = "Toggle transparency" })
+-- harper_ls is opt-in; too many false positives
+map("n", "<leader>th", "<cmd>HarperToggle<CR>", { desc = "Toggle harper_ls grammar checks" })
+
+-- Toggle light/dark for nvim, kitty and lsd together
+map("n", "<leader>tt", function()
+	require("theme").toggle()
+end, { desc = "Toggle light/dark theme" })
+
+-- Toggle transparency on <leader>to; useless atm
+map("n", "<leader>to", function()
+	local kanagawa = require("kanagawa")
+	kanagawa.setup({ transparent = not kanagawa.config.transparent })
+	vim.cmd.colorscheme("kanagawa")
+end, { desc = "Toggle transparency" })
 
 -- Obsidian keybinds
 map("n", "<leader>oo", ":cd $O_VAULT_DIR<CR>", { desc = "Open Obsidian notes" })

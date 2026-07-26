@@ -1,11 +1,10 @@
-require("nvchad.options")
-
 local o = vim.opt
 local g = vim.g
 
 g.editorconfig = true
 
--- NvChad
+o.cursorline = true
+o.fillchars = { eob = " " } -- no '~' past the end of the buffer
 
 o.laststatus = 3
 o.showmode = false
@@ -83,8 +82,6 @@ o.diffopt = {
 	"indent-heuristic",
 	"iwhite", -- I toggle this one, it doesn't fit all cases.
 }
-
-require("highlight")
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "tex",

@@ -7,7 +7,7 @@ return {
 	},
 	cmd = "ObsidianTodo",
 	keys = {
-		{ "<leader>tt", desc = "Todos: toggle list" },
+		{ "<leader>td", desc = "Todos: toggle list" },
 		{ "<leader>ta", desc = "Todos: add" },
 		{ "<leader>tA", desc = "Todos: add urgent" },
 		{ "<leader>to", desc = "Todos: open today's note" },

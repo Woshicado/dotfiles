@@ -4,10 +4,10 @@ vim.lsp.log.set_level("error")
 
 return {
 	"neovim/nvim-lspconfig",
+	event = { "BufReadPost", "BufNewFile", "BufWritePre" },
 	dependencies = { "barreiroleo/ltex_extra.nvim" },
 	config = function()
-		-- EXAMPLE
-		local nvlsp = require("nvchad.configs.lspconfig")
+		local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 		local function custom_on_attach(client, bufnr)
 			local function opts(desc)
@@ -17,7 +17,7 @@ return {
 			map("n", "gd", vim.lsp.buf.definition, opts("Go to type definition"))
 			map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
 			map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
-			map("n", "<leader>ra", require("nvchad.lsp.renamer"), opts("NvRenamer"))
+			map("n", "<leader>ra", vim.lsp.buf.rename, opts("Rename symbol"))
 			map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions", noremap = true })
 
 			if client.name == "ltex_plus" then
@@ -216,8 +216,7 @@ return {
 		for _, lsp in ipairs(servers) do
 			local config = {
 				on_attach = custom_on_attach,
-				on_init = nvlsp.on_init,
-				capabilities = nvlsp.capabilities,
+				capabilities = capabilities,
 				settings = server_settings[lsp],
 			}
 			vim.lsp.config(lsp, config)
@@ -228,7 +227,29 @@ return {
 			filetypes = { "markdown", "text", "tex", "typst", "gitcommit", "mail", "plaintext", "html" },
 		}
 
-		vim.lsp.enable(servers)
+		--[[ harper_ls stays configured but is not started automatically: it produces a lot
+		     of false positives in anything that is not prose. ]]
+		local opt_in = { harper_ls = true }
+		vim.lsp.enable(vim.tbl_filter(function(name)
+			return not opt_in[name]
+		end, servers))
+
+		vim.api.nvim_create_user_command("HarperToggle", function()
+			local clients = vim.lsp.get_clients({ name = "harper_ls" })
+			if #clients == 0 then
+				vim.lsp.enable("harper_ls")
+				vim.notify("harper_ls enabled")
+				return
+			end
+			--[[ `vim.lsp.enable(name, false)` only drops the config from
+			     lsp._enabled_configs, i.e. it stops *future* attachment -- already running
+			     clients keep going, so they have to be stopped explicitly. ]]
+			vim.lsp.enable("harper_ls", false)
+			for _, client in ipairs(clients) do
+				client:stop() -- vim.lsp.stop_client() is deprecated in 0.12
+			end
+			vim.notify("harper_ls disabled")
+		end, { desc = "Toggle the harper_ls grammar server" })
 
 		-- Diagnostics in new line
 		vim.diagnostic.config({

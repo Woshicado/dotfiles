@@ -1,6 +1,11 @@
 {
   "actions": [
     {
+      "key": "t",
+      "type": "command",
+      "value": "$HOME/.local/bin/theme-switch toggle"
+    },
+    {
       "actions": [
         {
           "key": "k",

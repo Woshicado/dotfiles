@@ -1,6 +1,4 @@
 return {
-	require("plugins.disable"),
-
 	-- require("plugins.configs.ale"),
 
 	require("plugins.configs.notmuch"),
@@ -12,6 +10,10 @@ return {
 	require("plugins.configs.conform"),
 	require("plugins.configs.mini"),
 	require("plugins.configs.mini-jump"),
+	require("plugins.configs.mini-tabline"),
+	require("plugins.configs.mini-hipatterns"),
+	require("plugins.configs.lualine"),
+	require("plugins.configs.indent-blankline"),
 	require("plugins.configs.treesitter-context"),
 	require("plugins.configs.abolish"),
 	require("plugins.configs.todo-comments"),
@@ -33,10 +35,11 @@ return {
 	-- require("plugins.configs.cmp"),
 	require("plugins.configs.blink-cmp"),
 	require("plugins.configs.yanky"),
+	require("plugins.configs.mason"),
 	require("plugins.configs.lspconfig"),
 	-- require("plugins.configs.ltex-extra"),
 	require("plugins.configs.oil"),
-	-- require("plugins.configs.kanagawa"),
+	require("plugins.configs.kanagawa"),
 	-- require("plugins.configs.oil-git"),  -- performance
 	require("plugins.configs.leap"),
 	require("plugins.configs.repeat"),
