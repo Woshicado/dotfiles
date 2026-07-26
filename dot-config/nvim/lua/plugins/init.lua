@@ -36,7 +36,8 @@ return {
 	require("plugins.configs.lspconfig"),
 	-- require("plugins.configs.ltex-extra"),
 	require("plugins.configs.oil"),
-	require("plugins.configs.oil-git"),
+	-- require("plugins.configs.kanagawa"),
+	-- require("plugins.configs.oil-git"),  -- performance
 	require("plugins.configs.leap"),
 	require("plugins.configs.repeat"),
 	require("plugins.configs.speeddating"),

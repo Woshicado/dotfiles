@@ -18,3 +18,4 @@ CLAUDE.md
 .mise
 .env
 .docker.env
+skills-lock.json

@@ -17,7 +17,7 @@ M.base46 = {
 		["@string"] = { italic = true },
 	},
 	theme_toggle = {
-		"onedark",
+		"kanagawa",
 		"penumbra_light",
 	},
 }

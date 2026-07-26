@@ -98,6 +98,14 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   export TAR_OPTIONS="--exclude=.DS_Store"  # gnu tar
 
   export OVPN_PROFILE="${HOME}/Library/Application Support/OpenVPN Connect/profiles/1728929973375.ovpn"
+
+  # Android SDK. platform-tools is *prepended* on purpose: Gradle and Studio resolve adb
+  # from sdk.dir by absolute path and ignore PATH entirely, so the CLI `adb` must be that
+  # same binary — otherwise brew's android-platform-tools shadows it and you end up
+  # debugging two different adbs. cmdline-tools/latest/bin provides sdkmanager/avdmanager.
+  export ANDROID_HOME="${HOME}/Library/Android/sdk"
+  export PATH="${ANDROID_HOME}/platform-tools:${PATH}"
+  export PATH="${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin"
 fi
 
 ### COMMENTED OUT EXPORTS
@@ -125,8 +133,6 @@ fi
 # NVM
 # export NVM_DIR="$HOME/.nvm"
 
-# Android Studio
-# export ANDROID_HOME=$HOME/Library/Android/sdk
-# export PATH=$PATH:$ANDROID_HOME/platform-tools
-# export PATH=$PATH:$ANDROID_HOME/tools
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+# Android Studio — now live in the darwin block above. JAVA_HOME is deliberately not set
+# globally: Android projects pin their own (Juggluco's .mise.toml uses Studio's bundled JBR 21,
+# since the system JDK is too new for its AGP).
