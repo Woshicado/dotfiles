@@ -32,6 +32,7 @@ state_file="$state_dir/theme"
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
 kitty_dir="$config_dir/kitty"
 lsd_dir="$config_dir/lsd"
+showy_quota_dir="$config_dir/showy-quota"
 
 die() {
 	printf 'theme-switch: %s\n' "$1" >&2
@@ -224,6 +225,23 @@ apply_lsd() {
 	ln -sfn "colors-$theme.yaml" "$lsd_dir/colors.yaml"
 }
 
+apply_showy_quota() {
+	local theme=$1 variant
+	case $theme in
+	dark) variant="kanagawa-wave" ;;
+	light) variant="kanagawa-lotus" ;;
+	*) return 0 ;;
+	esac
+	[[ -r "$showy_quota_dir/$variant.env" ]] || return 0
+	ln -sfn "$variant.env" "$showy_quota_dir/config.env"
+
+	# The zellij feeder reads config.env once at startup, so it has to be
+	# restarted for the quota strip to repaint in the new palette
+	command -v showy-quota-zellij-ensure >/dev/null 2>&1 &&
+		showy-quota-zellij-ensure --restart --all >/dev/null 2>&1
+	return 0
+}
+
 set_theme() {
 	local theme=$1 rc=0
 	mkdir -p "$state_dir"
@@ -234,6 +252,7 @@ set_theme() {
 	apply_kitty "$theme" || rc=1
 	apply_tmux "$theme" || rc=1
 	apply_claude "$theme" || rc=1
+	apply_showy_quota "$theme" || rc=1
 	return $rc
 }
 

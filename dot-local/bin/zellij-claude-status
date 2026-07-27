@@ -1,0 +1,182 @@
+#!/usr/bin/env bash
+#
+# zellij-claude-status -- per-tab Claude Code activity glyphs in the zjstatus bar.
+#
+# Usage (from a Claude Code hook, see dot-claude/settings.json):
+#   zellij-claude-status tool      # PreToolUse  -- reads tool_name from stdin JSON
+#   zellij-claude-status working   # PostToolUse / UserPromptSubmit / SessionStart
+#   zellij-claude-status notify    # Notification -- waiting for permission
+#   zellij-claude-status done      # Stop
+#   zellij-claude-status clear     # SessionEnd
+#   zellij-claude-status render    # recompute + repaint only (no state change)
+#
+# Why this exists rather than ishefi/zellaude: zellaude replaces the whole tab
+# bar (so it cannot coexist with the zjstatus bar in ../../dot-config/zellij),
+# has no theming knobs, and registers its own hook by *writing into*
+# ~/.claude/settings.json -- which here is a symlink into this git repo.
+#
+# ---------------------------------------------------------------------------
+# How the pane -> tab mapping works
+# ---------------------------------------------------------------------------
+# A Claude pane knows only its own $ZELLIJ_PANE_ID and $ZELLIJ_SESSION_NAME;
+# zellij exports no tab id into the pane environment. `zellij action list-panes
+# --tab --json` is the only thing that joins the two, so state is recorded per
+# pane and resolved to a tab at render time.
+#
+# NOTE: pane `id` in that JSON is scoped *per type* -- a plugin pane and a
+# terminal pane can both be id 0 -- hence the `is_plugin == false` filter.
+#
+# State lives in one file per pane, so several Claude instances in one tab each
+# contribute a glyph, and a dead pane's glyph disappears on the next render.
+
+set -uo pipefail
+
+STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/zellij-claude"
+
+# Glyph vocabulary mirrors zellaude's so the two read the same at a glance.
+glyph_for() {
+	case "$1" in
+	thinking) printf '●' ;;   # ● generating
+	bash) printf '⚡' ;;       # ⚡ running a command
+	read) printf '◉' ;;       # ◉ reading / searching
+	edit) printf '✎' ;;       # ✎ editing
+	subagent) printf '⊜' ;;   # ⊜ spawned a subagent
+	websearch) printf '◈' ;;  # ◈ web search / fetch
+	tool) printf '⚙' ;;       # ⚙ some other tool
+	notify) printf '⚠' ;;     # ⚠ waiting for permission
+	done) printf '✓' ;;       # ✓ finished
+	*) printf '○' ;;          # ○ idle / unknown
+	esac
+}
+
+# ANSI index per state -- same palette contract as the layout: these are
+# terminal colours, so they follow theme-switch's kitty swap. `notify` is the
+# only loud one; it is the only state that actually wants the user's attention.
+color_for() {
+	case "$1" in
+	notify) printf '16' ;; # notice / orange
+	done) printf '2' ;;    # green
+	bash | edit) printf '3' ;;
+	*) printf '8' ;;       # muted -- ambient activity is not an alert
+	esac
+}
+
+# Map a Claude Code tool name onto a state. Anything unrecognised is `tool`.
+state_for_tool() {
+	case "$1" in
+	Bash | BashOutput | KillShell) printf 'bash' ;;
+	Read | Grep | Glob | NotebookRead) printf 'read' ;;
+	Edit | Write | NotebookEdit | MultiEdit) printf 'edit' ;;
+	Task | Agent) printf 'subagent' ;;
+	WebSearch | WebFetch) printf 'websearch' ;;
+	*) printf 'tool' ;;
+	esac
+}
+
+# ---------------------------------------------------------------------------
+
+render() {
+	local session=$1 dir panes state_file pane_id st out
+	dir="$STATE_ROOT/$session"
+
+	# No state at all -> make sure the widget is blanked, then stop.
+	if [[ ! -d $dir ]]; then
+		zellij -s "$session" pipe "zjstatus::pipe::pipe_claude::" 2>/dev/null
+		return 0
+	fi
+
+	# pane id -> tab position, terminals only (see the is_plugin note above).
+	panes=$(zellij -s "$session" action list-panes --tab --json 2>/dev/null |
+		jq -r '.[] | select(.is_plugin == false) | "\(.id) \(.tab_position)"' 2>/dev/null)
+	if [[ -z $panes ]]; then
+		return 0
+	fi
+
+	# Collect "tab_position<TAB>state" for every live pane that has state,
+	# pruning state files whose pane has since gone away.
+	local rows=""
+	for state_file in "$dir"/*; do
+		[[ -e $state_file ]] || continue
+		pane_id=${state_file##*/}
+		st=$(<"$state_file")
+
+		local tabpos
+		tabpos=$(awk -v p="$pane_id" '$1 == p { print $2; exit }' <<<"$panes")
+		if [[ -z $tabpos ]]; then
+			rm -f "$state_file" # pane is gone
+			continue
+		fi
+		rows+="$tabpos	$st"$'\n'
+	done
+
+	# Group by tab, ascending. Each tab renders as its 1-based index (zellij
+	# tab_position is 0-based, the bar shows 1-based) followed by one glyph per
+	# Claude pane in it -- so two agents in tab 4 give "4⚡●".
+	out=""
+	local tab
+	for tab in $(cut -f1 <<<"$rows" | grep -E '^[0-9]+$' | sort -n -u); do
+		local seg=""
+		while IFS=$'\t' read -r t s; do
+			[[ $t == "$tab" ]] || continue
+			seg+="#[fg=$(color_for "$s")]$(glyph_for "$s")"
+		done <<<"$rows"
+		[[ -n $seg ]] && out+=" #[fg=8]$((tab + 1))$seg"
+	done
+
+	[[ -n $out ]] && out="$out#[fg=default] "
+	zellij -s "$session" pipe "zjstatus::pipe::pipe_claude::$out" 2>/dev/null
+}
+
+# ---------------------------------------------------------------------------
+
+main() {
+	local action=${1:-render}
+
+	# Outside zellij this is a no-op, so the same hook line is safe everywhere.
+	[[ -n ${ZELLIJ_SESSION_NAME:-} ]] || exit 0
+	command -v jq >/dev/null 2>&1 || exit 0
+
+	local session=$ZELLIJ_SESSION_NAME
+	local pane=${ZELLIJ_PANE_ID:-}
+	local dir="$STATE_ROOT/$session"
+
+	# Write $1 as this pane's state, but skip the (comparatively expensive)
+	# repaint when nothing actually changed. PostToolUse fires on every single
+	# tool call and almost always reports the same state twice in a row, so
+	# without this guard each one would cost a `zellij action list-panes` plus
+	# a `jq`. Only genuine transitions reach render().
+	set_state() {
+		local new=$1 old=""
+		[[ -n $pane ]] || exit 0
+		[[ -r $dir/$pane ]] && old=$(<"$dir/$pane")
+		[[ $old == "$new" ]] && exit 0
+		mkdir -p "$dir"
+		printf '%s' "$new" >"$dir/$pane"
+	}
+
+	case "$action" in
+	render) ;;
+	clear)
+		[[ -n $pane ]] || exit 0
+		[[ -e $dir/$pane ]] || exit 0 # already clean; nothing to repaint
+		rm -f "$dir/$pane"
+		;;
+	tool)
+		# PreToolUse hands the hook a JSON payload on stdin; `tool_name` picks
+		# the glyph. Fall back to a generic tool state if stdin is not JSON.
+		local payload tool
+		payload=$(cat 2>/dev/null)
+		tool=$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null)
+		set_state "$(state_for_tool "${tool:-}")"
+		;;
+	*)
+		# `working` is reported as `thinking`; the rest are used verbatim.
+		[[ $action == working ]] && action=thinking
+		set_state "$action"
+		;;
+	esac
+
+	render "$session"
+}
+
+main "$@"

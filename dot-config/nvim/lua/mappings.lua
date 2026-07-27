@@ -1,5 +1,8 @@
 require("complicated_mappings")
 
+-- <C-hjkl>: nvim windows, falling through to zellij/tmux panes at the edge
+require("muxnav").setup()
+
 local map = vim.keymap.set
 
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })

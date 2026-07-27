@@ -1,0 +1,211 @@
+// Zellij configuration -- mirroring ../tmux/tmux.conf.
+//
+// <C-g> is kept to exit NORMAL mode
+
+keybinds {
+    // ---- prefix -----------------------------------------------------------
+    // tmux.conf:67-69  (unbind C-b; set -g prefix C-Space; bind C-Space send-prefix)
+    locked {
+        bind "Ctrl Space" { SwitchToMode "Tmux"; }
+    }
+    shared_except "tmux" "locked" {
+        unbind "Ctrl b"
+        // zellij's default binds Ctrl-h to Move mode, which would shadow the
+        // navigator binding below in normal mode
+        unbind "Ctrl h"
+        bind "Ctrl Space" { SwitchToMode "Tmux"; }
+    }
+
+    // ---- prefix mode ------------------------------------------------------
+    // actions return to Locked (not Normal), so the prefix is one-shot like tmux
+    tmux {
+        bind "Ctrl Space" { Write 0; SwitchToMode "Locked"; }   // send-prefix
+        bind "Esc" "q" { SwitchToMode "Locked"; }
+
+        // splits, inheriting the cwd like `-c "#{pane_current_path}"` does
+        bind "\"" { NewPane "Down"; SwitchToMode "Locked"; }     // tmux.conf:74
+        bind "%" { NewPane "Right"; SwitchToMode "Locked"; }     // tmux.conf:75
+        bind "x" { CloseFocus; SwitchToMode "Locked"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "Locked"; }
+        bind "o" { FocusNextPane; SwitchToMode "Locked"; }
+        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "Locked"; }
+        bind "g" { ToggleFloatingPanes; SwitchToMode "Locked"; }
+
+        // `bind b select-layout -E` (tmux.conf:78) has no direct equivalent;
+        // cycling swap layouts is the closest thing zellij offers.
+        bind "b" "Space" { NextSwapLayout; SwitchToMode "Locked"; }
+
+        // tabs == tmux windows
+        bind "c" { NewTab; SwitchToMode "Locked"; }
+        bind "&" { CloseTab; SwitchToMode "Locked"; }
+        bind "n" { GoToNextTab; SwitchToMode "Locked"; }
+        bind "p" { GoToPreviousTab; SwitchToMode "Locked"; }
+        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "1" { GoToTab 1; SwitchToMode "Locked"; }
+        bind "2" { GoToTab 2; SwitchToMode "Locked"; }
+        bind "3" { GoToTab 3; SwitchToMode "Locked"; }
+        bind "4" { GoToTab 4; SwitchToMode "Locked"; }
+        bind "5" { GoToTab 5; SwitchToMode "Locked"; }
+        bind "6" { GoToTab 6; SwitchToMode "Locked"; }
+        bind "7" { GoToTab 7; SwitchToMode "Locked"; }
+        bind "8" { GoToTab 8; SwitchToMode "Locked"; }
+        bind "9" { GoToTab 9; SwitchToMode "Locked"; }
+        // kitty.conf maps Cmd+0 to prefix+"0"; tmux used that for window 10
+        bind "0" { GoToTab 10; SwitchToMode "Locked"; }
+
+        // focus / move panes
+        bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Locked"; }
+        bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Locked"; }
+        bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Locked"; }
+        bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
+        bind "H" { MovePane "Left"; }
+        bind "J" { MovePane "Down"; }
+        bind "K" { MovePane "Up"; }
+        bind "L" { MovePane "Right"; }
+        bind "r" { SwitchToMode "Resize"; }
+
+        // copy mode / sessions
+        bind "[" { SwitchToMode "Scroll"; }                      // tmux copy-mode
+        bind "d" { Detach; }
+        bind "s" "w" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; SwitchToMode "Locked"; }
+    }
+
+    // ---- copy mode --------------------------------------------------------
+    // mode-keys vi (tmux.conf:13). Esc/q leave straight back to locked.
+    scroll {
+        bind "Esc" "q" { SwitchToMode "Locked"; }
+        bind "y" { Copy; }
+    }
+    shared_among "resize" "move" "session" "search" "tab" "pane" "prompt" {
+        bind "Esc" { SwitchToMode "Locked"; }
+    }
+
+    // ---- rename modes -----------------------------------------------------
+    renametab {
+        bind "Enter" { SwitchToMode "Locked"; }
+        bind "Esc" { UndoRenameTab; SwitchToMode "Locked"; }
+        bind "Ctrl c" { UndoRenameTab; SwitchToMode "Locked"; }
+    }
+    renamepane {
+        bind "Enter" { SwitchToMode "Locked"; }
+        bind "Esc" { UndoRenamePane; SwitchToMode "Locked"; }
+        bind "Ctrl c" { UndoRenamePane; SwitchToMode "Locked"; }
+    }
+
+    // ---- no-prefix bindings, live in every mode ---------------------------
+    shared {
+        // vim-zellij-navigator: seamless Ctrl-hjkl between nvim splits and
+        // zellij panes, replacing christoomey/vim-tmux-navigator (tmux.conf:8).
+        // The nvim half is muxnavigator.lua / smart-splits.lua
+        bind "Ctrl h" {
+            MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
+                name "move_focus_or_tab"
+                payload "left"
+                move_mod "ctrl"
+            }
+        }
+        bind "Ctrl j" {
+            MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
+                name "move_focus"
+                payload "down"
+                move_mod "ctrl"
+            }
+        }
+        bind "Ctrl k" {
+            MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
+                name "move_focus"
+                payload "up"
+                move_mod "ctrl"
+            }
+        }
+        bind "Ctrl l" {
+            MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
+                name "move_focus_or_tab"
+                payload "right"
+                move_mod "ctrl"
+            }
+        }
+
+        // tmux.conf:71 -- M-g toggled a floating terminal
+        bind "Alt g" { ToggleFloatingPanes; }
+
+        // tmux.conf:81-82 -- macOS word jumps: Alt-Left/Right send M-b / M-f
+        bind "Alt Left" { WriteChars "\u{1b}b"; }
+        bind "Alt Right" { WriteChars "\u{1b}f"; }
+
+        // copy_on_select is false to match tmux (MouseDragEnd1Pane was unbound,
+        // tmux.conf:100), so selections need an explicit copy.
+        bind "Alt c" { Copy; }
+    }
+}
+
+// ---- options --------------------------------------------------------------
+
+default_mode "locked"
+default_layout "default"
+
+// `set -g mouse on` (tmux.conf:12)
+mouse_mode true
+
+// `set -g set-clipboard on` (tmux.conf:122) + copy-mode-vi y (tmux.conf:105)
+copy_command "pbcopy"
+copy_on_select false
+
+// EDITOR/VISUAL are nvim (tmux.conf:16-17); used for `[` -> scroll -> e
+scrollback_editor "nvim"
+
+// tmux-sensible sets history-limit 50000
+scroll_buffer_size 50000
+
+// closest thing to pane-border-status/pane-border-format (tmux.conf:94-97)
+pane_frames true
+
+// tmux detaches rather than killing the server on close
+on_force_close "detach"
+
+// resurrect panes across restarts, like tmux-resurrect/continuum would
+session_serialization true
+
+show_startup_tips false
+show_release_notes false
+
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
+
+// ---- theme ----------------------------------------------------------------
+
+theme "kanagawa-wave"
+theme_dark "kanagawa-wave"
+theme_light "kanagawa-lotus"
+
+themes {
+    kanagawa-wave {
+        fg "#DCD7BA"        // text
+        bg "#1F1F28"        // bg-bar / bg-pane (Neovim's Normal background)
+        black "#16161D"
+        red "#C34043"       // error
+        green "#76946A"
+        yellow "#E6C384"    // alert
+        blue "#7E9CD8"      // accent / highlight
+        magenta "#957FB8"
+        cyan "#7FB4CA"      // info
+        white "#C8C093"
+        orange "#FFA066"    // notice
+    }
+    kanagawa-lotus {
+        fg "#545464"
+        bg "#f2ecbc"
+        black "#1F1F28"
+        red "#c84053"
+        green "#6f894e"
+        yellow "#77713f"
+        blue "#4d699b"
+        magenta "#b35b79"
+        cyan "#4e8ca2"
+        white "#43436c"
+        orange "#cc6d00"
+    }
+}

@@ -64,8 +64,7 @@ return {
 	require("plugins.configs.minty"),
 	require("plugins.configs.copilot"),
 	-- require("plugins.configs.lsp-signature"),
-	-- require("plugins.configs.vim-tmux-navigator"),  -- superseded by smart-splits: works with tmux *and* zellij
-	require("plugins.configs.smart-splits"),
+	-- require("plugins.configs.vim-tmux-navigator"),  -- superseded by lua/muxnav.lua (no plugin, one async CLI call)
 	-- require("plugins.configs.puppeteer"),
 	require("plugins.configs.modes"),
 	require("plugins.configs.twilight"),

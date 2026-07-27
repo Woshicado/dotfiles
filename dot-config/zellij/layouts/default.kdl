@@ -1,0 +1,149 @@
+// Default layout: one zjstatus bar at the bottom, styled after the tmux ukiyo
+// status line (tmux.conf:37-64) -- user@host segment on the left, then the tabs
+// immediately after it, left-aligned. Everything that is not a tab sits on the
+// right so it never shifts the left edge around.
+//
+// ---------------------------------------------------------------------------
+// COLOURS: ANSI indices, *not* zellij theme names.
+// ---------------------------------------------------------------------------
+// zjstatus does NOT read zellij's theme palette -- `grep -rni palette src/`
+// in dj95/zjstatus returns nothing. Its `parse_color` accepts, in order:
+// `$alias` (from a `color_*` key), `#rrggbb`, the 16 ANSI *names*, and 0-255
+// indices. A name like `blue` therefore resolves to the **terminal's** ANSI
+// blue, not to the `themes {}` block in ../config.kdl.
+//
+// That is exactly what we want: `theme-switch` swaps kitty's palette
+// (kitty/kanagawa.conf <-> kitty/kanagawa-light.conf), so an ANSI-indexed bar
+// re-colours itself on light/dark toggle for free, with zellij uninvolved.
+//
+//   idx  wave       lotus      role in theme-switch's palette
+//   ---  ---------  ---------  ------------------------------
+//   2    #76946A    #6f894e    green   (session / rename modes)
+//   3    #C0A36E    #77713f    yellow  (copy / search modes)
+//   4    #7E9CD8    #4d699b    accent  (user@host fill)
+//   6    #6A9589    #597b75    cyan    (resize / move / pane / tab modes)
+//   16   #FFA066    #cc6d00    notice  (PREFIX)
+//   18   #2D4F67    #c9cbd1    selection -- active tab fill  (custom slot)
+//   19   #1F1F28    #f2ecbc    bar bg, and text on filled segments (custom)
+//   20   #DCD7BA    #545464    text -- inactive tabs               (custom)
+//
+// 18/19/20 are added by kitty/kanagawa.conf and kitty/kanagawa-light.conf,
+// extending the color16/color17 override those files already carried.
+//
+// TWO TRAPS, both of which fail *silently* by dropping the whole `#[...]`:
+//   * `orange` is not one of the 16 ANSI names -- write `16`.
+//   * `default` is NOT usable. zjstatus's `parse_color` maps "default" to None
+//     (src/render.rs, `color_by_name`), so `#[bg=default]` never resets the
+//     background. That left every powerline cap drawn in its own segment's
+//     colour -- invisible -- which is what made this bar look blocky rather
+//     than powerline-capped. Always name a background explicitly (`19`).
+//
+// Powerline caps:  is U+E0B2 (left cap),  is U+E0B0 (right cap); both are
+// covered by the Symbols Nerd Font symbol_map in kitty.conf:57.
+
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="https://github.com/dj95/zjstatus/releases/download/v0.24.0/zjstatus.wasm" {
+                // Nothing here is bold: the fills already carry the emphasis, and
+                // bolding on top of them reads as noise.
+                format_left   "#[bg=4,fg=19] {command_user}@{command_host} #[bg=19,fg=4]  {tabs}"
+                format_center ""
+                // No clock: ukiyo leaves the right edge of the tmux bar completely
+                // empty, and that emptiness is most of what makes it read as calm.
+                format_right  "{pipe_claude}{pipe_showy_quota}{mode} "
+                format_space  ""
+
+                border_enabled "false"
+                hide_frame_for_single_pane "false"
+
+                // one-shot: the interval is generous so this is not a per-render exec.
+                // `hostname -s` for the short name -- the ".local" suffix tmux's #H
+                // carries is noise on a single-machine setup.
+                command_user_command    "whoami"
+                command_user_format     "{stdout}"
+                command_user_interval   "3600"
+                command_user_rendermode "static"
+
+                command_host_command    "hostname -s"
+                command_host_format     "{stdout}"
+                command_host_interval   "3600"
+                command_host_rendermode "static"
+
+                // Per-tab Claude Code activity, fed by `zellij-claude-status`
+                // (dot-local/bin) off the Claude Code hooks in
+                // dot-claude/settings.json. Renders e.g. "4 1" -- tab index
+                // plus one glyph per Claude pane in that tab. Empty when no
+                // Claude session is running anywhere, so it costs nothing.
+                // `dynamic` so the piped payload's own #[...] directives apply.
+                pipe_claude_format     "{output}"
+                pipe_claude_rendermode "dynamic"
+
+                // showy-quota strips, fed per-session by `showy-quota-zellij-pipe`.
+                // `raw` because showy-quota emits its own ANSI escapes.
+                pipe_showy_quota_format     "{output}"
+                pipe_showy_quota_rendermode "raw"
+
+                // tmux has no modes, so this has no ukiyo counterpart.
+                //
+                // EVERY mode renders, and every label is padded to the width of the
+                // longest one ("SESSION"), so the segment never changes width. An
+                // appearing/disappearing badge shifts everything laid out after it --
+                // with the mode on the left that dragged the whole tab row sideways
+                // on each prefix press. Fixed width plus right-alignment keeps both
+                // the tabs and the quota strip still.
+                //
+                // fg=19 (bar bg) is readable on every saturated fill; LOCK sits on
+                // the selection colour instead and takes fg=20, the same pairing the
+                // active tab uses.
+                //
+                // The padding is the whole field -- do NOT add spaces around the
+                // centred label, which re-introduces the asymmetry it just removed.
+                // TAB and SESSION are half a column off centre: their lengths are the
+                // opposite parity to every other label, so no single field width can
+                // centre all of them.
+                mode_default_to_mode "normal"
+                mode_locked       "#[bg=19,fg=18]#[bg=18,fg=20]   LOCK   #[bg=19,fg=18]"
+                mode_normal       "#[bg=19,fg=4]#[bg=4,fg=19]  NORMAL  #[bg=19,fg=4]"
+                mode_tmux         "#[bg=19,fg=16]#[bg=16,fg=19]  PREFIX  #[bg=19,fg=16]"
+                mode_scroll       "#[bg=19,fg=3]#[bg=3,fg=19]   COPY   #[bg=19,fg=3]"
+                mode_search       "#[bg=19,fg=3]#[bg=3,fg=19]  SEARCH  #[bg=19,fg=3]"
+                mode_enter_search "#[bg=19,fg=3]#[bg=3,fg=19]  SEARCH  #[bg=19,fg=3]"
+                mode_resize       "#[bg=19,fg=6]#[bg=6,fg=19]  RESIZE  #[bg=19,fg=6]"
+                mode_move         "#[bg=19,fg=6]#[bg=6,fg=19]   MOVE   #[bg=19,fg=6]"
+                mode_pane         "#[bg=19,fg=6]#[bg=6,fg=19]   PANE   #[bg=19,fg=6]"
+                mode_tab          "#[bg=19,fg=6]#[bg=6,fg=19]   TAB    #[bg=19,fg=6]"
+                mode_session      "#[bg=19,fg=2]#[bg=2,fg=19] SESSION  #[bg=19,fg=2]"
+                mode_rename_tab   "#[bg=19,fg=2]#[bg=2,fg=19]  RENAME  #[bg=19,fg=2]"
+                mode_rename_pane  "#[bg=19,fg=2]#[bg=2,fg=19]  RENAME  #[bg=19,fg=2]"
+
+                // `set -g window-status-separator "  "` (tmux.conf:53); the active
+                // tab is an arrow-capped segment like ukiyo's, inactive ones are
+                // plain text on the bar background.
+                //
+                // ukiyo fills the active tab with `selection` (#2D4F67 / #c9cbd1),
+                // which is kitty's `selection_background` -- not one of the 16 ANSI
+                // names. Rather than hardcode hex (and lose the light/dark switch),
+                // that colour is published as `color18` in kitty/kanagawa.conf and
+                // kitty/kanagawa-light.conf, extending the color16/color17 override
+                // those files already do. theme-switch swaps the file, so `18` here
+                // is exact *and* theme-aware.
+                //
+                // ANSI 8 (muted, #727169/#8a8980) was the first attempt and is far
+                // too dark in lotus -- it reads as the heavy block this bar exists
+                // to avoid.
+                //
+                // Text is `20` on both tab states: #DCD7BA on wave's dark navy fill,
+                // #545464 on lotus's pale grey one -- readable against each.
+                tab_separator "  "
+                tab_normal    "#[bg=19,fg=20] {index} {name} "
+                tab_active    "#[bg=18,fg=19]#[bg=18,fg=20] {index} {name} #[bg=19,fg=18]"
+
+                tab_fullscreen_indicator " "
+                tab_floating_indicator   " "
+                tab_sync_indicator       " "
+            }
+        }
+    }
+}

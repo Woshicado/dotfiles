@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+#
+# showy-quota-zellij-ensure -- keep exactly one showy-quota feeder per zellij session.
+#
+# The zjstatus integration path needs a long-running `showy-quota-zellij-pipe`
+# loop per session: it polls codexbar and pipes the rendered strip into the
+# {pipe_showy_quota} widget (see ../../dot-config/zellij/layouts/default.kdl).
+# Nothing in zellij starts it, so two callers do:
+#
+#   ../../dot-config/zsh/dot-zshrc  -- on shell start inside a zellij session
+#   theme-switch                    -- after swapping showy-quota's config.env,
+#                                      since the feeder reads its palette once
+#                                      at startup and must be restarted to repaint
+#
+# Usage:
+#   showy-quota-zellij-ensure [SESSION]     # default: $ZELLIJ_SESSION_NAME
+#   showy-quota-zellij-ensure --all         # every live session
+#   showy-quota-zellij-ensure --restart ... # kill any existing feeder first
+
+set -uo pipefail
+
+pidfile_for() { printf '%s/showy-quota-zellij-%s.pid' "${TMPDIR:-/tmp}" "$1"; }
+
+# Live sessions only -- `list-sessions -s` also prints EXITED ones, which would
+# spawn feeders that pipe into nothing.
+live_sessions() {
+	zellij list-sessions -n 2>/dev/null |
+		grep -v 'EXITED' |
+		awk '{ print $1 }'
+}
+
+feeder_pid() {
+	local pf pid
+	pf=$(pidfile_for "$1")
+	[[ -r $pf ]] || return 1
+	pid=$(<"$pf")
+	[[ -n $pid ]] || return 1
+	# kill -0 rather than trusting the file: a pidfile left by a crashed session
+	# would otherwise suppress the feeder forever.
+	kill -0 "$pid" 2>/dev/null || return 1
+	printf '%s' "$pid"
+}
+
+start_one() {
+	local session=$1 restart=$2 pid
+
+	if pid=$(feeder_pid "$session"); then
+		[[ $restart == yes ]] || return 0
+		kill "$pid" 2>/dev/null
+	fi
+
+	# setsid-less detach: the feeder must outlive the shell that spawned it.
+	ZELLIJ_SESSION_NAME="$session" nohup showy-quota-zellij-pipe >/dev/null 2>&1 &
+	printf '%s\n' "$!" >"$(pidfile_for "$session")"
+}
+
+main() {
+	local restart=no all=no
+	local -a sessions=()
+
+	while (($#)); do
+		case "$1" in
+		--restart) restart=yes ;;
+		--all) all=yes ;;
+		*) sessions+=("$1") ;;
+		esac
+		shift
+	done
+
+	command -v showy-quota-zellij-pipe >/dev/null 2>&1 || exit 0
+	command -v zellij >/dev/null 2>&1 || exit 0
+
+	if [[ $all == yes ]]; then
+		mapfile -t sessions < <(live_sessions)
+	elif ((${#sessions[@]} == 0)); then
+		[[ -n ${ZELLIJ_SESSION_NAME:-} ]] || exit 0
+		sessions=("$ZELLIJ_SESSION_NAME")
+	fi
+
+	local s
+	for s in "${sessions[@]}"; do
+		[[ -n $s ]] && start_one "$s" "$restart"
+	done
+}
+
+main "$@"

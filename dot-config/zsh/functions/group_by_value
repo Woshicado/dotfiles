@@ -1,37 +1,31 @@
 #!/usr/bin/env zsh
 
-# Usage: rg-group-by-value [-p path] <key> <glob> [<glob> ...]
-#   rg-group-by-value latent_dist_percentile config.yaml
-#   rg-group-by-value latent_dist_percentile config.yaml '*.yml' '*.yaml.bak'
-#   rg-group-by-value -p ./some/subdir latent_dist_percentile config.yaml
+# Usage: group-by-value <key> <path-filter> [<path-filter> ...] <file_glob>
+#   group-by-value latent_dist_percentile '*dqn*' config.yaml
 group-by-value() {
   emulate -L zsh
-  local search_path="."
-  local -a opts
-  zparseopts -D -E -A opts p:=search_path_opt
-
-  if [[ -n "${opts[-p]}" ]]; then
-    search_path="${opts[-p]}"
-  fi
-
   local key="$1"
   shift
-  local -a globs=("$@")
+  local -a args=("$@")
 
-  if [[ -z "$key" || ${#globs[@]} -eq 0 ]]; then
-    echo "usage: rg-group-by-value [-p path] <key> <glob> [<glob> ...]" >&2
+  if [[ -z "$key" || ${#args[@]} -eq 0 ]]; then
+    echo "usage: rg-group-by-value <key> [path-filter ...] <file_glob>" >&2
     return 1
   fi
 
-  local -a glob_args
-  for g in "${globs[@]}"; do
-    glob_args+=(-g "$g")
+  local file_glob="${args[-1]}"
+  local -a path_filters=("${args[@]:0:${#args[@]}-1}")
+
+  local combined="**"
+  for f in "${path_filters[@]}"; do
+    combined="${combined}/${f}/**"
   done
+  combined="${combined}/${file_glob}"
 
   rg -H -oP "${key}:\s*\K\S+" \
-     "${glob_args[@]}" \
+     -g "$combined" \
+     -g '!/*_*/**' \
      -L \
-     "$search_path" \
   | awk -F: '{print $2, $1}' \
   | sort -k1,1 \
   | awk '{if ($1 != prev) {print "\n=== " $1 " ==="; prev=$1} print "  " $2}'
