@@ -3,7 +3,7 @@ return {
 	lazy = false,
 	priority = 1000, -- must load before anything that reads its colours (lualine)
 	opts = {
-		compile = false, -- enable compiling the colorscheme
+		compile = true, -- enable compiling the colorscheme
 		undercurl = true, -- enable undercurls
 		commentStyle = { italic = true, bold = true },
 		functionStyle = {},
