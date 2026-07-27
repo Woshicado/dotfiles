@@ -19,7 +19,7 @@
 //   idx  wave       lotus      role in theme-switch's palette
 //   ---  ---------  ---------  ------------------------------
 //   2    #76946A    #6f894e    green   (session / rename modes)
-//   3    #C0A36E    #77713f    yellow  (copy / search modes)
+//   3    #C0A36E    #77713f    yellow  (scroll / search modes)
 //   4    #7E9CD8    #4d699b    accent  (user@host fill)
 //   6    #6A9589    #597b75    cyan    (resize / move / pane / tab modes)
 //   16   #FFA066    #cc6d00    notice  (PREFIX)
@@ -107,7 +107,7 @@ layout {
                 mode_locked       "#[bg=19,fg=18]#[bg=18,fg=20]   LOCK   #[bg=19,fg=18]"
                 mode_normal       "#[bg=19,fg=4]#[bg=4,fg=19]  NORMAL  #[bg=19,fg=4]"
                 mode_tmux         "#[bg=19,fg=16]#[bg=16,fg=19]  PREFIX  #[bg=19,fg=16]"
-                mode_scroll       "#[bg=19,fg=3]#[bg=3,fg=19]   COPY   #[bg=19,fg=3]"
+                mode_scroll       "#[bg=19,fg=3]#[bg=3,fg=19]  SCROLL  #[bg=19,fg=3]"
                 mode_search       "#[bg=19,fg=3]#[bg=3,fg=19]  SEARCH  #[bg=19,fg=3]"
                 mode_enter_search "#[bg=19,fg=3]#[bg=3,fg=19]  SEARCH  #[bg=19,fg=3]"
                 mode_resize       "#[bg=19,fg=6]#[bg=6,fg=19]  RESIZE  #[bg=19,fg=6]"

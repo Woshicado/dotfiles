@@ -136,7 +136,7 @@ local function setup_for_display(display_index)
 		display = display_index,
 		position = position,
 		icon = {
-			string = "|  ",
+			string = "|  ",
 			font = "FiraCode Nerd Font:Bold:14.0",
 			color = colors.grey,
 			padding_left = -2,
@@ -431,13 +431,13 @@ local function setup_for_display(display_index)
 		if total > 0 then
 			notifications:set({
 				drawing = true,
-				icon = { string = "|  ", color = colors.blue },
+				icon = { string = "|  ", color = colors.blue },
 				label = { string = tostring(total), color = colors.blue },
 			})
 		else
 			notifications:set({
 				drawing = true,
-				icon = { string = "|  ", color = colors.grey },
+				icon = { string = "|  ", color = colors.grey },
 				label = { string = "0", color = colors.grey },
 			})
 		end

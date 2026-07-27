@@ -7,12 +7,23 @@ keybinds {
     // tmux.conf:67-69  (unbind C-b; set -g prefix C-Space; bind C-Space send-prefix)
     locked {
         bind "Ctrl Space" { SwitchToMode "Tmux"; }
+        // Normal mode is BROKEN when default_mode is "locked" -- zellij stops
+        // forwarding *any* keystroke to the pane, so the keyboard appears dead
+        // until you get back to Locked.
+        // Upstream bug https://github.com/zellij-org/zellij/issues/3998
+        unbind "Ctrl g"
     }
     shared_except "tmux" "locked" {
         unbind "Ctrl b"
         // zellij's default binds Ctrl-h to Move mode, which would shadow the
         // navigator binding below in normal mode
         unbind "Ctrl h"
+        // The remaining stock mode-entry keys are all keys nvim wants:
+        // Ctrl-o jumplist, Ctrl-n/Ctrl-p completion, Ctrl-t tag pop
+        unbind "Ctrl o"
+        unbind "Ctrl n"
+        unbind "Ctrl p"
+        unbind "Ctrl t"
         bind "Ctrl Space" { SwitchToMode "Tmux"; }
     }
 
@@ -64,20 +75,66 @@ keybinds {
         bind "L" { MovePane "Right"; }
         bind "r" { SwitchToMode "Resize"; }
 
-        // copy mode / sessions
+        // scroll mode / sessions
         bind "[" { SwitchToMode "Scroll"; }                      // tmux copy-mode
         bind "d" { Detach; }
         bind "s" "w" { LaunchOrFocusPlugin "session-manager" { floating true; move_to_focused_tab true; }; SwitchToMode "Locked"; }
     }
 
-    // ---- copy mode --------------------------------------------------------
-    // mode-keys vi (tmux.conf:13). Esc/q leave straight back to locked.
+    // ---- scroll mode ------------------------------------------------------
+    // NOT a copy mode. Zellij has no text cursor and no keyboard selection
+    // (https://github.com/zellij-org/zellij/issues/947, open since 2021)
+
+    // Every exit below lands in Locked, never Normal. The stock bindings for
+    // e / Ctrl-s / Ctrl-c all end in `SwitchToMode "Normal"`, and since this
+    // config does not set clear-defaults=true they merge in unless overridden.
     scroll {
         bind "Esc" "q" { SwitchToMode "Locked"; }
+        bind "e" { EditScrollback; SwitchToMode "Locked"; }
+        bind "Ctrl s" { SwitchToMode "Locked"; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Locked"; }
+
+        // vi motions. Stock zellij puts half-page on bare d/u and page on
+        // bare h/l, which collide with vim's delete/undo and left/right.
+        bind "Ctrl d" { HalfPageScrollDown; }
+        bind "Ctrl u" { HalfPageScrollUp; }
+        bind "Ctrl e" { ScrollDown; }
+        bind "Ctrl y" { ScrollUp; }
+        bind "G" { ScrollToBottom; }
+        // no `gg`: zellij exposes ScrollToBottom but no ScrollToTop
+
+        // search on / and ? rather than stock `s`
+        bind "/" "?" { SwitchToMode "EnterSearch"; SearchInput 0; }
+
+        // only ever copies a *mouse* selection -- see the note above
         bind "y" { Copy; }
     }
+
+    // Post-search navigation. Same motion set, plus n/N instead of n/p.
+    search {
+        bind "q" { SwitchToMode "Locked"; }
+        bind "Ctrl s" { SwitchToMode "Locked"; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Locked"; }
+        unbind "d"
+        unbind "u"
+        unbind "h"
+        unbind "l"
+        bind "Ctrl d" { HalfPageScrollDown; }
+        bind "Ctrl u" { HalfPageScrollUp; }
+        bind "Ctrl e" { ScrollDown; }
+        bind "Ctrl y" { ScrollUp; }
+        bind "G" { ScrollToBottom; }
+        unbind "p"
+        bind "n" { Search "down"; }
+        bind "N" { Search "up"; }
+        bind "/" "?" { SwitchToMode "EnterSearch"; SearchInput 0; }
+    }
+    // Esc AND Enter both go to Locked. Stock zellij sends Enter to Normal from
+    // every one of these modes (https://github.com/zellij-org/zellij/issues/3998)
+    // the other way to end up with a dead keyboard (NORMAL mode)
     shared_among "resize" "move" "session" "search" "tab" "pane" "prompt" {
         bind "Esc" { SwitchToMode "Locked"; }
+        bind "Enter" { SwitchToMode "Locked"; }
     }
 
     // ---- rename modes -----------------------------------------------------
