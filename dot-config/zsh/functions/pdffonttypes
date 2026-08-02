@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+# Just the font *types* in use (Type 1, Type 3, TrueType, CID ...) and which
+# pages use them -- the thing conferences actually restrict. Uses poppler's
+# pdffonts, whose type strings are the canonical ones (it distinguishes
+# Type 1 / Type 1C / CID Type 0C, which the raw /Subtype does not).
+# For the full per-font detail (sizes, embedding, subsetting) use pdffontuse.
+pdffonttypes() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdffonttypes <file.pdf>"; return 1 }
+  local -i pages maxpages=${PDFFONTTYPES_MAXPAGES:-100}
+
+  # Slice the fixed-width "type" column out of pdffonts' table: the dashed
+  # rule on line 2 gives both the column offset and its width.
+  local extract='
+    NR==2 { start = index($0, " ") + 1; len = length($2) }
+    NR>2  { t = substr($0, start, len); sub(/ *$/, "", t)
+            if (t != "") print t (pg ? "\t" pg : "") }'
+
+  pages=$(pdfinfo "$1" 2>/dev/null | awk '/^Pages:/ {print $2}')
+  if (( pages <= 0 )); then
+    print -u2 "pdffonttypes: cannot read $1"; return 1
+  fi
+
+  if (( pages > maxpages )); then
+    print -r -- "(${pages} pages; per-page breakdown skipped)"
+    pdffonts "$1" 2>/dev/null | awk "$extract" | sort -u
+    return
+  fi
+
+  local -i p
+  for (( p = 1; p <= pages; p++ )); do
+    pdffonts -f $p -l $p "$1" 2>/dev/null | awk -v pg=$p "$extract"
+  done | sort -t$'\t' -k1,1 -k2,2n -u | awk -F'\t' '
+    { order[$1] || order[$1] = ++n; pgs[$1] = pgs[$1] " " $2 }
+    END {
+      for (t in pgs) {
+        cnt = split(pgs[t], a, " ")
+        out = ""; i = 1
+        while (i <= cnt) {                    # collapse runs into ranges
+          j = i
+          while (j < cnt && a[j+1] == a[j] + 1) j++
+          out = out (out ? "," : "") (j > i ? a[i] "-" a[j] : a[i])
+          i = j + 1
+        }
+        printf "%-14s pages %s\n", t, out
+      }
+    }' | sort
+}

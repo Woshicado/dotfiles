@@ -1,0 +1,86 @@
+#!/usr/bin/env zsh
+
+# Submission-relevant document facts: PDF version, page geometry (and whether
+# it is consistent), encryption, and the features camera-ready checkers reject
+# -- annotations, JavaScript, embedded files, AcroForms, transparency.
+pdfmeta() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdfmeta <file.pdf>"; return 1 }
+  uv run --with pikepdf python - "$1" <<'PY'
+import sys, os, collections, pikepdf
+from pikepdf import Name
+
+path = sys.argv[1]
+pdf  = pikepdf.open(path)
+
+KNOWN = {(595, 842): "A4", (612, 792): "Letter", (842, 1191): "A3",
+         (420, 595): "A5", (612, 1008): "Legal"}
+
+print(f"file        {os.path.basename(path)}  "
+      f"({os.path.getsize(path)/1024/1024:.2f} MB, {len(pdf.pages)} pages)")
+print(f"version     PDF {pdf.pdf_version}"
+      + ("  linearized" if pdf.is_linearized else ""))
+print(f"encrypted   {'YES -- must be removed for most submissions' if pdf.is_encrypted else 'no'}")
+
+with pdf.open_metadata() as m:
+    prod = m.get("pdf:Producer") or dict(pdf.docinfo).get("/Producer", "-")
+print(f"producer    {str(prod)[:70]}")
+
+# ---- page geometry ----
+geo = collections.Counter()
+crop_differs = rotated = 0
+for p in pdf.pages:
+    mb = [float(x) for x in p.MediaBox]
+    w, h = round(abs(mb[2]-mb[0])), round(abs(mb[3]-mb[1]))
+    geo[(w, h)] += 1
+    if "/CropBox" in p and [float(x) for x in p.CropBox] != mb:
+        crop_differs += 1
+    if int(p.get("/Rotate", 0)) % 360:
+        rotated += 1
+
+print("\ngeometry")
+for (w, h), n in geo.most_common():
+    name = KNOWN.get((w, h)) or KNOWN.get((h, w))
+    name = f"{name}{' landscape' if name and (w > h) else ''}" if name else "non-standard"
+    print(f"  {w}x{h} pt = {w*25.4/72:.0f}x{h*25.4/72:.0f} mm  "
+          f"({w/72:.2f}x{h/72:.2f} in)  {name}  -- {n} page(s)")
+if len(geo) > 1:
+    print("  !! page sizes are inconsistent")
+if crop_differs:
+    print(f"  !! CropBox differs from MediaBox on {crop_differs} page(s) "
+          "(content may be cropped away, or crop marks hidden)")
+if rotated:
+    print(f"  !! /Rotate set on {rotated} page(s)")
+
+# ---- features that trip up checkers ----
+root  = pdf.Root
+flags = []
+annots = collections.Counter()
+transparency = 0
+for p in pdf.pages:
+    for a in p.get("/Annots", []):
+        try: annots[str(a.get("/Subtype", "?")).lstrip("/")] += 1
+        except Exception: pass
+    res = p.get("/Resources", {})
+    for _, g in res.get("/ExtGState", {}).items():
+        try:
+            if g.get("/SMask") not in (None, Name.None_) or float(g.get("/CA", 1)) < 1 \
+               or float(g.get("/ca", 1)) < 1:
+                transparency += 1; break
+        except Exception: pass
+
+if annots:
+    flags.append("annotations: " + ", ".join(f"{k} x{v}" for k, v in annots.most_common()))
+if "/AcroForm" in root:      flags.append("AcroForm (fillable form fields)")
+if "/Names" in root and "/JavaScript" in root.Names:
+    flags.append("!! JavaScript present")
+if "/Names" in root and "/EmbeddedFiles" in root.Names:
+    flags.append("!! embedded file attachments")
+if "/OpenAction" in root:    flags.append("OpenAction (runs on open)")
+if transparency:             flags.append(f"transparency/alpha on {transparency} page(s)")
+if "/Outlines" in root:      flags.append("bookmarks/outline")
+if "/OCProperties" in root:  flags.append("!! optional content layers (OCG)")
+
+print("\nfeatures")
+print("\n".join(f"  {f}" for f in flags) if flags else "  none (clean)")
+PY
+}

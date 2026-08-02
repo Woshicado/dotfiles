@@ -1,0 +1,147 @@
+#!/usr/bin/env zsh
+
+# Which colour models the document actually paints in, split by vector fills
+# vs. raster images, with the pages each appears on. Venues that print offset
+# often require CMYK (or forbid it, for digital-only proceedings), and a stray
+# Separation/spot colour from a figure is a common camera-ready rejection.
+pdfcolor() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdfcolor <file.pdf>"; return 1 }
+  uv run --with pikepdf python - "$1" <<'PY'
+import sys, collections, pikepdf
+from pikepdf import Name
+
+pdf  = pikepdf.open(sys.argv[1])
+seen = collections.defaultdict(set)          # (kind, model) -> pages
+BY_N = {1: "Gray", 3: "RGB", 4: "CMYK"}
+
+def resolve(cs, res, depth=0):
+    """Map a colourspace object to a short model name."""
+    if cs is None or depth > 4:
+        return "?"
+    if isinstance(cs, Name):
+        n = str(cs).lstrip("/")
+        if n.startswith("Device"):
+            return n[6:]
+        if n == "Pattern":
+            return "Pattern"
+        named = (res.get("/ColorSpace", {}) if res is not None else {})
+        try:
+            return resolve(named[cs], res, depth + 1)
+        except Exception:
+            return n
+    try:
+        fam = str(cs[0]).lstrip("/")
+    except Exception:
+        return "?"
+    if fam == "ICCBased":
+        try:
+            return "ICC-" + BY_N.get(int(cs[1].get("/N", 0)), "?")
+        except Exception:
+            return "ICC-?"
+    if fam in ("Indexed", "I"):
+        try:
+            return "Indexed(" + resolve(cs[1], res, depth + 1) + ")"
+        except Exception:
+            return "Indexed"
+    if fam == "Separation":
+        try:
+            return "Separation:" + str(cs[1]).lstrip("/")[:14]
+        except Exception:
+            return "Separation"
+    if fam == "DeviceN":
+        try:
+            return f"DeviceN({len(cs[1])})"
+        except Exception:
+            return "DeviceN"
+    if fam.startswith("Device"):
+        return fam[6:]
+    if fam in ("CalRGB", "Lab"):
+        return fam
+    if fam == "CalGray":
+        return "Gray"
+    return fam
+
+# operator -> model painted directly, no resources lookup needed
+DIRECT = {"g": "Gray", "G": "Gray", "rg": "RGB", "RG": "RGB",
+          "k": "CMYK", "K": "CMYK"}
+
+def walk(owner, res, page_no, depth=0):
+    if depth > 8:
+        return
+    xobjs = res.get("/XObject", {}) if res is not None else {}
+    fill = stroke = None
+    try:
+        stream = pikepdf.parse_content_stream(owner)
+    except Exception:
+        return
+    for ins in stream:
+        ops, op = ins.operands, str(ins.operator)
+        if op in DIRECT:
+            seen[("vector", DIRECT[op])].add(page_no)
+        elif op in ("cs", "CS") and ops:
+            m = resolve(ops[0], res)
+            if op == "cs": fill = m
+            else:          stroke = m
+        elif op in ("sc", "scn"):
+            if fill:   seen[("vector", fill)].add(page_no)
+        elif op in ("SC", "SCN"):
+            if stroke: seen[("vector", stroke)].add(page_no)
+        elif op == "Do" and ops:
+            try:
+                xo = xobjs[ops[0]]
+            except Exception:
+                continue
+            st = xo.get("/Subtype")
+            if st == Name.Form:
+                walk(xo, xo.get("/Resources", res), page_no, depth + 1)
+            elif st == Name.Image:
+                if xo.get("/ImageMask"):
+                    seen[("image", "ImageMask")].add(page_no)
+                else:
+                    seen[("image", resolve(xo.get("/ColorSpace"), res))].add(page_no)
+
+for i, page in enumerate(pdf.pages, 1):
+    if "/Contents" in page:
+        walk(page, page.get("/Resources"), i)
+
+if not seen:
+    print("no painting operators found"); sys.exit(0)
+
+def ranges(nums):
+    nums, out, i = sorted(nums), [], 0
+    while i < len(nums):
+        j = i
+        while j + 1 < len(nums) and nums[j + 1] == nums[j] + 1:
+            j += 1
+        out.append(str(nums[i]) if j == i else f"{nums[i]}-{nums[j]}")
+        i = j + 1
+    return ",".join(out)
+
+for (kind, model) in sorted(seen, key=lambda k: (k[0], -len(seen[k]))):
+    pg = sorted(seen[(kind, model)])
+    print(f"{kind:7} {model:20} {len(pg):3} pg  pages {ranges(pg)}")
+
+# ---- flags ----
+def families(sub):
+    return {m.replace("ICC-", "").split("(")[1].rstrip(")")
+            if m.startswith("Indexed(") else m.replace("ICC-", "")
+            for (k, m) in seen if k == sub or sub == "*"}
+
+fam = families("*")
+has_rgb  = any(f in ("RGB", "CalRGB") for f in fam)
+has_cmyk = "CMYK" in fam
+spot     = sorted({m for (_, m) in seen
+                   if m.startswith(("Separation", "DeviceN"))})
+print()
+if has_rgb and has_cmyk:
+    print("!! mixed RGB and CMYK -- pick one for camera-ready")
+elif has_cmyk:
+    print("CMYK document")
+elif has_rgb:
+    print("RGB document")
+for s in spot:
+    print(f"!! spot/named colour: {s}")
+if "Lab" in fam:
+    print("!! Lab colour present")
+PY
+}

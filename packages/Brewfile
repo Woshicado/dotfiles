@@ -4,7 +4,7 @@ tap "gromgit/fuse", trusted: true
 tap "homebrew/cask"
 tap "homebrew/core"
 tap "jstkdng/programs", trusted: true
-tap "koekeishiya/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
+tap "nikitabobko/tap", trusted: true
 tap "sass/sass", trusted: true
 tap "sergioribera/tap", "https://github.com/SergioRibera/homebrew-tap", trusted: true
 tap "theseal/ssh-askpass", trusted: true
@@ -284,10 +284,6 @@ brew "felixkratz/formulae/sketchybar"
 brew "felixkratz/formulae/svim"
 # Read-write NTFS driver for FUSE
 brew "gromgit/fuse/ntfs-3g-mac"
-# Simple hotkey-daemon for macOS.
-brew "koekeishiya/formulae/skhd"
-# A tiling window manager for macOS based on binary space partitioning.
-brew "koekeishiya/formulae/yabai"
 # Stylesheet Preprocessor
 brew "sass/sass/sass"
 # Take pretty screenshots of your code
@@ -295,6 +291,8 @@ brew "sergioribera/tap/sss_code"
 # Passphrase dialog for use with OpenSSH in macOS
 brew "theseal/ssh-askpass/ssh-askpass"
 # Android SDK component
+# i3-like tiling window manager for macOS (replaced yabai + skhd)
+cask "aerospace"
 cask "android-platform-tools"
 # Tools for building Android applications
 cask "android-studio"

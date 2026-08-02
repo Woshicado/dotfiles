@@ -1,0 +1,151 @@
+#!/usr/bin/env zsh
+
+# Fonts *as actually used*: type, embedding, subsetting, and the effective
+# point sizes they are rendered at. Unlike poppler's pdffonts (which only
+# enumerates the font resources), this walks the content streams, so it
+# reports real sizes even when the producer emits "/F1 1 Tf" and puts the
+# scale in the text matrix (XeLaTeX/dvipdfmx, OCR layers, Canva, ...).
+# Flags Type 3 fonts and missing embedding -- the usual conference blockers.
+pdffontuse() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdffontuse <file.pdf>"; return 1 }
+  uv run --with pikepdf python - "$1" <<'PY'
+import sys, math, collections, pikepdf
+from pikepdf import Name
+
+pdf = pikepdf.open(sys.argv[1])
+IDENT = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+info = {}
+
+def mul(m, n):
+    a1, b1, c1, d1, e1, f1 = m
+    a2, b2, c2, d2, e2, f2 = n
+    return (a1*a2 + b1*c2, a1*b2 + b1*d2,
+            c1*a2 + d1*c2, c1*b2 + d1*d2,
+            e1*a2 + f1*c2 + e2, e1*b2 + f1*d2 + f2)
+
+def num(o):
+    try: return float(o)
+    except Exception: return 0.0
+
+def describe(f):
+    sub  = str(f.get("/Subtype", "?")).lstrip("/")
+    base = str(f.get("/BaseFont", "(none)")).lstrip("/")
+    desc = f.get("/FontDescriptor")
+    if sub == "Type0":                       # descriptor lives on the descendant
+        try:
+            d0 = f["/DescendantFonts"][0]
+            desc = d0.get("/FontDescriptor", desc)
+            sub = "Type0/" + str(d0.get("/Subtype", "?")).lstrip("/")
+        except Exception:
+            pass
+    emb = desc is not None and any(
+        k in desc for k in ("/FontFile", "/FontFile2", "/FontFile3"))
+    if sub == "Type3":                       # glyph procs are inline streams
+        emb = True
+    enc = f.get("/Encoding")
+    if isinstance(enc, Name):   enc = str(enc).lstrip("/")
+    elif enc is not None:       enc = str(enc.get("/BaseEncoding", "dict")).lstrip("/")
+    else:                       enc = "-"
+    subset = len(base) > 7 and base[6] == "+" and base[:6].isupper()
+    return dict(base=base, sub=sub, emb=emb, subset=subset, enc={enc},
+                uni="/ToUnicode" in f,
+                sizes=collections.Counter(), pages=set())
+
+def glyphs(ops, op):
+    try:
+        if op == "Tj":        return len(bytes(ops[0]))
+        if op in ("'", '"'):  return len(bytes(ops[-1]))
+        if op == "TJ":        return sum(len(bytes(e)) for e in ops[0]
+                                         if isinstance(e, pikepdf.String))
+    except Exception:
+        return 1
+    return 0
+
+def walk(owner, res, ctm, page_no, depth=0):
+    if depth > 8: return
+    fonts = res.get("/Font", {})    if res is not None else {}
+    xobjs = res.get("/XObject", {}) if res is not None else {}
+    stack, cur = [], ctm
+    tm = tlm = IDENT
+    cf, cfs = None, 0.0
+    try:
+        stream = pikepdf.parse_content_stream(owner)
+    except Exception:
+        return
+    for ins in stream:
+        ops, op = ins.operands, str(ins.operator)
+        if   op == "q":  stack.append(cur)
+        elif op == "Q":  cur = stack.pop() if stack else cur
+        elif op == "cm" and len(ops) >= 6:
+            cur = mul(tuple(num(o) for o in ops[:6]), cur)
+        elif op == "BT": tm = tlm = IDENT
+        elif op == "Tm" and len(ops) >= 6:
+            tm = tlm = tuple(num(o) for o in ops[:6])
+        elif op in ("Td", "TD") and len(ops) >= 2:
+            tlm = mul((1, 0, 0, 1, num(ops[0]), num(ops[1])), tlm); tm = tlm
+        elif op == "Tf" and len(ops) >= 2:
+            cfs, cf = num(ops[1]), None
+            try:    fobj = fonts[ops[0]]
+            except Exception: fobj = None
+            if fobj is not None:
+                og = getattr(fobj, "objgen", (0, 0))
+                k = og if og != (0, 0) else id(fobj)
+                info.setdefault(k, describe(fobj))
+                cf = info[k]
+        elif op == "Do" and ops:
+            try:    xo = xobjs[ops[0]]
+            except Exception: continue
+            if xo.get("/Subtype") == Name.Form:
+                m = xo.get("/Matrix")
+                m = tuple(num(x) for x in m) if m is not None else IDENT
+                walk(xo, xo.get("/Resources", res), mul(m, cur), page_no, depth+1)
+        if op in ("Tj", "TJ", "'", '"') and cf is not None:
+            n = glyphs(ops, op)
+            if n:
+                comb = mul(tm, cur)
+                cf["sizes"][round(cfs * math.hypot(comb[1], comb[3]), 2)] += n
+                cf["pages"].add(page_no)
+
+for i, page in enumerate(pdf.pages, 1):
+    if "/Contents" in page:
+        walk(page, page.get("/Resources"), IDENT, i)
+
+if not info:
+    print("no text found (image-only / scanned PDF?)"); sys.exit(0)
+
+# merge font objects that are the same face (common: one per page)
+merged = {}
+for r in info.values():
+    m = merged.setdefault((r["base"], r["sub"], r["emb"], r["subset"]), r)
+    if m is not r:
+        m["sizes"].update(r["sizes"]); m["pages"] |= r["pages"]; m["enc"] |= r["enc"]
+
+rows = sorted(merged.values(), key=lambda r: -sum(r["sizes"].values()))
+w = max(12, min(30, max(len(r["base"]) for r in rows)))
+print(f"{'font':{w}}  {'type':13} {'emb':4}{'sub':4}{'uni':4}{'enc':11} sizes pt(glyphs)")
+for r in rows:
+    top = sorted(r["sizes"].items(), key=lambda kv: -kv[1])
+    s = "  ".join(f"{k:g}({v})" for k, v in top[:5])
+    if len(top) > 5: s += f"  +{len(top)-5} more"
+    enc = ",".join(sorted(r["enc"]))
+    print(f"{r['base'][:w]:{w}}  {r['sub'][:13]:13} "
+          f"{'yes' if r['emb'] else 'NO':4}{'yes' if r['subset'] else '-':4}"
+          f"{'yes' if r['uni'] else 'no':4}{enc[:11]:11} {s}")
+
+allsz = collections.Counter()
+for r in rows: allsz.update(r["sizes"])
+body = allsz.most_common(1)[0][0]
+print(f"\nbody text ~{body:g} pt   smallest {min(allsz):g} pt   "
+      f"largest {max(allsz):g} pt   {len(allsz)} distinct sizes")
+
+warn = []
+for r in rows:
+    if r["sub"] == "Type3":
+        pg = ",".join(str(p) for p in sorted(r["pages"])[:8])
+        warn.append(f"Type 3 font: {r['base']}  (page {pg})")
+    if not r["emb"]:
+        warn.append(f"not embedded: {r['base']} ({r['sub']})")
+for x in warn:
+    print(f"!! {x}")
+PY
+}

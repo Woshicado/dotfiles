@@ -1,20 +1,37 @@
 #!/usr/bin/env zsh
 
+# One-shot health check: where the file's weight comes from, plus the
+# submission-compliance basics (fonts, sizes, Type 3, image resolution).
+# Composes pdfmeta / pdfweight / pdfpaths / pdfxobj / pdffontuse / pdfdpi.
 pdftriage() {
-  [[ -f "$1" ]] || { print -u2 "usage: pdftriage <file.pdf>"; return 1 }
-  local wreport preport worst
+  [[ -f "$1" ]] || { print -u2 "usage: pdftriage <file.pdf> [min-dpi]"; return 1 }
+  local wreport preport worst dpi=${2:-300}
+
+  pdfmeta "$1" || return 1
+
   wreport=$(pdfweight "$1") || return 1
   preport=$(pdfpaths "$1") || return 1
 
-  print -P "%B── heaviest pages (bytes) ──%b"
+  print -P "\n%B── heaviest pages (bytes) ──%b"
   print -r -- "$wreport" | head -5
 
   print -P "\n%B── slowest pages (path ops) ──%b"
   print -r -- "$preport" | head -5
 
   worst=${${(z)$(print -r -- "$preport" | head -1)}[-1]}
-  [[ -n "$worst" ]] || { print -u2 "couldn't determine worst page"; return 1 }
+  if [[ -n "$worst" ]]; then
+    print -P "\n%B── XObjects on page $worst ──%b"
+    pdfxobj "$1" "$worst"
+  else
+    print -u2 "couldn't determine worst page"
+  fi
 
-  print -P "\n%B── XObjects on page $worst ──%b"
-  pdfxobj "$1" "$worst"
+  print -P "\n%B── font types ──%b"
+  pdffonttypes "$1"
+
+  print -P "\n%B── colour ──%b"
+  pdfcolor "$1"
+
+  print -P "\n%B── low-res images (<${dpi} dpi) ──%b"
+  pdfdpi "$1" "$dpi"
 }

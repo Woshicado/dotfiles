@@ -2,6 +2,9 @@ return {
   defaults = { lazy = true },
   install = { colorscheme = { "kanagawa" } },
 
+  -- Plugins with `dev = true` are loaded from here instead of being cloned.
+  dev = { path = "~/projects", patterns = {}, fallback = true },
+
   ui = {
     icons = {
       ft = "",

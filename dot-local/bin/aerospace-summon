@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# aerospace-summon BUNDLE_ID [APP_NAME]
+#
+# Bring an app's window to the *current* workspace and focus it.
+#
+# AeroSpace has no sticky / show-on-all-workspaces feature, so a window that
+# should feel "always reachable" has to be fetched on demand instead.
+
+set -euo pipefail
+
+AEROSPACE=/opt/homebrew/bin/aerospace
+
+bundle_id="${1:?usage: aerospace-summon BUNDLE_ID [APP_NAME]}"
+app_name="${2:-}"
+
+window_id="$(
+	"$AEROSPACE" list-windows --monitor all \
+		--app-bundle-id "$bundle_id" \
+		--format '%{window-id}' 2>/dev/null | head -1
+)"
+
+if [ -z "$window_id" ]; then
+	[ -n "$app_name" ] && open -a "$app_name"
+	exit 0
+fi
+
+workspace="$("$AEROSPACE" list-workspaces --focused)"
+
+"$AEROSPACE" move-node-to-workspace --window-id "$window_id" "$workspace"
+"$AEROSPACE" focus --window-id "$window_id"

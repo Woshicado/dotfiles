@@ -80,7 +80,7 @@ map({ "i", "t" }, "<M-S-u>", "Ü", { desc = "Ü" })
 map({ "i", "t" }, "<M-S-a>", "Ä", { desc = "Ä" })
 
 -- Terminal mappings
-map("t", "<c-\\><ESC>", "<C-\\><C-n>", { noremap = true, desc = "Defocus terminal" })
+map("t", "<c-x>", "<C-\\><C-n>", { noremap = true, desc = "Defocus terminal" })
 
 -- Center screen on navigation with ctrl-u/d
 map("n", "<C-u>", "<C-u>zz", { desc = "Center screen on navigation" })
@@ -115,9 +115,6 @@ map("i", "<A-Up>", "<Esc>:m .-2<cr>==gi", { desc = "Move line up", noremap = tru
 map("i", "<A-k>", "<Esc>:m .-2<cr>==gi", { desc = "Move line up", noremap = true })
 map("i", "<A-Down>", "<Esc>:m .+1<cr>==gi", { desc = "Move line down", noremap = true })
 map("i", "<A-j>", "<Esc>:m .+1<cr>==gi", { desc = "Move line down", noremap = true })
-
--- Delete word
-map("n", "<C-w>", [["_db]], { desc = "Delete word", noremap = true })
 
 -- Toggle comment s
 map("n", "<M-/>", "<leader>/==", { desc = "Toggle comment", remap = true })

@@ -140,6 +140,10 @@ layout {
                 tab_normal    "#[bg=19,fg=20] {index} {name} "
                 tab_active    "#[bg=18,fg=19]#[bg=18,fg=20] {index} {name} #[bg=19,fg=18]"
 
+                tab_normal_bell          "#[bg=19,fg=16,bold] {index} {name}{bell_indicator} "
+                tab_normal_flashing_bell "#[bg=16,fg=19,bold] {index} {name}{bell_indicator} "
+                tab_bell_indicator       " ●"
+
                 tab_fullscreen_indicator " "
                 tab_floating_indicator   " "
                 tab_sync_indicator       " "

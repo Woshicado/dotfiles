@@ -154,9 +154,14 @@ keybinds {
         // vim-zellij-navigator: seamless Ctrl-hjkl between nvim splits and
         // zellij panes, replacing christoomey/vim-tmux-navigator (tmux.conf:8).
         // The nvim half is muxnavigator.lua / smart-splits.lua
+        // move_focus, NOT move_focus_or_tab: at the leftmost/rightmost pane this
+        // is a no-op instead of jumping to the previous/next tab. Matches tmux,
+        // and matches what Ctrl-j/k already did -- the old asymmetry meant
+        // horizontal navigation silently changed tabs. It also removes an
+        // inconsistency with nvim, where the tab fallback never worked anyway.
         bind "Ctrl h" {
             MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
-                name "move_focus_or_tab"
+                name "move_focus"
                 payload "left"
                 move_mod "ctrl"
             }
@@ -177,7 +182,7 @@ keybinds {
         }
         bind "Ctrl l" {
             MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm" {
-                name "move_focus_or_tab"
+                name "move_focus"
                 payload "right"
                 move_mod "ctrl"
             }
@@ -197,6 +202,13 @@ keybinds {
 }
 
 // ---- options --------------------------------------------------------------
+
+// `set -g default-terminal "tmux-256color"` (tmux.conf:103). zellij has no
+// equivalent option and leaves TERM alone, so kitty's `xterm-kitty` leaks into
+// panes -- and, over ssh, onto remotes whose terminfo db has never heard of it
+env {
+    TERM "xterm-256color"
+}
 
 default_mode "locked"
 default_layout "default"

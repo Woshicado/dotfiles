@@ -1,0 +1,90 @@
+#!/usr/bin/env zsh
+
+# Effective resolution of every placed raster image: pixel dimensions vs the
+# size it is actually drawn at, which is what determines print quality.
+# Needs the CTM, so it walks content streams (incl. nested Form XObjects).
+# Flags anything under <min-dpi> (default 300) -- camera-ready checkers and
+# IEEE PDF eXpress reject low-res figures.
+pdfdpi() {
+  [[ -f "$1" ]] || { print -u2 "usage: pdfdpi <file.pdf> [min-dpi]"; return 1 }
+  uv run --with pikepdf python - "$1" "${2:-300}" <<'PY'
+import sys, math, pikepdf
+from pikepdf import Name
+
+pdf   = pikepdf.open(sys.argv[1])
+FLOOR = float(sys.argv[2])
+IDENT = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+rows  = []
+
+def mul(m, n):
+    a1, b1, c1, d1, e1, f1 = m
+    a2, b2, c2, d2, e2, f2 = n
+    return (a1*a2 + b1*c2, a1*b2 + b1*d2,
+            c1*a2 + d1*c2, c1*b2 + d1*d2,
+            e1*a2 + f1*c2 + e2, e1*b2 + f1*d2 + f2)
+
+def num(o):
+    try: return float(o)
+    except Exception: return 0.0
+
+def cs_of(xo):
+    cs = xo.get("/ColorSpace")
+    if cs is None: return "-"
+    if isinstance(cs, Name): return str(cs).lstrip("/").replace("Device", "")
+    try: return str(cs[0]).lstrip("/")[:10]
+    except Exception: return "array"
+
+def walk(owner, res, ctm, page_no, depth=0):
+    if depth > 8: return
+    xobjs = res.get("/XObject", {}) if res is not None else {}
+    stack, cur = [], ctm
+    try: stream = pikepdf.parse_content_stream(owner)
+    except Exception: return
+    for ins in stream:
+        ops, op = ins.operands, str(ins.operator)
+        if   op == "q": stack.append(cur)
+        elif op == "Q": cur = stack.pop() if stack else cur
+        elif op == "cm" and len(ops) >= 6:
+            cur = mul(tuple(num(o) for o in ops[:6]), cur)
+        elif op == "Do" and ops:
+            try: xo = xobjs[ops[0]]
+            except Exception: continue
+            st = xo.get("/Subtype")
+            if st == Name.Form:
+                m = xo.get("/Matrix")
+                m = tuple(num(x) for x in m) if m is not None else IDENT
+                walk(xo, xo.get("/Resources", res), mul(m, cur), page_no, depth+1)
+            elif st == Name.Image:
+                # unit square -> image area; column norms give drawn extent
+                wpt = math.hypot(cur[0], cur[1])
+                hpt = math.hypot(cur[2], cur[3])
+                px, py = int(xo.get("/Width", 0)), int(xo.get("/Height", 0))
+                if wpt < 0.01 or hpt < 0.01: continue
+                filt = xo.get("/Filter")
+                filt = (str(filt[-1]) if not isinstance(filt, (Name, type(None)))
+                        else str(filt)).lstrip("/").replace("Decode", "")[:9]
+                rows.append((min(px/(wpt/72), py/(hpt/72)), page_no, str(ops[0]),
+                             px, py, wpt, hpt, cs_of(xo),
+                             int(xo.get("/BitsPerComponent", 0)), filt))
+
+for i, page in enumerate(pdf.pages, 1):
+    if "/Contents" in page:
+        walk(page, page.get("/Resources"), IDENT, i)
+
+if not rows:
+    print("no raster images found (all-vector PDF)"); sys.exit(0)
+
+low = sorted(r for r in rows if r[0] < FLOOR)
+if not low:
+    print(f"{len(rows)} placed image(s), all at or above {FLOOR:g} dpi")
+    sys.exit(0)
+
+print(f"{'dpi':>7}  {'pg':>3}  {'name':10} {'pixels':>13}  {'drawn (pt)':>13}  "
+      f"{'cs':7} {'bpc':>3}  filter")
+for dpi, pg, name, px, py, wpt, hpt, cs, bpc, filt in low:
+    print(f"{dpi:7.0f}  {pg:3}  {name[:10]:10} {f'{px}x{py}':>13}  "
+          f"{f'{wpt:.0f}x{hpt:.0f}':>13}  {cs:7} {bpc:3}  {filt}")
+
+print(f"\n{len(low)} of {len(rows)} placed image(s) below {FLOOR:g} dpi")
+PY
+}

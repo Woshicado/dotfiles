@@ -107,12 +107,14 @@
         {
           "key": "v",
           "type": "command",
-          "value": "$HOME/.local/bin/toggle_app.sh 'OpenVPN Connect'"
+          "value": "$HOME/.local/bin/aerospace-summon org.openvpn.client.app \"OpenVPN Connect\"",
+          "label": "summon OpenVPN Connect"
         },
         {
           "key": "x",
           "type": "command",
-          "value": "$HOME/.local/bin/toggle_app.sh 'KeePassXC'"
+          "value": "$HOME/.local/bin/aerospace-summon org.keepassxc.keepassxc \"KeePassXC\"",
+          "label": "summon KeePassXC"
         }
       ],
       "key": "o",
@@ -146,41 +148,103 @@
         {
           "key": "h",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m query --windows | /opt/homebrew/bin/jq -r '.[] | select(.\"is-floating\" == true) | .app' | xargs -I{} /usr/bin/osascript -e \"tell application \\\"System Events\\\" to set visible of process \\\"{}\\\" to false\""
+          "value": "/opt/homebrew/bin/aerospace list-windows --all --json --format '%{app-name}%{window-layout}' | /opt/homebrew/bin/jq -r '.[] | select(.\"window-layout\" == \"floating\") | .\"app-name\"' | xargs -I{} /usr/bin/osascript -e \"tell application \\\"System Events\\\" to set visible of process \\\"{}\\\" to false\""
         },
         {
-          "key": "y",
+          "key": "a",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m space --layout \"$(/opt/homebrew/bin/yabai -m query --spaces --space | /opt/homebrew/bin/jq -r 'if .type == \"bsp\" then \"stack\" else \"bsp\" end')\""
+          "value": "/opt/homebrew/bin/aerospace layout tiles accordion"
         },
         {
           "key": "b",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m space --balance"
+          "value": "/opt/homebrew/bin/aerospace balance-sizes"
         },
         {
           "key": "m",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+          "value": "/opt/homebrew/bin/aerospace fullscreen"
         },
         {
           "key": "r",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m space --rotate 270"
+          "value": "/opt/homebrew/bin/aerospace layout tiles horizontal vertical"
         },
         {
           "key": "w",
           "type": "command",
-          "value": "/opt/homebrew/bin/yabai -m window --close"
+          "value": "/opt/homebrew/bin/aerospace close"
         },
         {
           "key": "R",
           "type": "command",
-          "value": "killall yabai"
+          "value": "/opt/homebrew/bin/aerospace reload-config"
         }
       ],
-      "key": "y",
-      "label": "yabai",
+      "key": "a",
+      "label": "aerospace",
+      "type": "group"
+    },
+    {
+      "actions": [
+        {
+          "key": "h",
+          "type": "command",
+          "value": "/opt/homebrew/bin/aerospace focus-monitor left 2>/dev/null || true",
+          "label": "focus left"
+        },
+        {
+          "key": "j",
+          "type": "command",
+          "value": "/opt/homebrew/bin/aerospace focus-monitor down 2>/dev/null || true",
+          "label": "focus down"
+        },
+        {
+          "key": "k",
+          "type": "command",
+          "value": "/opt/homebrew/bin/aerospace focus-monitor up 2>/dev/null || true",
+          "label": "focus up"
+        },
+        {
+          "key": "l",
+          "type": "command",
+          "value": "/opt/homebrew/bin/aerospace focus-monitor right 2>/dev/null || true",
+          "label": "focus right"
+        },
+        {
+          "key": "m",
+          "type": "group",
+          "label": "move window",
+          "actions": [
+            {
+              "key": "h",
+              "type": "command",
+              "value": "/opt/homebrew/bin/aerospace move-node-to-monitor --focus-follows-window left 2>/dev/null || true",
+              "label": "move left"
+            },
+            {
+              "key": "j",
+              "type": "command",
+              "value": "/opt/homebrew/bin/aerospace move-node-to-monitor --focus-follows-window down 2>/dev/null || true",
+              "label": "move down"
+            },
+            {
+              "key": "k",
+              "type": "command",
+              "value": "/opt/homebrew/bin/aerospace move-node-to-monitor --focus-follows-window up 2>/dev/null || true",
+              "label": "move up"
+            },
+            {
+              "key": "l",
+              "type": "command",
+              "value": "/opt/homebrew/bin/aerospace move-node-to-monitor --focus-follows-window right 2>/dev/null || true",
+              "label": "move right"
+            }
+          ]
+        }
+      ],
+      "key": "d",
+      "label": "display",
       "type": "group"
     },
     {
@@ -190,49 +254,22 @@
             {
               "key": "h",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --display west; /opt/homebrew/bin/yabai -m display --focus west 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace move left 2>/dev/null || true"
             },
             {
               "key": "l",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --display east; /opt/homebrew/bin/yabai -m display --focus east 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace move right 2>/dev/null || true"
             },
             {
               "key": "j",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --display south; /opt/homebrew/bin/yabai -m display --focus south 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace move down 2>/dev/null || true"
             },
             {
               "key": "k",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --display north; /opt/homebrew/bin/yabai -m display --focus north 2>/dev/null || true"
-            }
-          ],
-          "key": "d",
-          "label": "display",
-          "type": "group"
-        },
-        {
-          "actions": [
-            {
-              "key": "h",
-              "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --swap west 2>/dev/null || true"
-            },
-            {
-              "key": "l",
-              "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --swap east 2>/dev/null || true"
-            },
-            {
-              "key": "j",
-              "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --swap south 2>/dev/null || true"
-            },
-            {
-              "key": "k",
-              "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --swap north 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace move up 2>/dev/null || true"
             }
           ],
           "key": "m",
@@ -242,51 +279,24 @@
         {
           "actions": [
             {
-              "actions": [
-                {
-                  "key": "h",
-                  "type": "command",
-                  "value": "/opt/homebrew/bin/yabai -m display --focus west 2>/dev/null || true"
-                },
-                {
-                  "key": "l",
-                  "type": "command",
-                  "value": "/opt/homebrew/bin/yabai -m display --focus east 2>/dev/null || true"
-                },
-                {
-                  "key": "j",
-                  "type": "command",
-                  "value": "/opt/homebrew/bin/yabai -m display --focus south 2>/dev/null || true"
-                },
-                {
-                  "key": "k",
-                  "type": "command",
-                  "value": "/opt/homebrew/bin/yabai -m display --focus north 2>/dev/null || true"
-                }
-              ],
-              "key": "d",
-              "label": "display",
-              "type": "group"
-            },
-            {
               "key": "h",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --focus west 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace focus left 2>/dev/null || true"
             },
             {
               "key": "l",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --focus east 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace focus right 2>/dev/null || true"
             },
             {
               "key": "j",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --focus south 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace focus down 2>/dev/null || true"
             },
             {
               "key": "k",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --focus north 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace focus up 2>/dev/null || true"
             }
           ],
           "key": "f",
@@ -298,22 +308,22 @@
             {
               "key": "h",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --resize left:-20:0 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace resize width -20 2>/dev/null || true"
             },
             {
               "key": "l",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --resize right:20:0 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace resize width +20 2>/dev/null || true"
             },
             {
               "key": "j",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --resize top:0:20 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace resize height +20 2>/dev/null || true"
             },
             {
               "key": "k",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m window --resize bottom:0:-20 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace resize height -20 2>/dev/null || true"
             }
           ],
           "key": "s",
@@ -325,52 +335,52 @@
             {
               "key": "1",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 1 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 1 2>/dev/null || true"
             },
             {
               "key": "2",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 2 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 2 2>/dev/null || true"
             },
             {
               "key": "3",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 3 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 3 2>/dev/null || true"
             },
             {
               "key": "4",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 4 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 4 2>/dev/null || true"
             },
             {
               "key": "5",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 5 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 5 2>/dev/null || true"
             },
             {
               "key": "6",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 6 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 6 2>/dev/null || true"
             },
             {
               "key": "7",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 7 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 7 2>/dev/null || true"
             },
             {
               "key": "8",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 8 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 8 2>/dev/null || true"
             },
             {
               "key": "9",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 9 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 9 2>/dev/null || true"
             },
             {
               "key": "0",
               "type": "command",
-              "value": "/opt/homebrew/bin/yabai -m space --focus 0 2>/dev/null || true"
+              "value": "/opt/homebrew/bin/aerospace workspace 0 2>/dev/null || true"
             }
           ],
           "key": "w",
@@ -384,11 +394,6 @@
     },
     {
       "actions": [
-        {
-          "key": "y",
-          "type": "command",
-          "value": "killall yabai"
-        },
         {
           "key": "s",
           "type": "command",
