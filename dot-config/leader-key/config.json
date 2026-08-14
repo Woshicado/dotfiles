@@ -156,6 +156,11 @@
           "value": "/opt/homebrew/bin/aerospace layout tiles accordion"
         },
         {
+          "key": "f",
+          "type": "command",
+          "value": "/opt/homebrew/bin/aerospace layout floating tiling"
+        },
+        {
           "key": "b",
           "type": "command",
           "value": "/opt/homebrew/bin/aerospace balance-sizes"

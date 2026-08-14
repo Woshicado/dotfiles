@@ -208,6 +208,8 @@ keybinds {
 // panes -- and, over ssh, onto remotes whose terminfo db has never heard of it
 env {
     TERM "xterm-256color"
+    EDITOR "nvim"
+    VISUAL "nvim"
 }
 
 default_mode "locked"

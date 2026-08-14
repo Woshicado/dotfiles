@@ -602,19 +602,6 @@
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "slash",
-                                    "modifiers": { "mandatory": ["left_option"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "slash",
-                                        "modifiers": ["left_option", "shift"]
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
-                                "from": {
                                     "key_code": "n",
                                     "modifiers": { "mandatory": ["left_option"] }
                                 },
@@ -652,19 +639,6 @@
                                 "to": [
                                     {
                                         "key_code": "e",
-                                        "modifiers": ["left_option"]
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
-                                "from": {
-                                    "key_code": "1",
-                                    "modifiers": { "mandatory": ["left_option", "shift"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "1",
                                         "modifiers": ["left_option"]
                                     }
                                 ],
@@ -722,19 +696,6 @@
                                 "to": [
                                     {
                                         "key_code": "e",
-                                        "modifiers": ["right_option"]
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
-                                "from": {
-                                    "key_code": "1",
-                                    "modifiers": { "mandatory": ["right_option", "shift"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "1",
                                         "modifiers": ["right_option"]
                                     }
                                 ],

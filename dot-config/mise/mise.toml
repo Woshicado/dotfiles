@@ -8,6 +8,7 @@ minimum_release_age = "3d"
 [env]
 
 [tools]
+"cargo:tree-sitter-cli" = "latest"
 "github:alexzielenski/mousecape" = "latest"
 "github:pdobsan/oama" = "latest"
 go = "latest"

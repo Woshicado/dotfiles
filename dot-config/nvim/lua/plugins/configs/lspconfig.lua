@@ -212,6 +212,11 @@ return {
 			},
 		}
 
+		local drop_filetypes = {
+			tailwindcss = { markdown = true },
+			ltex_plus = { markdown = true, gitcommit = true },
+		}
+
 		-- Configure each server
 		for _, lsp in ipairs(servers) do
 			local config = {
@@ -219,6 +224,13 @@ return {
 				capabilities = capabilities,
 				settings = server_settings[lsp],
 			}
+			local drop = drop_filetypes[lsp]
+			if drop then
+				local defaults = vim.lsp.config[lsp] and vim.lsp.config[lsp].filetypes or {}
+				config.filetypes = vim.tbl_filter(function(ft)
+					return not drop[ft]
+				end, defaults)
+			end
 			vim.lsp.config(lsp, config)
 		end
 

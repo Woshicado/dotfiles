@@ -335,6 +335,10 @@ run = 'move-node-to-workspace B'
 if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace B'
 
+[[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = 'move-node-to-workspace B'
+
 # --- Z: Zotero ---
 [[on-window-detected]]
 if.app-id = 'org.zotero.zotero'
@@ -400,3 +404,23 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'cc.ffitch.shottr'
 run = 'layout floating'
+
+# Adobe apps not recognized
+[[on-window-detected]]
+if.app-id = 'com.adobe.Photoshop'
+run = 'layout tiling'
+
+[[on-window-detected]]
+if.app-id = 'com.adobe.illustrator'
+run = 'layout tiling'
+
+[[on-window-detected]]
+if.app-id = 'com.adobe.InDesign'
+run = 'layout tiling'
+
+[[on-window-detected]]
+if.app-id = 'com.adobe.LightroomClassicCC7'
+run = 'layout tiling'
+
+## AFTER EFFECTS
+## PREMIERE PRO
