@@ -307,7 +307,6 @@ return {
 
 		sources = {
 			default = {
-				"vimtex",
 				"lsp",
 				"path",
 				"snippets",
@@ -315,6 +314,13 @@ return {
 				"dictionary",
 				"emoji",
 			},
+
+			per_filetype = {
+				tex = { inherit_defaults = true, "vimtex" },
+				plaintex = { inherit_defaults = true, "vimtex" },
+				bib = { inherit_defaults = true, "vimtex" },
+			},
+
 			providers = {
 				vimtex = {
 					name = "vimtex",
@@ -358,7 +364,7 @@ return {
 					name = "LSP",
 					module = "blink.cmp.sources.lsp",
 					opts = { tailwind_color_icon = "󱓻" },
-					async = false, -- Whether we should show the completions before this provider returns, without waiting for it
+					async = true,
 					timeout_ms = 1000, -- How long to wait for the provider to return before showing completions and treating it as asynchronous
 					transform_items = function(_, items)
 						local types = require("blink.cmp.types").CompletionItemKind

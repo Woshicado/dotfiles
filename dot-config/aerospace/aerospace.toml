@@ -17,6 +17,9 @@ config-version = 2
 after-startup-command = [
   'exec-and-forget /bin/bash -c "pkill -x borders; exec borders style=round background_color=0x302c2e34 active_color=\"glow(0xff95e6cb)\" inactive_color=0xcced8274 hidpi=off width=8.0 ax_focus=on"',
 
+  # Start mozilla apps in normal mode, even when holding alt/opt
+  'exec-and-forget launchctl setenv MOZ_DISABLE_SAFE_MODE_KEY 1',
+
   # Per-workspace default layout. The global default is
   # default-root-container-layout = 'tiles'; this overrides it for W only.
   # Setting it once at startup is enough: the root container belongs to the

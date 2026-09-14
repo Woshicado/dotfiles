@@ -18,6 +18,7 @@ go = "latest"
 "pipx:mypy" = "latest"
 "pipx:pynvim" = "latest"
 "pipx:timetagger_cli" = "latest"
+"pipx:zotero-mcp-server" = { version = "latest", extras = "all" }
 usage = "latest"
 uv = "latest"
 

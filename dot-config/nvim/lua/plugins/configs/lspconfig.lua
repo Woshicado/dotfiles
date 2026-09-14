@@ -4,7 +4,7 @@ vim.lsp.log.set_level("error")
 
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+	event = "VeryLazy",
 	dependencies = { "barreiroleo/ltex_extra.nvim" },
 	config = function()
 		local capabilities = require("blink.cmp").get_lsp_capabilities()
