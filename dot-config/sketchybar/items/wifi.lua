@@ -2,80 +2,26 @@ local icons = require("icons")
 local colors = require("colors")
 local settings = require("settings")
 
--- Execute the event provider binary which provides the event "network_update"
--- for the network interface "en0", which is fired every 2.0 seconds.
-sbar.exec(
-	"killall network_load >/dev/null; $CONFIG_DIR/helpers/event_providers/network_load/bin/network_load en0 network_update 2.0"
-)
-
 local popup_width = 250
 
-local wifi_up = sbar.add("item", "items.wifi1", {
+local wifi = sbar.add("item", "items.wifi", {
 	position = "right",
-	padding_left = -5,
-	width = 0,
-	icon = {
-		padding_right = 0,
-		font = {
-			style = settings.font.style_map["Bold"],
-			size = 9.0,
-		},
-		string = icons.wifi.upload,
-	},
-	label = {
-		font = {
-			family = settings.font.numbers,
-			style = settings.font.style_map["Bold"],
-			size = 9.0,
-		},
-		color = colors.red,
-		string = "??? Bps",
-		width = 44,
-	},
-	y_offset = 4,
-})
-
-local wifi_down = sbar.add("item", "items.wifi2", {
-	position = "right",
-	padding_left = -5,
-	icon = {
-		padding_right = 0,
-		font = {
-			style = settings.font.style_map["Bold"],
-			size = 9.0,
-		},
-		string = icons.wifi.download,
-	},
-	label = {
-		font = {
-			family = settings.font.numbers,
-			style = settings.font.style_map["Bold"],
-			size = 9.0,
-		},
-		color = colors.blue,
-		string = "??? Bps",
-		width = 44,
-	},
-	y_offset = -4,
-})
-
-local wifi = sbar.add("item", "items.wifi.padding", {
-	position = "right",
+	-- Paddings are tuned so the icons in the shared pill sit about 12 pt apart
+	-- with about 9 pt to the pill's edge.
+	padding_left = 3,
+	padding_right = 2,
 	label = { drawing = false },
-})
-
--- Background around the item
-local wifi_bracket = sbar.add("bracket", "items.wifi.bracket", {
-	wifi.name,
-	wifi_up.name,
-	wifi_down.name,
-}, {
-	background = { color = colors.bg1 },
 	popup = { align = "center", height = 30 },
 })
 
+-- One pill for the toggles group: amphetamine, focus and vpn (items/action_items.lua),
+-- bluetooth (items/bluetooth.lua), both loaded before this, and wifi.
+sbar.add("bracket", "items.toggles.bracket", { "amphetamine", "focus", "protonvpn", "bluetooth", wifi.name }, {
+	background = { color = colors.bg1 },
+})
+
 local ssid = sbar.add("item", {
-	position = "popup." .. wifi_bracket.name,
+	position = "popup." .. wifi.name,
 	icon = {
 		font = {
 			style = settings.font.style_map["Bold"],
@@ -100,7 +46,7 @@ local ssid = sbar.add("item", {
 })
 
 local hostname = sbar.add("item", {
-	position = "popup." .. wifi_bracket.name,
+	position = "popup." .. wifi.name,
 	icon = {
 		align = "left",
 		string = "Hostname:",
@@ -115,7 +61,7 @@ local hostname = sbar.add("item", {
 })
 
 local ip = sbar.add("item", {
-	position = "popup." .. wifi_bracket.name,
+	position = "popup." .. wifi.name,
 	icon = {
 		align = "left",
 		string = "IP:",
@@ -129,7 +75,7 @@ local ip = sbar.add("item", {
 })
 
 local mask = sbar.add("item", {
-	position = "popup." .. wifi_bracket.name,
+	position = "popup." .. wifi.name,
 	icon = {
 		align = "left",
 		string = "Subnet mask:",
@@ -143,7 +89,7 @@ local mask = sbar.add("item", {
 })
 
 local router = sbar.add("item", {
-	position = "popup." .. wifi_bracket.name,
+	position = "popup." .. wifi.name,
 	icon = {
 		align = "left",
 		string = "Router:",
@@ -158,25 +104,6 @@ local router = sbar.add("item", {
 
 sbar.add("item", { position = "right", width = settings.group_paddings })
 
-wifi_up:subscribe("network_update", function(env)
-	local up_color = (env.upload == "000 Bps") and colors.grey or colors.red
-	local down_color = (env.download == "000 Bps") and colors.grey or colors.blue
-	wifi_up:set({
-		icon = { color = up_color },
-		label = {
-			string = env.upload,
-			color = up_color,
-		},
-	})
-	wifi_down:set({
-		icon = { color = down_color },
-		label = {
-			string = env.download,
-			color = down_color,
-		},
-	})
-end)
-
 wifi:subscribe({ "wifi_change", "system_woke" }, function(env)
 	sbar.exec("ipconfig getifaddr en0", function(ip)
 		local connected = not (ip == "")
@@ -190,13 +117,13 @@ wifi:subscribe({ "wifi_change", "system_woke" }, function(env)
 end)
 
 local function hide_details()
-	wifi_bracket:set({ popup = { drawing = false } })
+	wifi:set({ popup = { drawing = false } })
 end
 
 local function toggle_details()
-	local should_draw = wifi_bracket:query().popup.drawing == "off"
+	local should_draw = wifi:query().popup.drawing == "off"
 	if should_draw then
-		wifi_bracket:set({ popup = { drawing = true } })
+		wifi:set({ popup = { drawing = true } })
 		sbar.exec("networksetup -getcomputername", function(result)
 			hostname:set({ label = result })
 		end)
@@ -217,10 +144,13 @@ local function toggle_details()
 	end
 end
 
-wifi_up:subscribe("mouse.clicked", toggle_details)
-wifi_down:subscribe("mouse.clicked", toggle_details)
-wifi:subscribe("mouse.clicked", function()
-	sbar.exec("open 'x-apple.systempreferences:com.apple.wifi-settings'")
+wifi:subscribe("mouse.clicked", function(env)
+	if env.BUTTON == "right" then -- System Settings
+		hide_details()
+		sbar.exec("open 'x-apple.systempreferences:com.apple.wifi-settings'")
+	else -- network details
+		toggle_details()
+	end
 end)
 wifi:subscribe("mouse.exited.global", hide_details)
 

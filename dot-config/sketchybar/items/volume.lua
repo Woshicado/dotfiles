@@ -10,6 +10,7 @@ local volume_percent = sbar.add("item", "items.volume1", {
 	label = {
 		string = "??%",
 		padding_left = -1,
+		padding_right = 2,
 		font = { family = settings.font.numbers },
 	},
 })
@@ -41,17 +42,10 @@ local volume_bracket = sbar.add("bracket", "items.volume.bracket", {
 	volume_icon.name,
 	volume_percent.name,
 }, {
-	background = {
-		color = colors.transparent,
-		height = 30,
-		border_color = colors.grey,
-	},
+	-- Only the anchor for the popup; the visible pill is shared with the battery
+	-- and added in items/battery.lua.
+	background = { drawing = false },
 	popup = { align = "center" },
-})
-
-sbar.add("item", "items.volume.padding", {
-	position = "right",
-	width = settings.group_paddings,
 })
 
 local volume_slider = sbar.add("slider", popup_width, {

@@ -51,6 +51,10 @@ local function update_spotify()
 			-- Clean up result (remove newlines)
 			local status = result:gsub("\n", "")
 
+			-- The gap after the Spotify pill only belongs there while the pill does;
+			-- otherwise it doubles the gap between its two neighbours.
+			sbar.set("items.spotify.padding", { drawing = not (status == "stopped" or status == "") })
+
 			if status == "stopped" or status == "" then
 				-- Hide entirely if Spotify isn't running
 				spotify_anchor:set({ drawing = false })

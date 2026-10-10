@@ -4,6 +4,10 @@ local settings = require("settings")
 
 local battery = sbar.add("item", "items.battery", {
 	position = "right",
+	-- Spacing within the shared power pill: about 12 pt to the volume icon. The
+	-- label is never used, and its default paddings would widen the gap.
+	padding_right = 3,
+	label = { drawing = false },
 	icon = {
 		font = {
 			style = settings.font.style_map["Regular"],
@@ -109,12 +113,10 @@ battery:subscribe("mouse.clicked", function(env)
 	end
 end)
 
-sbar.add("bracket", "items.battery.bracket", { battery.name }, {
-	background = {
-		color = colors.transparent,
-		height = 30,
-		border_color = colors.grey,
-	},
+-- One pill for the power and sound group: volume (items/volume.lua, loaded
+-- before this) and battery.
+sbar.add("bracket", "items.power.bracket", { "items.volume2", "items.volume1", battery.name }, {
+	background = { color = colors.bg1 },
 })
 
 sbar.add("item", "items.battery.padding", {

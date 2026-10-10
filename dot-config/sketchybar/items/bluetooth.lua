@@ -13,6 +13,9 @@ local idle_color = colors.white -- or colors.fg if you prefer
 
 local bluetooth = sbar.add("item", "bluetooth", {
 	position = "right",
+	-- Spacing within the shared toggles pill, see items/wifi.lua.
+	padding_left = 2,
+	padding_right = 2,
 	icon = {
 		string = icon_off,
 		font = {
@@ -25,8 +28,11 @@ local bluetooth = sbar.add("item", "bluetooth", {
 	},
 	label = {
 		string = "",
-		padding_right = 6,
-    padding_left = -2,
+		-- Same count style as the Claude badge; at the default 13 pt the digit sits
+		-- half a point below the icon and whole-point offsets cannot correct that.
+		font = { style = settings.font.style_map["Bold"], size = 11.0 },
+		padding_right = 2,
+		padding_left = -2,
 	},
 	-- Bluetooth power/connection state changes rarely; poll infrequently.
 	update_freq = 60,
@@ -72,13 +78,6 @@ end)
 bluetooth:subscribe("routine", update_bluetooth)
 bluetooth:subscribe("forced", update_bluetooth)
 
-sbar.add("bracket", "items.bluetooth.bracket", { bluetooth.name }, {
-	background = { color = colors.bg1 },
-})
-
-sbar.add("item", "items.bluetooth.padding", {
-	position = "right",
-	width = settings.group_paddings,
-})
+-- The shared pill around the toggles is added in items/wifi.lua.
 
 update_bluetooth()

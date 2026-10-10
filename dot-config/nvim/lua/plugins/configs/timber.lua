@@ -2,7 +2,7 @@ return {
 	"Goose97/timber.nvim",
 	version = "*",
 	opts = {},
-	pin = true,  -- broken for nvim v0.12. I got local changes right now. There also is a PR open
+	pin = true, -- broken for nvim v0.12. I got local changes right now. There also is a PR open
 	-- stylua: ignore start
 	keys = {
 		{ "glt", function() require("timber.actions").insert_log({ templates = { before = "time_start", after = "time_end" }, position = "surround" }) end, desc = "[G]o [L]og [T]ime" },
@@ -11,7 +11,6 @@ return {
 		{ "glp", function() require("timber.actions").insert_log({ template = "pretty", position = "below" }) end, desc = "[G]o [L]og [P]retty print" },
 	},
 	-- stylua: ignore end
-	event = "VeryLazy",
 	config = function()
 		require("timber").setup({
 			log_marker = "🪵",
@@ -44,7 +43,7 @@ return {
 				},
 			},
 			log_watcher = {
-				enabled = true,
+				enabled = #vim.api.nvim_list_uis() > 0,
 				sources = {
 					log_file = {
 						type = "filesystem",

@@ -27,7 +27,8 @@ local memory = sbar.add("graph", "memory", 42, {
 		width = 0,
 		y_offset = 4,
 	},
-	padding_right = settings.paddings + 6,
+	-- Followed by cpu in the same pill, so only a small gap to its icon.
+	padding_right = settings.paddings,
 })
 
 local function memory_update()
@@ -54,7 +55,8 @@ end
 
 memory:subscribe("routine", memory_update)
 
-sbar.add("bracket", "items.ram.bracket", { memory.name }, {
+-- One pill for the system group: cpu (items/cpu.lua, loaded before this) and ram.
+sbar.add("bracket", "items.system.bracket", { "items.cpu", memory.name }, {
 	background = { color = colors.bg1, drawing = true },
 })
 

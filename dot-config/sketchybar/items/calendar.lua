@@ -21,7 +21,6 @@ local cal = sbar.add("item", {
 		width = 49,
 		align = "right",
 		font = { family = settings.font.numbers },
-    y_offset = -1,
 	},
 	position = position,
 	update_freq = 30,

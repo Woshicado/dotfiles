@@ -116,12 +116,18 @@ end
 
 local OSASCRIPT_CMD = build_osascript_cmd(dock_apps)
 
+-- The small raised counts, in the same face as every other number on the bar.
+local COUNT_FONT = settings.font.numbers .. ":Bold:10.0"
+
 -- Each display registers a function here that applies a resolved counts table to
 -- its own items; the shared updater calls all of them with a single query result.
 local appliers = {}
 
 local function setup_for_display(display_index)
 	local position = display.is_builtin(display_index) and "q" or "center"
+	-- The built-in display has little room left of the notch, so there an app is
+	-- only shown while it has something to report (either count above zero).
+	local unread_only = display.is_builtin(display_index)
 	local suffix = tostring(display_index)
 
 	-- Table to hold dynamically created per-app items
@@ -143,7 +149,9 @@ local function setup_for_display(display_index)
 		},
 		label = {
 			string = "0",
-			font = "FiraCode Nerd Font:Bold:12.0",
+			font = settings.font.numbers .. ":Bold:12.0",
+			-- At this size the digits would sit a point below the bell.
+			y_offset = 1,
 			color = colors.grey,
 		},
 		padding_right = 10,
@@ -173,7 +181,7 @@ local function setup_for_display(display_index)
 		local safe_name = app_name:gsub("%s+", "_"):lower()
 		local base = "items.notifications." .. safe_name
 		local click_cmd = entry.command or ('open -a "' .. app_name .. '"')
-		local has_secondary = entry.count_command2 ~= nil and position ~= "q"  -- somehow broken for q
+		local has_secondary = entry.count_command2 ~= nil
 
 		local icon_item, primary, secondary
 
@@ -191,7 +199,7 @@ local function setup_for_display(display_index)
 				},
 				label = {
 					string = "",
-					font = "FiraCode Nerd Font:Bold:10.0",
+					font = COUNT_FONT,
 					color = colors.red,
 					y_offset = 4,
 					padding_left = 0,
@@ -227,7 +235,7 @@ local function setup_for_display(display_index)
 				icon = { drawing = false },
 				label = {
 					string = "",
-					font = "FiraCode Nerd Font:Bold:10.0",
+					font = COUNT_FONT,
 					color = colors.red,
 					y_offset = 4,
 					padding_left = 0,
@@ -245,7 +253,7 @@ local function setup_for_display(display_index)
 				icon = { drawing = false },
 				label = {
 					string = "",
-					font = "FiraCode Nerd Font:Bold:10.0",
+					font = COUNT_FONT,
 					color = colors.yellow,
 					y_offset = -4,
 					padding_left = 0,
@@ -341,6 +349,8 @@ local function setup_for_display(display_index)
 		display = display_index,
 		background = { color = colors.bg1 },
 	})
+	-- Lets items/spaces.lua check whether the workspace strip would run into it.
+	display.notifications[display_index] = "items.notifications" .. suffix .. ".bracket"
 
 	sbar.add("item", "items.notifications" .. suffix .. ".padding", {
 		display = display_index,
@@ -351,16 +361,24 @@ local function setup_for_display(display_index)
 	-- ── Expand / collapse animation ──────────────────────────────────────────
 	local expanded = true
 	local last_counts = {}
+	local last_signature = nil
 
-	local function set_app_items_visible(visible)
+	-- Whether an app's items are drawn at all, given its counts.
+	local function shown(count, sec_count)
+		return expanded and (not unread_only or count > 0 or sec_count > 0)
+	end
+
+	local function set_app_items_visible()
 		for _, entry in ipairs(apps_to_track) do
 			local handles = get_or_create_item(entry)
 			local app_name = normalize(entry).name
+			local count = last_counts[app_name] or 0
+			local sec_count = last_counts[app_name .. ":secondary"] or 0
+			local visible = shown(count, sec_count)
 			if handles.secondary then
 				-- Three-item layout: toggle icon and primary together
 				handles.icon:set({ drawing = visible })
 				handles.primary:set({ drawing = visible })
-				local sec_count = last_counts[app_name .. ":secondary"] or 0
 				handles.secondary:set({ drawing = visible and sec_count > 0 })
 			else
 				handles.primary:set({ drawing = visible })
@@ -370,7 +388,7 @@ local function setup_for_display(display_index)
 
 	notifications:subscribe("mouse.clicked", function()
 		expanded = not expanded
-		set_app_items_visible(expanded)
+		set_app_items_visible()
 	end)
 	-- ─────────────────────────────────────────────────────────────────────────
 
@@ -379,6 +397,7 @@ local function setup_for_display(display_index)
 	local function apply_counts(app_counts)
 		last_counts = app_counts
 
+		local signature = ""
 		local total = 0
 		for key, count in pairs(app_counts) do
 			-- Only sum primary counts (not ":secondary" keys) into the total badge
@@ -392,20 +411,24 @@ local function setup_for_display(display_index)
 			local handles = get_or_create_item(entry)
 			local count = app_counts[app_name] or 0
 			local sec_count = app_counts[app_name .. ":secondary"] or 0
+			local visible = shown(count, sec_count)
+			if visible then
+				signature = signature .. app_name .. ";"
+			end
 
 			if handles.secondary then
 				-- Three-item layout: icon colour changes independently
 				if count > 0 then
-					handles.icon:set({ drawing = expanded, icon = { color = colors.white } })
-					handles.primary:set({ drawing = expanded, label = { string = tostring(count), color = colors.red } })
+					handles.icon:set({ drawing = visible, icon = { color = colors.white } })
+					handles.primary:set({ drawing = visible, label = { string = tostring(count), color = colors.red } })
 				else
-					handles.icon:set({ icon = { color = colors.grey } })
-					handles.primary:set({ label = { string = "" } })
+					handles.icon:set({ drawing = visible, icon = { color = colors.grey } })
+					handles.primary:set({ drawing = visible, label = { string = "" } })
 				end
 
 				if sec_count > 0 then
 					handles.secondary:set({
-						drawing = expanded,
+						drawing = visible,
 						label = { string = tostring(sec_count), color = colors.yellow },
 					})
 				else
@@ -415,17 +438,27 @@ local function setup_for_display(display_index)
 				-- Simple single-item layout
 				if count > 0 then
 					handles.primary:set({
-						drawing = expanded,
+						drawing = visible,
 						icon = { color = colors.white },
 						label = { string = tostring(count), color = colors.red },
 					})
 				else
 					handles.primary:set({
+						drawing = visible,
 						icon = { color = colors.grey },
 						label = { string = "", color = colors.grey },
 					})
 				end
 			end
+		end
+
+		-- The pill changed width: let items/spaces.lua re-check which workspace
+		-- strip still fits next to it, once the new layout has been drawn.
+		if unread_only and signature ~= last_signature then
+			last_signature = signature
+			sbar.delay(1, function()
+				sbar.trigger("aerospace_workspace_change")
+			end)
 		end
 
 		if total > 0 then

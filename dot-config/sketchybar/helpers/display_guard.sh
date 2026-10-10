@@ -18,7 +18,8 @@
 # the duration of the burst so it never thrashes, then does one clean restart
 # once the layout has settled.
 #
-# Invoked from yabai display_* signals (see ~/.config/yabai/yabairc).
+# Invoked by helpers/display_watch on every display reconfiguration callback
+# (started from helpers/init.lua).
 #
 # Flow, per signal:
 #   1. SIGSTOP sketchybar — halts the rebuild loop. A stopped process has not
@@ -55,6 +56,6 @@ fi
 mine="$$"
 echo "$mine" > "$STAMP"
 
-# Launch the debouncer fully detached (nohup + background) so it survives yabai
-# reaping this action process.
+# Launch the debouncer fully detached (nohup + background) so it survives the
+# caller reaping this process.
 nohup "$0" --wait "$mine" >/dev/null 2>&1 &

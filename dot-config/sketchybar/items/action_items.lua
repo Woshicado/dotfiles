@@ -15,6 +15,11 @@ local active_color_amphetamine = colors.green
 
 local amphetamine = sbar.add("item", "amphetamine", {
 	position = "right",
+	-- Spacing within the shared toggles pill, see items/wifi.lua. The label is
+	-- never used, and its default paddings would widen the gap.
+	label = { drawing = false },
+	-- The cup glyph is wider than its advance, so it needs extra room to the edge.
+	padding_right = 9,
 	icon = {
 		string = icon_amphetamine_off,
 		font = {
@@ -111,6 +116,9 @@ local active_color_focus = colors.blue
 
 local focus = sbar.add("item", "focus", {
 	position = "right",
+	padding_left = 4,
+	padding_right = 6,
+	label = { drawing = false },
 	icon = {
 		string = icon_focus_off,
 		font = {
@@ -174,10 +182,13 @@ local active_color_protonvpn = colors.green
 
 local protonvpn = sbar.add("item", "protonvpn", {
 	position = "right",
+	padding_left = 2,
+	padding_right = 4,
+	label = { drawing = false },
 	icon = {
 		string = icon_protonvpn,
 		font = "sketchybar-app-font:Regular:17.0",
-    padding_left = 6,
+    padding_left = 5,
     padding_right = 0,
 		y_offset = 1,
 	},
@@ -238,17 +249,7 @@ end)
 protonvpn:subscribe("routine", update_protonvpn)
 protonvpn:subscribe("forced", update_protonvpn)
 
--- ==========================================================
--- BRACKET AND PADDING
--- ==========================================================
-sbar.add("bracket", "action_items_bracket", { amphetamine.name, focus.name, protonvpn.name }, {
-	background = { color = colors.bg1 },
-})
-
-sbar.add("item", "action_items_padding", {
-	position = "right",
-	width = settings.group_paddings,
-})
+-- The shared pill around the toggles is added in items/wifi.lua.
 
 -- Initial Load
 update_amphetamine()
