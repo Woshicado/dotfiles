@@ -134,12 +134,6 @@ map("x", "p", [["_dP]])
 map("x", "x", [["_x]])
 map("x", "s", [["_s]])
 
--- Github copilot
-map("i", "<C-c>", 'copilot#Accept("")', { expr = true, replace_keycodes = false })
-map("i", "<C-f>", "<Plug>(copilot-accept-line)", { noremap = false })
--- map('i', '<C-g>', '<Plug>(copilot-suggest)', { noremap = false })
-vim.g.copilot_no_tab_map = true
-
 -- Smart home/end keys; Cmd for home and end
 -- stylua: ignore start
 map( "n", "<Home>", [[col('.') == matchend(getline('.'), '^\\s*')+1 ? '0' : '^']],
@@ -271,15 +265,12 @@ vim.keymap.set("n", "<leader>-", '"-p', { desc = "Paste from small delete regist
 map("v", "<C-k>", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 map("v", "<C-j>", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 
--- treesitter incremental selection
-vim.keymap.set("n", "<CR>", function()
-	-- Only hijack CR when not in quickfix
-	if vim.bo.buftype == "" then
-		vim.cmd("normal van")
-	else
-		vim.cmd("normal! \r")
+map("n", "<CR>", function()
+	if vim.bo.buftype ~= "" then -- quickfix, help, ...: keep the default
+		return vim.api.nvim_feedkeys(vim.keycode("<CR>"), "n", false)
 	end
-end)
-vim.keymap.set("v", "<CR>", "an", { desc = "Expand selection to parent node", remap = true })
-vim.keymap.set("v", "<BS>", "in", { desc = "Shrink selection to child node", remap = true })
+	require("incsel").start()
+end, { desc = "Select treesitter node under cursor" })
+map("x", "<CR>", function() require("incsel").expand() end, { desc = "Expand selection to parent node" })
+map("x", "<BS>", function() require("incsel").shrink() end, { desc = "Shrink selection to previous node" })
 -- stylua: ignore end

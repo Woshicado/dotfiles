@@ -42,8 +42,6 @@ require("theme").setup()
 
 require("vim._core.ui2").enable()
 
-vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
-
 vim.schedule(function()
 	require("mappings")
 end)

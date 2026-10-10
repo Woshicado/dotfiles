@@ -1,7 +1,5 @@
 local map = vim.keymap.set
 
-vim.lsp.log.set_level("error")
-
 return {
 	"neovim/nvim-lspconfig",
 	event = "VeryLazy",
@@ -46,8 +44,9 @@ return {
 
 		-- Local dictionary
 		local words = {}
-		for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):lines() do
-			table.insert(words, word)
+		local spell_add = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+		if vim.fn.filereadable(spell_add) == 1 then
+			words = vim.fn.readfile(spell_add)
 		end
 
 		-- Make sure python venv is used
@@ -155,27 +154,11 @@ return {
 					},
 				},
 			},
-			tinymist = {
-				settings = {
-					formatterMode = "typstyle",
-					exportPdf = "onType",
-					semanticTokens = "disable",
-				},
-			},
 			html = {},
 			marksman = {},
 			cssls = {},
 			clangd = {},
 			ts_ls = {},
-			pyright = {
-				python = {
-					analysis = {
-						autoSearchPaths = true,
-						diagnosticMode = "workspace",
-						useLibraryCodeForTypes = true,
-					},
-				},
-			},
 			pylsp = {
 				pylsp = {
 					plugins = {
@@ -224,6 +207,15 @@ return {
 			ltex_plus = { markdown = true, gitcommit = true },
 		}
 
+		--[[ Reading `vim.lsp.config[name]` resolves nvim-lspconfig's lsp/<name>.lua and
+		     validates it, which throws when the server binary is not on PATH. ]]
+		local function resolved_config(name)
+			local ok, cfg = pcall(function()
+				return vim.lsp.config[name]
+			end)
+			return ok and cfg or nil
+		end
+
 		-- Configure each server
 		for _, lsp in ipairs(servers) do
 			local config = {
@@ -233,7 +225,8 @@ return {
 			}
 			local drop = drop_filetypes[lsp]
 			if drop then
-				local defaults = vim.lsp.config[lsp] and vim.lsp.config[lsp].filetypes or {}
+				local resolved = resolved_config(lsp)
+				local defaults = resolved and resolved.filetypes or {}
 				config.filetypes = vim.tbl_filter(function(ft)
 					return not drop[ft]
 				end, defaults)
@@ -241,14 +234,35 @@ return {
 			vim.lsp.config(lsp, config)
 		end
 
-		vim.lsp.config["harper_ls"] = {
+		vim.lsp.config("harper_ls", {
 			cmd = { "harper-ls", "--stdio" },
 			filetypes = { "markdown", "text", "tex", "typst", "gitcommit", "mail", "plaintext", "html" },
-		}
+		})
+
+		--[[ Never attach to a buffer without a file name: the client gets a bogus
+		     `file://` URI and marksman logs an error on every keystroke.
+				 Wraps each server's default root_dir. ]]
+		for _, lsp in ipairs(servers) do
+			local resolved = resolved_config(lsp)
+			local default_root, markers = resolved and resolved.root_dir, resolved and resolved.root_markers
+			vim.lsp.config(lsp, {
+				root_dir = function(bufnr, on_dir)
+					if vim.api.nvim_buf_get_name(bufnr) == "" then
+						return
+					end
+					if type(default_root) == "function" then
+						return default_root(bufnr, on_dir)
+					end
+					-- a root_dir function takes precedence over root_markers, so apply them here
+					on_dir(default_root or (markers and vim.fs.root(bufnr, markers)) or nil)
+				end,
+			})
+		end
 
 		--[[ harper_ls stays configured but is not started automatically: it produces a lot
 		     of false positives in anything that is not prose. ]]
 		local opt_in = { harper_ls = true }
+		vim.lsp.log.set_level("error")
 		vim.lsp.enable(vim.tbl_filter(function(name)
 			return not opt_in[name]
 		end, servers))

@@ -1,9 +1,11 @@
-local usercmd = vim.api.nvim_create_user_command
+local function usercmd(name, fn)
+	vim.api.nvim_buf_create_user_command(0, name, fn, {})
+end
 local map = vim.keymap.set
 
 -- Indentation
 
-local o = vim.opt
+local o = vim.opt_local
 
 o.tabstop = 2
 o.shiftwidth = 0
@@ -43,13 +45,13 @@ end
 
 usercmd("Quote", function()
 	quote()
-end, {})
+end)
 
 usercmd("UnQuote", function()
 	unquote()
-end, {})
+end)
 
-local opts = { noremap = true, silent = true }
+local opts = { buffer = true, silent = true }
 map({ "v", "n" }, "<leader>aq", function()
 	quote(false)
 end, opts)
@@ -67,6 +69,10 @@ vim.keymap.set("n", "[[", function()
 	vim.cmd("normal! zt")
 end, { buffer = 0, silent = false, desc = "Jump to previous section" })
 
+-- The built-in ftplugin already undoes gO / ]] / [[; only our own additions go here.
 vim.b.undo_ftplugin = (vim.b.undo_ftplugin or "")
-	.. '\n sil! exe "nunmap <buffer> gO"'
-	.. '\n sil! exe "nunmap <buffer> ]]" | sil! exe "nunmap <buffer> [["'
+	.. "\n sil! nunmap <buffer> <leader>aq | sil! vunmap <buffer> <leader>aq"
+	.. "\n sil! nunmap <buffer> <leader>cq | sil! vunmap <buffer> <leader>cq"
+	.. "\n sil! nunmap <buffer> <leader>rq | sil! vunmap <buffer> <leader>rq"
+	.. "\n sil! delcommand -buffer Quote | sil! delcommand -buffer UnQuote"
+	.. "\n setl ts< sw< sts< et<"

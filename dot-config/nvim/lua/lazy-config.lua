@@ -16,34 +16,18 @@ return {
 
   performance = {
     rtp = {
+      -- Names are matched against $VIMRUNTIME/plugin/*.{vim,lua} basenames; anything
+      -- else (netrw, syntax, ftplugin, ...) would be a silent no-op.
       disabled_plugins = {
-        "2html_plugin",
-        "tohtml",
-        "getscript",
-        "getscriptPlugin",
         "gzip",
-        "logipat",
-        "netrw",
-        "netrwPlugin",
-        "netrwSettings",
-        "netrwFileHandlers",
         "matchit",
-        "tar",
-        "tarPlugin",
-        "rrhelper",
-        "spellfile_plugin",
-        "vimball",
-        "vimballPlugin",
-        "zip",
-        "zipPlugin",
-        "tutor",
+        "netrwPlugin",
         "rplugin",
-        "syntax",
-        "synmenu",
-        "optwin",
-        "compiler",
-        "bugreport",
-        "ftplugin",
+        "spellfile", -- no auto-download prompt for missing spell files
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
       },
     },
   },

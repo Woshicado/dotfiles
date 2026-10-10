@@ -6,7 +6,8 @@ return {
 	init = function()
 		vim.api.nvim_create_autocmd("FileType", {
 			callback = function(args)
-				-- Enable treesitter highlighting and disable regex syntax
+				-- Treesitter highlighting for every filetype with a parser (the built-in
+				-- ftplugins only do this for a handful: lua, vim, markdown, query, ...).
 				pcall(vim.treesitter.start)
 				-- Enable treesitter-based indentation
 				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
@@ -47,30 +48,9 @@ return {
 			return string.match(filename, ".*mise.*%.toml$") ~= nil
 		end, { force = true, all = false })
 	end,
-	opts = {
-		fold = {
-			fold_one_line_after = true,
-		},
-		incremental_selection = {
-			enable = true,
-			keymaps = {
-				init_selection = "<CR>",
-				node_incremental = "<CR>",
-				scope_incremental = "<S-CR>",
-				node_decremental = "<BS>",
-			},
-		},
-		-- indent = {
-		-- 	enable = true,
-		-- 	disable = {},
-		-- },
-		-- highlight = {
-		-- 	enable = true,
-		-- 	disable = { "latex", "bibtex", "mail" },
-		-- 	additional_vim_regex_highlighting = { "mail" },
-		-- },
-	},
-	config = function(_, opts)
+	-- highlight/indent are the FileType autocmd above,
+	-- folds are nvim-ufo, incremental selection is lua/incsel.lua.
+	config = function()
 		require("nvim-treesitter").setup()
 	end,
 }
