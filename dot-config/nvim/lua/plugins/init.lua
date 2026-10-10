@@ -40,6 +40,7 @@ return {
 	require("plugins.configs.mason"),
 	require("plugins.configs.lspconfig"),
 	-- require("plugins.configs.ltex-extra"),
+	require("plugins.configs.typst-preview"),
 	require("plugins.configs.oil"),
 	require("plugins.configs.kanagawa"),
 	-- require("plugins.configs.oil-git"),  -- performance

@@ -24,6 +24,7 @@ return {
 				java = { "google-java-format" },
 				xml = { "xmlformatter" },
 				sh = { "shfmt" },
+				typst = { "typstyle" },
 			},
 			opts = {
 				format = {

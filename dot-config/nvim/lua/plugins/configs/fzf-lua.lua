@@ -26,6 +26,8 @@ return {
 		{ "<leader>fm", "<cmd>FzfLua marks<CR>", desc = "Fuzzy marks" },
 		{ "<leader>fq", "<cmd>FzfLua grep_quickfix<CR>", desc = "Fuzzy quickfix list" },
 		{ "<leader>fl", "<cmd>FzfLua lgrep_loclist<CR>", desc = "Fuzzy location list" },
+		{ "<leader>fh", function() require("logseq_howto").pick() end, desc = "Fuzzy find Logseq how-tos" },
+		{ "<leader>fH", function() require("logseq_howto").blocks() end, desc = "Fuzzy find Logseq how-to blocks" },
 		{ "<leader>uh", "<cmd>FzfLua undotree<CR>", desc = "Show undotree" },
 		{ "<leader>uf", "<cmd>FzfLua undotree locate=false<CR>", desc = "Show undotree @location" },
 

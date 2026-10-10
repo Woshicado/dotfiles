@@ -184,6 +184,18 @@
           "key": "R",
           "type": "command",
           "value": "/opt/homebrew/bin/aerospace reload-config"
+        },
+        {
+          "key": "e",
+          "type": "command",
+          "value": "$HOME/.local/bin/aerospace-toggle toggle",
+          "label": "suspend/resume window management"
+        },
+        {
+          "key": "s",
+          "type": "command",
+          "value": "$HOME/.local/bin/aerospace-toggle on",
+          "label": "start + re-enable AeroSpace"
         }
       ],
       "key": "a",
@@ -403,6 +415,12 @@
           "key": "s",
           "type": "command",
           "value": "killall sketchybar"
+        },
+        {
+          "key": "a",
+          "type": "command",
+          "value": "$HOME/.local/bin/aerospace-toggle quit",
+          "label": "AeroSpace (full quit)"
         }
       ],
       "key": "k",

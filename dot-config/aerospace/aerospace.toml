@@ -205,7 +205,7 @@ gaps.outer.right =      12
     alt-c = 'workspace C'          # chat — likewise, four apps share it
     alt-d = 'workspace D'
     alt-f = 'workspace F'
-    alt-g = 'workspace G'
+    alt-g = ['workspace G', 'exec-and-forget open -a Logseq']
     alt-m = ['workspace M', 'exec-and-forget open -a Thunderbird']
     alt-p = ['workspace P', 'exec-and-forget open -a "Proton Mail"']
     alt-r = ['workspace R', 'exec-and-forget open -a MacWhisper']
@@ -342,11 +342,6 @@ run = 'move-node-to-workspace B'
 if.app-id = 'net.imput.helium'
 run = 'move-node-to-workspace B'
 
-# --- Z: Zotero ---
-[[on-window-detected]]
-if.app-id = 'org.zotero.zotero'
-run = 'move-node-to-workspace Z'
-
 # --- P: Proton suite ---
 [[on-window-detected]]
 if.app-id = 'ch.protonmail.desktop'
@@ -398,6 +393,10 @@ run = 'move-node-to-workspace W'
 if.app-id = 'com.goodsnooze.MacWhisper'
 run = 'move-node-to-workspace R'
 
+[[on-window-detected]]
+if.app-id = 'com.logseq.logseq'
+run = 'move-node-to-workspace G'
+
 # --- Floating, not pinned: summoned to the current workspace with alt-backtick ---
 [[on-window-detected]]
 if.app-id = 'org.keepassxc.keepassxc'
@@ -424,6 +423,11 @@ run = 'layout tiling'
 [[on-window-detected]]
 if.app-id = 'com.adobe.LightroomClassicCC7'
 run = 'layout tiling'
+
+[[on-window-detected]]
+if.app-id = 'org.zotero.zotero'
+if.window-title-regex-substring = 'Citation Dialog'
+run = 'layout floating'
 
 ## AFTER EFFECTS
 ## PREMIERE PRO

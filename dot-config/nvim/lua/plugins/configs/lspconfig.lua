@@ -155,6 +155,13 @@ return {
 					},
 				},
 			},
+			tinymist = {
+				settings = {
+					formatterMode = "typstyle",
+					exportPdf = "onType",
+					semanticTokens = "disable",
+				},
+			},
 			html = {},
 			marksman = {},
 			cssls = {},
