@@ -14,18 +14,40 @@ AEROSPACE=/opt/homebrew/bin/aerospace
 bundle_id="${1:?usage: aerospace-summon BUNDLE_ID [APP_NAME]}"
 app_name="${2:-}"
 
-window_id="$(
+list_window() {
 	"$AEROSPACE" list-windows --monitor all \
 		--app-bundle-id "$bundle_id" \
-		--format '%{window-id}' 2>/dev/null | head -1
-)"
+		--format '%{window-id} %{window-layout}' 2>/dev/null | head -1
+}
 
-if [ -z "$window_id" ]; then
+# Read the target first: unhiding below activates the app, and AeroSpace follows
+# macOS focus to the window's *old* workspace.
+workspace="$("$AEROSPACE" list-workspaces --focused)"
+
+read -r window_id layout <<<"$(list_window)"
+
+if [ -z "${window_id:-}" ]; then
 	[ -n "$app_name" ] && open -a "$app_name"
 	exit 0
 fi
 
-workspace="$("$AEROSPACE" list-workspaces --focused)"
+# A window that is hidden (cmd-h / tray) or minimized lives in one of AeroSpace's
+# macos_native_* containers. `move-node-to-workspace` treats any window outside
+# the floating container as tiling and binds it into the root tiling container,
+# which resizes it to fill the workspace. When AeroSpace later notices the
+# window is back it is re-flagged floating, but its old size is never restored.
+# So bring it back to a normal state first and only move it once AeroSpace has
+# it as floating again.
+case "$layout" in
+macos_native_*)
+	[ -n "$app_name" ] && open -a "$app_name"
+	for _ in $(seq 1 40); do
+		read -r _ layout <<<"$(list_window)"
+		[ "$layout" = floating ] && break
+		sleep 0.05
+	done
+	;;
+esac
 
 "$AEROSPACE" move-node-to-workspace --window-id "$window_id" "$workspace"
 "$AEROSPACE" focus --window-id "$window_id"

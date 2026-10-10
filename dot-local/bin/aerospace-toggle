@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+#
+# aerospace-toggle [toggle|on|off|quit]
+#
+# Turn AeroSpace off and back on for the things that fight a tiling WM —
+# presenting on a second monitor, mostly, where automatic tiling and
+# focus-follows-mouse rearrange windows mid-slideshow.
+#
+#   toggle  (default)  Suspend window management if AeroSpace is running,
+#                      resume it if it is already suspended, start it if it is
+#                      not running at all. One key for all three, so the same
+#                      key always gets you back.
+#   on                 Make sure AeroSpace is running *and* managing windows.
+#   off                Suspend window management, leaving the process alive.
+#   quit               Suspend, then quit AeroSpace and JankyBorders outright.
+#
+# `off`/`toggle` use AeroSpace's own `enable` command: the process stays up,
+# every window becomes a plain floating macOS window, and key events are no
+# longer intercepted. That is the cheap, instantly reversible option and the
+# one to reach for first; `quit` exists for when even a suspended AeroSpace is
+# in the way (it still holds Accessibility handles on every window).
+#
+# Why `enable off` before quitting: AeroSpace hides the windows of invisible
+# workspaces by parking them outside the visible screen area, and `enable off`
+# is what pulls them back in. Quitting without it strands those windows
+# off-screen with no window manager left to fetch them.
+#
+# Note: `enable off` is documented to stop tiling and key interception. Whether
+# it also stops focus-follows-mouse is not documented — if the cursor still
+# steals focus while suspended, use `quit` (bound to <leader>ka) instead.
+
+set -euo pipefail
+
+AEROSPACE=/opt/homebrew/bin/aerospace
+APP=AeroSpace
+
+running() { /usr/bin/pgrep -x "$APP" >/dev/null 2>&1; }
+
+start() {
+	# `open -a` is a no-op beyond activation when the app is already running.
+	open -a "$APP"
+}
+
+case "${1:-toggle}" in
+toggle)
+	if running; then
+		"$AEROSPACE" enable toggle
+	else
+		start
+	fi
+	;;
+on)
+	if running; then
+		"$AEROSPACE" enable on
+	else
+		start
+	fi
+	;;
+off)
+	if running; then
+		"$AEROSPACE" enable off
+	fi
+	;;
+quit)
+	if running; then
+		# Best effort: if the server is wedged, quit anyway.
+		"$AEROSPACE" enable off || true
+		/usr/bin/osascript -e "tell application \"$APP\" to quit" ||
+			/usr/bin/pkill -x "$APP" || true
+	fi
+	# AeroSpace owns borders via after-startup-command, so it goes too. A
+	# fresh AeroSpace start re-launches it.
+	/usr/bin/pkill -x borders || true
+	;;
+*)
+	echo "usage: ${0##*/} [toggle|on|off|quit]" >&2
+	exit 1
+	;;
+esac
