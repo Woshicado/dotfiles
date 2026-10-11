@@ -18,9 +18,12 @@ return {
 			html = {
 				enabled = true,
 				only_render_image_at_cursor = true,
-				-- Enabling "markdown" down here allows you to view html images in
-				-- markdown files
-				filetypes = { "html", "xhtml", "htm", "markdown" },
+				--[[ Do NOT add "markdown" here. This integration calls vim.treesitter.get_parser(buf, "html"),
+					   the markdown one get_parser(buf, "markdown"). Neovim caches one parser per buffer, so
+						 alternating languages creates a new parser on every render while the replaced one stays
+						 attached (on_bytes) until the buffer is unloaded. Leaked parsers piled up with every edit
+						 and each keystroke ran LanguageTree:_edit on all of them -- THIS IS WHAT CAUSED MY LAG ]]
+				filetypes = { "html", "xhtml", "htm" },
 			},
 		},
 	},
