@@ -4,20 +4,11 @@ local settings = require("settings")
 
 local popup_width = 250
 
-local volume_percent = sbar.add("item", "items.volume1", {
+local volume_icon = sbar.add("item", "items.volume", {
 	position = "right",
-	icon = { drawing = false },
-	label = {
-		string = "??%",
-		padding_left = -1,
-		padding_right = 2,
-		font = { family = settings.font.numbers },
-	},
-})
-
-local volume_icon = sbar.add("item", "items.volume2", {
-	position = "right",
-	padding_right = -1,
+	-- Right edge of the shared power pill: matches the battery's inset on the
+	-- left, which the glyph's own side bearing makes look wider than this one.
+	padding_right = 9,
 	icon = {
 		string = icons.volume._100,
 		width = 0,
@@ -40,7 +31,6 @@ local volume_icon = sbar.add("item", "items.volume2", {
 
 local volume_bracket = sbar.add("bracket", "items.volume.bracket", {
 	volume_icon.name,
-	volume_percent.name,
 }, {
 	-- Only the anchor for the popup; the visible pill is shared with the battery
 	-- and added in items/battery.lua.
@@ -66,7 +56,7 @@ local volume_slider = sbar.add("slider", popup_width, {
 	click_script = 'osascript -e "set volume output volume $PERCENTAGE"',
 })
 
-volume_percent:subscribe("volume_change", function(env)
+volume_icon:subscribe("volume_change", function(env)
 	local volume = tonumber(env.INFO)
 	local icon = icons.volume._0
 	if volume > 60 then
@@ -79,13 +69,10 @@ volume_percent:subscribe("volume_change", function(env)
 		icon = icons.volume._10
 	end
 
-	local lead = ""
-	if volume < 10 then
-		lead = "0"
-	end
+	-- A muted output reports 0 as well, so this covers both.
+	local color = volume > 0 and colors.white or colors.red
 
-	volume_icon:set({ label = icon })
-	volume_percent:set({ label = lead .. volume .. "%" })
+	volume_icon:set({ label = { string = icon, color = color } })
 	volume_slider:set({ slider = { percentage = volume } })
 end)
 
@@ -151,7 +138,5 @@ local function volume_scroll(env)
 end
 
 volume_icon:subscribe("mouse.clicked", volume_toggle_details)
+volume_icon:subscribe("mouse.exited.global", volume_collapse_details)
 volume_icon:subscribe("mouse.scrolled", volume_scroll)
-volume_percent:subscribe("mouse.clicked", volume_toggle_details)
-volume_percent:subscribe("mouse.exited.global", volume_collapse_details)
-volume_percent:subscribe("mouse.scrolled", volume_scroll)

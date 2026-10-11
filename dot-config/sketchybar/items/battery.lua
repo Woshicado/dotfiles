@@ -115,7 +115,7 @@ end)
 
 -- One pill for the power and sound group: volume (items/volume.lua, loaded
 -- before this) and battery.
-sbar.add("bracket", "items.power.bracket", { "items.volume2", "items.volume1", battery.name }, {
+sbar.add("bracket", "items.power.bracket", { "items.volume", battery.name }, {
 	background = { color = colors.bg1 },
 })
 

@@ -3,8 +3,8 @@ return {
 
 	require("plugins.configs.notmuch"),
 	require("plugins.configs.difft"),
-	require("plugins.configs.codeshot"),
-	require("plugins.configs.claudecode"),
+	-- require("plugins.configs.codeshot"),
+	-- require("plugins.configs.claudecode"),
 	require("plugins.configs.early-retirement"),
 	require("plugins.configs.nvim-ufo"),
 	-- require("plugins.configs.nvim-java"),
@@ -19,8 +19,8 @@ return {
 	-- require("plugins.configs.abolish"),
 	require("plugins.configs.todo-comments"),
 	-- require("plugins.configs.dooing"),  -- retired in favour of obsidian-todo
-	require("plugins.configs.obsidian-todo"),
-	require("plugins.configs.obsidian-shop"),
+	-- require("plugins.configs.obsidian-todo"),
+	-- require("plugins.configs.obsidian-shop"),
 	require("plugins.configs.preview-markdown"),
 	require("plugins.configs.markdown-plus"),
 	require("plugins.configs.render-markdown"),
