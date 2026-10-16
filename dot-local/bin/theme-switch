@@ -153,22 +153,33 @@ tmux_set_options() {
 #   highlight. Since bg_bar is deliberately Neovim's background, the inactive border
 #   ends up the same colour as the background and disappears. Set both explicitly --
 #   a calm but visible inactive border, and a clearly brighter active one. Must run
-#   *after* ukiyo.tmux, which rewrites these on every render. ]]
+#   *after* ukiyo.tmux, which rewrites these on every render.
+#
+#   Popups are set here too, though ukiyo leaves them alone: since tmux 3.8 they
+#   default to a dark grey background (themedarkgrey) instead of the terminal's. The
+#   background goes back to Neovim's Normal so the nested session's border row blends
+#   in, and the frame gets a violet of its own to tell a popup from a pane split. ]]
 tmux_border_styles() {
-	local inactive active
+	local inactive active popup bg fg
 	case $1 in
 	dark)
 		inactive="#54546D" # sumiInk6, ~25 lightness off the background
 		active="#7E9CD8"   # crystalBlue, ~52 off
+		popup="#957FB8"    # oniViolet
+		bg="#1F1F28" fg="#DCD7BA"
 		;;
 	light)
 		inactive="#a09cac" # lotusViolet1, ~28 off
 		active="#4d699b"   # lotusBlue4, ~53 off
+		popup="#624c83"    # lotusViolet4
+		bg="#f2ecbc" fg="#545464"
 		;;
 	esac
 
 	tmux set-option -g pane-border-style "fg=$inactive" >/dev/null 2>&1 || return 1
 	tmux set-option -g pane-active-border-style "fg=$active" >/dev/null 2>&1 || return 1
+	tmux set-option -g popup-style "bg=$bg,fg=$fg" >/dev/null 2>&1 || return 1
+	tmux set-option -g popup-border-style "bg=$bg,fg=$popup" >/dev/null 2>&1 || return 1
 }
 
 apply_tmux() {

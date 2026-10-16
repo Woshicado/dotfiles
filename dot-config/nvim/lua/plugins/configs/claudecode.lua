@@ -22,14 +22,17 @@ return { -- Idk whether I'll need this. tmux/zellij split seems sufficient but l
 		"ClaudeCodeDiffDeny",
 		"ClaudeCodeCloseAllDiffs",
 	},
+	-- Toggle/focus/open/add also map in visual mode (`x`, not `v`, so Select-mode
+	-- typing is untouched). The plugin exits visual itself and keeps the selection
+	-- as context when focus moves to the Claude terminal.
 	keys = {
-		{ "<leader>a", nil, desc = "AI/Claude Code" },
-		{ "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
-		{ "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
-		{ "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
-		{ "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+		{ "<leader>a", nil, mode = { "n", "x" }, desc = "AI/Claude Code" },
+		{ "<leader>ac", "<cmd>ClaudeCode<cr>", mode = { "n", "x" }, desc = "Toggle Claude" },
+		{ "<leader>af", "<cmd>ClaudeCodeFocus<cr>", mode = { "n", "x" }, desc = "Focus Claude" },
+		{ "<leader>ar", "<cmd>ClaudeCode --resume<cr>", mode = { "n", "x" }, desc = "Resume Claude" },
+		{ "<leader>aC", "<cmd>ClaudeCode --continue<cr>", mode = { "n", "x" }, desc = "Continue Claude" },
 		{ "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
-		{ "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+		{ "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", mode = { "n", "x" }, desc = "Add current buffer" },
 		{ "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
 		{
 			"<leader>as",

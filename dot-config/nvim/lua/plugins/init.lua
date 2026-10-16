@@ -4,7 +4,7 @@ return {
 	require("plugins.configs.notmuch"),
 	require("plugins.configs.difft"),
 	-- require("plugins.configs.codeshot"),
-	-- require("plugins.configs.claudecode"),
+	require("plugins.configs.claudecode"),
 	require("plugins.configs.early-retirement"),
 	require("plugins.configs.nvim-ufo"),
 	-- require("plugins.configs.nvim-java"),
