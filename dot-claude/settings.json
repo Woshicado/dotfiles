@@ -170,5 +170,5 @@
   "skipWorkflowUsageWarning": true,
   "theme": "light",
   "editorMode": "vim",
-  "preferredNotifChannel": "terminal_bell",
+  "preferredNotifChannel": "terminal_bell"
 }
