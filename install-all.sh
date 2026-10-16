@@ -33,6 +33,11 @@ fi
 chmod +x ./dot-claude/review-bot/install.sh
 ./dot-claude/review-bot/install.sh
 
+# Agent skills (private submodule): custom ones linked, upstream ones via npx skills.
+if command -v mise >/dev/null 2>&1; then
+  mise run skills || echo "!! skills install failed (private submodule unreachable?) — rerun: mise run skills"
+fi
+
 # Global CLI tools / language runtimes declared in ~/.config/mise
 # (stowed just above). Safe no-op if there is nothing to install.
 if command -v mise >/dev/null 2>&1; then

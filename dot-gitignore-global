@@ -19,3 +19,4 @@ CLAUDE.md
 .env
 .docker.env
 skills-lock.json
+.playwright-mcp

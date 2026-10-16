@@ -60,6 +60,19 @@ map({ "n", "v" }, "<C-S-o>", "<C-i>", { desc = "Forward", noremap = true })
 -- map("n", "<leader>sh", function() require("lsp_signature").toggle_float_win() end,
 -- 	{ desc = "Toggle signature help", noremap = true })
 
+-- map("n", "K", function()
+-- 	if #vim.lsp.get_clients({ bufnr = 0, method = "textDocument/hover" }) > 0 then
+-- 		vim.lsp.buf.hover()
+-- 		return
+-- 	end
+-- 	local kp = vim.bo.keywordprg
+-- 	if kp == "" or kp == ":Man" then
+-- 		vim.cmd("normal! K") -- builtin K, i.e. 'keywordprg'
+-- 	else
+-- 		vim.notify("No hover-capable LSP attached (yet)", vim.log.levels.WARN)
+-- 	end
+-- end, { desc = "Hover docs (falls back to keywordprg)", noremap = true })
+--
 map({ "n", "x" }, "<leader>sw", function()
 	local ve = vim.o.virtualedit -- returns a string, e.g. "", "all", "block,onemore"
 	if ve:find("all") then

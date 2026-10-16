@@ -7,7 +7,27 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "opus",
+  "skillOverrides": {
+    "anthropic-skills:docs": "on",
+    "anthropic-skills:docx": "user-invocable-only",
+    "anthropic-skills:google-workspace": "user-invocable-only",
+    "anthropic-skills:import-memory": "user-invocable-only",
+    "anthropic-skills:morning": "user-invocable-only",
+    "anthropic-skills:pdf": "on",
+    "anthropic-skills:pptx": "user-invocable-only",
+    "anthropic-skills:skill-creator": "user-invocable-only",
+    "anthropic-skills:xlsx": "on",
+    "find-skills": "off",
+    "frontend-design": "user-invocable-only",
+    "grill-me": "user-invocable-only",
+    "python-testing-patterns": "user-invocable-only",
+    "slurm-cluster": "on",
+    "spanish-anki": "user-invocable-only",
+    "web-artifacts-builder": "on",
+    "webapp-testing": "user-invocable-only",
+    "workstation": "on"
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -25,6 +45,10 @@
           {
             "type": "command",
             "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/compute-guard.py"
           }
         ]
       },
@@ -137,9 +161,14 @@
     "clangd-lsp@claude-plugins-official": false
   },
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "theme": "light",
   "editorMode": "vim",
-  "preferredNotifChannel": "terminal_bell"
+  "preferredNotifChannel": "terminal_bell",
 }

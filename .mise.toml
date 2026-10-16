@@ -10,6 +10,20 @@ description = "Install all optional dependencies"
 alias = "s"
 run = "stow --no-folding --dotfiles -R . --adopt"
 
+[tasks.skills]
+description = "Link custom agent skills and install upstream ones (skills submodule)"
+run = """
+  # Fetch the (private) submodule on first use only; later runs keep its branch.
+  if [ ! -f skills/install.sh ]; then
+    git submodule update --init skills && git -C skills switch -q main
+  fi
+  ./skills/install.sh
+"""
+
+[tasks.skills-update]
+description = "Update upstream agent skills via the skills CLI"
+run = "npx -y skills update -g -y"
+
 [tasks.info]
 description = "Print project information"
 alias = "i"
